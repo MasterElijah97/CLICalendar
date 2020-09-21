@@ -136,12 +136,13 @@ void Session::creatingDeal() {
     std::cin >> priority;
     std::cout << "Please, enter time in format HH:MM-HH::MM" << std::endl;
     std::cin >> time;
-    notes_.emplace_back(Note(name,
-                            description,
-                            label,
-                            priority,
-                            time.substr(0, 2)+time.substr(4, 5),
-                            time.substr(7, 9)+time.substr(11, 12)));
+    Deal newDeal(name,
+                description,
+                label,
+                priority,
+                time.substr(0, 2)+time.substr(4, 5),
+                time.substr(7, 9)+time.substr(11, 12));
+    joinedObject_->addDeal(newDeal);
 }
 
 void Session::logOut() {
@@ -201,15 +202,53 @@ void Session::getNotesFromServer() {
  }
 
  void Session::addTask(Task task) {
-     this->tasks.emplace_back(task);
+     this->tasks.push_back(task);
  }
 
  void Session::addNote(Note note) {
-     this->notes.emplace_back(note);
+     this->notes.push_back(note);
  }
 
  void Session::addDay(Day day) {
-     this->tasks.emplace_back(day);
+     this->tasks.push_back(day);
+ }
+
+ void Session::showJoined() {
+ 	this->joinedObject_->show();
+ }
+ void Session::showHelp() {
+ 	std::cout << "---List of supported commands---"                                           << std::endl;
+
+ 	std::cout << std::endl;
+
+ 	std::cout << "--Manipulating with data--"                                                                  << std::endl;
+ 	std::cout << "open tasks/notes/days     -open tasks or notes or days"                                      << std::endl;
+ 	std::cout << "create task/note/day/deal -create task or note or day or deal"                               << std::endl;
+ 	std::cout << "join deals                -allows to manipulate with deals if day is chosen"                 << std::endl;
+ 	std::cout << "edit                      -allows to edit joined item"                                       << std::endl;
+ 	std::cout << "copy                      -allows to copy joined item (works in pair with command \"paste\"" << std::endl;
+ 	std::cout << "past                      -allows to copy joined item (works in pair with command \"copy\""  << std::endl;
+ 	std::cout << "remove task/note/day      -removes task/note/day"                                            << std::endl;
+ 	std::cout << "remove deal/important N   -removes deal/important with number N"                             << std::endl;
+
+ 	std::cout << std::endl;
+
+ 	std::cout << "--Manipulating with accounts--"                                                              << std::endl;
+ 	std::cout << "add user                  -allows to create new account"                                     << std::endl;
+ 	std::cout << "login                     -allows to login in account"                                       << std::endl;
+ 	std::cout << "logout                    -allows to logout from  account"                                   << std::endl;
+
+ 	std::cout << std::endl;
+
+ 	std::cout << "--Manipulating with server--"                                                                << std::endl;
+ 	std::cout << "connect                   -allows to connect to server"                                      << std::endl;
+ 	std::cout << "disconnect                -allows to disconnect from server"                                 << std::endl;
+ 	std::cout << "sync                      -synchronises local and server databases"                          << std::endl;
+
+ 	std::cout << std::endl;
+
+ 	std::cout << "--Other--"                                                                                   << std::endl;
+ 	std::cout << "exit                      -sync bases, disconnect from server and logout"                    << std::endl;
  }
  //getters
 
@@ -256,7 +295,15 @@ void Session::setJoined(std::vector<Note>::iterator it) {
    joinedObject_ = it;
 }
 
+void Session::incrementJoined() {
+	this->joinedObject_ = joinedObject_ + 1;	
+}
 
+void Session::decrementJoined() {
+	this->joinedObject_ = joinedObject_ + 1;
+}
+
+//need to handle by visit
 void Session::setMovable(std::vector<Day>::iterator it) {
     moveableObject_ = it;
 }

@@ -150,6 +150,38 @@ class Note : public IVersion, public IUniqueId {
             std::cout << description_ << std::endl;
         }
 
+        void edit() {
+            std::string input;
+
+            this->show();
+
+            std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+
+            std::cout << "Label: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->label_ = input;
+                input.clear();
+            }
+
+            std::cout << "Name: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->name_ = input;
+                input.clear();
+            }
+
+            std::cout << "Description: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->description_ = input;
+                input.clear();
+            }
+
+            std::cout << std::endl;
+        }
+
+
         std::string concatenate() {
             return label_                    +SEPARATOR+
                    name_                     +SEPARATOR+
