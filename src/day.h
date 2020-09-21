@@ -141,6 +141,37 @@ class Day : public IVersion, public IUniqueId {
             showImportants();
         }
 
+        void edit() {
+            std::string input;
+
+            this->show();
+
+            std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+
+            std::cout << "Date: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->label_ = input;
+                input.clear();
+            }
+
+
+            std::cout << "Deals: ";
+            for (auto it = deals_.begin(); it != deals_.end(); ++it) {
+                it->edit();
+            }
+
+            std::cout << "Importants: ";
+            for (auto it = importants_.begin(); it != importants_.end(); ++it) {
+                std::cin >> input;
+                if (!input.empty()) {
+                *it = input;
+                input.clear();
+            }
+            
+            std::cout << std::endl;
+        }        
+
         std::string concatenate() {
             std::string tmp;
             for (auto it = importants_.begin(); it != importants_.end(); ++it) {

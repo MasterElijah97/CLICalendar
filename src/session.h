@@ -3,9 +3,11 @@
 
 
 #include <memory>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <map>
+#include <iterator>
 
 #include "MD5.h"
 #include "deal.h"
@@ -37,12 +39,70 @@ class Session { //Singleton
         void addNote(Note);
         void addDay(Day);
 
+        void showJoined();
+        void showHelp();
+
         void creatingTask();
         void creatingNote();
         void creatingDay();
         void creatingDeal();
 
         void getDataFromLocalBase();
+
+        std::variant<
+            std::vector<Day>::iterator,
+            std::vector<Note>::iterator,
+            std::vector<Task>::iterator,
+            std::vector<Deal>::iterator
+        > getJoined() const;
+
+        std::variant<
+            std::vector<Day>::iterator,
+            std::vector<Note>::iterator,
+            std::vector<Task>::iterator,
+            std::vector<Deal>::iterator
+        > getCopyable() const;
+
+        std::variant<
+            std::vector<Day>::iterator,
+            std::vector<Note>::iterator,
+            std::vector<Task>::iterator,
+            std::vector<Deal>::iterator
+        > getMoveable() const;
+
+        void setJoined(std::vector<Day>::iterator);
+        void setJoined(std::vector<Deal>::iterator);
+        void setJoined(std::vector<Task>::iterator);
+        void setJoined(std::vector<Note>::iterator);
+
+        void incrementJoined();
+        void decrementJoined();
+
+        void setMovable(std::vector<Day>::iterator);
+        void setMovable(std::vector<Deal>::iterator);
+        void setMovable(std::vector<Task>::iterator);
+        void setMovable(std::vector<Note>::iterator);
+
+        void setCopyable(std::vector<Day>::iterator);
+        void setCopyable(std::vector<Deal>::iterator);
+        void setCopyable(std::vector<Task>::iterator);
+        void setCopyable(std::vector<Note>::iterator);
+
+        void setJoinedLabel(const std::string);
+        void setJoinedName(const std::string);
+        void setJoinedDescription(const std::string);
+        void setJoinedPriority(const std::string);
+
+        void setJoinedTime(const std::string);
+        void setJoinedComplited(const bool);
+        void setJoinedDate(const std::string);
+
+        void eraseDealFromJoined(int&);
+        void eraseImportantFromJoined(int&);
+
+        void eraseJoinedTask();
+        void eraseJoinedNote();
+        void eraseJoinedDay();
         //getters
 
         //setters
@@ -92,58 +152,6 @@ class Session { //Singleton
         std::unordered_map<std::string, std::string> logindAndPassword; /*getfrombase*/
 
         //move to public
-        
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        > getJoined() const;
-
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        > getCopyable() const;
-
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        > getMoveable() const;
-
-        void setJoined(std::vector<Day>::iterator);
-        void setJoined(std::vector<Deal>::iterator);
-        void setJoined(std::vector<Task>::iterator);
-        void setJoined(std::vector<Note>::iterator);
-
-        void setMovable(std::vector<Day>::iterator);
-        void setMovable(std::vector<Deal>::iterator);
-        void setMovable(std::vector<Task>::iterator);
-        void setMovable(std::vector<Note>::iterator);
-
-        void setCopyable(std::vector<Day>::iterator);
-        void setCopyable(std::vector<Deal>::iterator);
-        void setCopyable(std::vector<Task>::iterator);
-        void setCopyable(std::vector<Note>::iterator);
-
-        void setJoinedLabel(const std::string);
-        void setJoinedName(const std::string);
-        void setJoinedDescription(const std::string);
-        void setJoinedPriority(const std::string);
-
-        void setJoinedTime(const std::string);
-        void setJoinedComplited(const bool);
-        void setJoinedDate(const std::string);
-
-        void eraseDealFromJoined(int&);
-        void eraseImportantFromJoined(int&);
-
-        void eraseJoinedTask();
-        void eraseJoinedNote();
-        void eraseJoinedDay();
 };
 
 #endif // SESSION_H

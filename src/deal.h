@@ -156,10 +156,6 @@ class Deal : public IVersion, public IUniqueId {
             return thisTime.end;
         }
 
-        std::string getDate() const {
-            return date_;
-        }
-
         std::pair< std::string, std::string > getTime() const {
             auto time = std::make_pair(thisTime.begin, thisTime.end);
             return time;
@@ -187,14 +183,15 @@ class Deal : public IVersion, public IUniqueId {
             updateVersion();
         }
 
-        void setTime(const std::string& begin, const std::string& end) {
+        void setTime(std::string begin, std::string end) {
             thisTime.begin = begin;
             thisTime.end = end;
             updateVersion();
         }
 
-        void setDate(const std::string& date) {
-            date_ = date;
+        void setDate(std::string date) {
+            this->date_ = date;
+            updateVersion();
         }
 
         void show() {
@@ -207,6 +204,58 @@ class Deal : public IVersion, public IUniqueId {
             std::cout << priority_ << std::endl;
             std::cout << name_ << std::endl;
             std::cout << description_ << std::endl;
+        }
+
+        void edit() {
+            std::string input;
+
+            this->show();
+
+            std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+
+            std::cout << "Name: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->name_ = input;
+                input.clear();
+            }
+
+            std::cout << "Description: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->description_ = input;
+                input.clear();
+            }
+
+            std::cout << "Label: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->label_ = input;
+                input.clear();
+            }
+
+            std::cout << "Priority: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->priority_ = input;
+                input.clear();
+            }
+
+            std::cout << "Begins at ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->thisTime.begin = input;
+                input.clear();
+            }
+
+            std::cout << "Ends at ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->thisTime.end = input;
+                input.clear();
+            }
+
+            std::cout << std::endl;
         }
 
         std::string concatenate() {

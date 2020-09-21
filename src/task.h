@@ -126,6 +126,37 @@ class Task : public IVersion, public IUniqueId {
             std::cout << description_ << std::endl;
         }
 
+        void edit() {
+            std::string input;
+
+            this->show();
+
+            std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+
+            std::cout << "Description: ";
+            std::cin >> input;
+            if (!input.empty()) {
+                this->description_ = input;
+                input.clear();
+            }
+
+
+            std::cout << "Completed? [Y / N]: ";
+            std::cin >> input;
+            if (!input.empty()) {
+
+                if ((input.find("Y") != std::string::npos) || (input.find("y") != std::string::npos)) {
+                    this->isCompleted_ = true;
+                } else {
+                    this->isCompleted_ = false;
+                }
+                input.clear();
+                
+            }
+            
+            std::cout << std::endl;
+        }   
+
         std::string concatenate() {
             return std::to_string(uniqueId_)    +SEPARATOR+
                    std::to_string(version_)     +SEPARATOR+
