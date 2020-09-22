@@ -6,6 +6,7 @@ void clearConsole() {
     }
 }
 
+//need to add if isLoggedIn_ = true
 void commandMonitor(const std::string& arg1,
                     const std::string& arg2,
                     const int& arg3,
