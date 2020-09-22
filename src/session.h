@@ -35,6 +35,10 @@ class Session { //Singleton
         void syncWithServerBase();
         void syncBases();
 
+        void getTasks();
+        void getNotes();
+        void getDays();
+
         void addTask(Task);
         void addNote(Note);
         void addDay(Day);

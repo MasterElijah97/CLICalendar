@@ -21,6 +21,6 @@ int main(int argc, char* argv[]) {
     
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;
-        commandMonitor(arg1, arg2, arg3);
+        commandMonitor(arg1, arg2, arg3, thisSession);
     }
 }
