@@ -80,13 +80,11 @@ void Session::logIn() {
     if (ExistingUser) {
 		this->setLoginAndPassword(login, hashedPassword);
         std::cout << "You've succesfully logged in" << std::endl;
+        this->user.isLoggedIn_ = true;
     else {
         std::cout << "Wrong login or password" << std::endl;
+        std::cout << "Please, try again" << std::endl;
     }
-
-    
-   	//todo
-    //match with local db
 }
 
 void getDataFromLocalBase() {
@@ -191,8 +189,15 @@ void Session::logOut() {
             //todo
             this->user.login_.clear();
             this->user.hashedPass_.clear();
-            this->//disconnect from db
-            this->//disconnect from server if connected
+            this->user.isLoggedIn_ = false;
+
+            tasksDb = nullptr;
+            notesDb = nullptr;
+            daysDb = nullptr;
+            dealsDb = nullptr;
+
+            //this->//disconnect from db by
+            //this->//disconnect from server if connected
 
 }
 void Session::connectToServer() {
