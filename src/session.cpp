@@ -104,9 +104,6 @@ void Session::logOut() {
 
 }
 
-void initDatabases(const std::string& login) {
-    
-}
 
 void getDataFromLocalBase() {
 	try {

@@ -210,7 +210,7 @@ class Day : public IVersion, public IUniqueId {
     private:
         std::string date_;
         std::vector<Deal> deals_;
-        std::vector<std::string> importants_;
+        std::vector<Important> importants_;
 };
 
 bool operator==(const Day& left, const Day& right) {

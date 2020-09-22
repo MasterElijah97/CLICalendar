@@ -22,6 +22,7 @@ HEADERS += src/commandMonitor.h \
            src/AES.h \
            src/day.h \
            src/deal.h \
+           src/important.h \
            src/iuniqueid.h \
            src/iversion.h \
            src/MD5.h \
@@ -38,6 +39,7 @@ SOURCES += main.cpp \
            src/commandMonitor.cpp \
            src/day.cpp \
            src/deal.cpp \
+           src/important.cpp \
            src/iuniqueid.cpp \
            src/iversion.cpp \
            src/MD5.cpp \
