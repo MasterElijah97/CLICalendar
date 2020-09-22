@@ -19,6 +19,7 @@ class Session { //Singleton
     public:
         static Session& instance();
 
+        void addingNewUser();
         void setLoginAndPassword(std::string&, std::string&);
         void logIn(const std::string& login, const std::string& password);
         void logOut();

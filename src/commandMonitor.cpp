@@ -150,7 +150,7 @@ void commandMonitor(const std::string& arg1,
     else if (arg1 == "add") {
 
         if (arg2 == "user") {
-            thisSession.thisSessiaddingNewUser();
+            thisSession.addingNewUser();
         } else {
             std::cout << "Wrong command. Please, check 'help'" << std::endl;
         }

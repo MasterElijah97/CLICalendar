@@ -22,9 +22,34 @@ Session::Session()
     days_.reserve(3000);
 }
 
+void Session::addingNewUser() {
+    std::string login;
+    std::string password;
+    std::cout << "Please, enter new login" << std::endl;
+    std::cin >> login;
+
+    auto user = accountsDb.get_no_throw<User>(where(is_equal(&User::login_, login)))
+
+    if (!user) {
+        std::cout << "Please, enter new password" << std::endl;
+        std::cin >> password;
+
+        this->user.login_ = login;
+        this->user.hashedPass_ = md5(password);
+
+        auto insertedId = accountsDb.insert(this->user);
+        this->user.id_ = insertedId;
+
+        std::cout << "New account has been created" << std::endl;
+        std::cout << "Now you can log in with entered login and password" << std:: endl;
+    } else {
+        std::cout << "Sorry, this login is exists. Please, try again." << std::endl;
+    }
+}
+
 void Session::setLoginAndPassword(const std::string& login, const std::string& password) {
-	this->login_ = login;
-	this->password = password_;
+	this->user.login_ = login;
+	this->user.hashedPass_ = password;
 }
 
 //public
@@ -34,12 +59,26 @@ Session& Session::instance() {
     return *instance;
 }
 
-void Session::logIn(const std::string& login, const std::string& password) {
+void Session::logIn() {
 
-    //connect to local db with accounts
+    std::string login;
+    std::string password;
+    std::string hashedPassword;
 
-	if (MD5(password) == storage.get<Account>(where(is_equal(&Password::login_, login))); {
-		this->setLoginAndPassword();
+    std::cout << "Login:";
+    std::cin >> login;
+    std::cout << std::endl;
+
+    std::cout << "Password";
+    std::cin >> password;
+    std::cout << std::endl;
+    hashedPassword = md5(password);
+
+    auto ExistingUser = storage.get_no_throw<User>(where(is_equal(&User::login_, login) && 
+                                                    is_equal(&User:hashedPass_, hashedPassword)));
+
+    if (ExistingUser) {
+		this->setLoginAndPassword(login, hashedPassword);
         std::cout << "You've succesfully logged in" << std::endl;
     else {
         std::cout << "Wrong login or password" << std::endl;

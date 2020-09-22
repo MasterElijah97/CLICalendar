@@ -73,6 +73,7 @@ class User {
         std::string hashedPass_;
         std::string encryptingKey_;
         std::string decryptingKey_;
+        int id;
 
         std::shared_ptr<sqlite3db> localDb = std::make_shared<sqlite3db>(new sqlite3db);
 };
