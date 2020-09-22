@@ -3,10 +3,6 @@
 
 #include "src/MD5.h"
 
-std::string arg1;
-std::string arg2;
-int arg3;
-
 int main(int argc, char* argv[]) {
 
     Session& thisSession = Session::instance();
@@ -19,6 +15,10 @@ int main(int argc, char* argv[]) {
     talk_to_svr::start(ep, login, password);
     service.run();
 
+    std::string arg1;
+    std::string arg2;
+    int arg3;
+    
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;
         commandMonitor(arg1, arg2, arg3);
