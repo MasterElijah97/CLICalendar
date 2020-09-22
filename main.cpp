@@ -15,6 +15,9 @@ int main(int argc, char* argv[]) {
     talk_to_svr::start(ep, login, password);
     service.run();
 
+    std::cout << "Please, log in or add new account." << std::endl;
+    std::cout << "Write 'help' command to see supported commands." << std::endl;
+
     std::string arg1;
     std::string arg2;
     int arg3;
