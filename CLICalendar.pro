@@ -19,8 +19,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 # Input
 HEADERS += src/commandMonitor.h \
-           ../Desktop/Программы в портфолио/CalendarWithServerClient/ClientForCal/crypto/aes/AES.h \
-           ../Desktop/Программы в портфолио/CalendarWithServerClient/ClientForCal/crypto/aes/AES.h \
            src/AES.h \
            src/day.h \
            src/deal.h \
@@ -36,7 +34,6 @@ HEADERS += src/commandMonitor.h \
            src/user.h \
            src/visitor.h
 SOURCES += main.cpp \
-           ../Desktop/Программы в портфолио/CalendarWithServerClient/ClientForCal/crypto/aes/AES.cpp \
            src/AES.cpp \
            src/commandMonitor.cpp \
            src/day.cpp \
