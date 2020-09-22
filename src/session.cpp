@@ -201,6 +201,16 @@ void Session::getNotesFromServer() {
      this->syncWithServerBase();
  }
 
+void Session::getTasks() const {
+	return tasks_;
+};
+void Session::getNotes() const {
+	return notes_;
+};
+void Session::getDays() const {
+	return days_;
+};
+
  void Session::addTask(Task task) {
      this->tasks.push_back(task);
  }
@@ -217,10 +227,13 @@ void Session::getNotesFromServer() {
  	this->joinedObject_->show();
  }
  void Session::showHelp() {
- 	std::cout << "---List of supported commands---"                                           << std::endl;
+ 	std::cout << "---List of supported commands---"                                                            << std::endl;
 
  	std::cout << std::endl;
-
+ 	std::cout << "--Navigation--"                                                                              << std::endl;
+ 	std::cout << "next                      -allows to get next item"                                          << std::endl;
+ 	std::cout << "prev                      -allows to get previous item"                                      << std::endl;
+ 	
  	std::cout << "--Manipulating with data--"                                                                  << std::endl;
  	std::cout << "open tasks/notes/days     -open tasks or notes or days"                                      << std::endl;
  	std::cout << "create task/note/day/deal -create task or note or day or deal"                               << std::endl;
@@ -282,6 +295,12 @@ std::variant<
     return moveableObject_;
 };
 
+/*
+template<typename T>
+void Session::setJoined(std::vector<T>::iterator it) {
+	joinedObject_ = it;
+}
+*/
 void Session::setJoined(std::vector<Day>::iterator it) {
    joinedObject_ = it;
 }
@@ -303,7 +322,17 @@ void Session::decrementJoined() {
 	this->joinedObject_ = joinedObject_ + 1;
 }
 
-//need to handle by visit
+/*
+template<typename T>
+void Session::setMovable(std::vector<T>::iterator it) {
+	movableObject_ = it;
+}
+
+template<typename T>
+void Session::setCopyable(std::vector<T>::iterator it) {
+	copyableObject_ = it;
+}
+*/
 void Session::setMovable(std::vector<Day>::iterator it) {
     moveableObject_ = it;
 }

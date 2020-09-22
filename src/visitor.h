@@ -11,6 +11,7 @@
 #include "task.h"
 #include "note.h"
 
+
 struct JoinedLabelSetter {
 	JoinedLabelSetter(std::string&&);
 
@@ -69,4 +70,33 @@ struct JoinedDateSetter {
 	static void operator()(std::vector<Day>::iterator);
 };
 
+struct CopyablePaster {
+	CopyablePaster(Session&);
+	Session& session_;
+
+	static void operator()(std::vector<Day>::iterator);
+	static void operator()(std::vector<Deal>::iterator);
+	static void operator()(std::vector<Task>::iterator);
+	static void operator()(std::vector<Note>::iterator);
+};
+
+struct JoinedIncrementAllower {
+	JoinedIncrementAllower(Session&);
+	Session& session_;
+
+	static void operator()(std::vector<Day>::iterator);
+	static void operator()(std::vector<Deal>::iterator);
+	static void operator()(std::vector<Task>::iterator);
+	static void operator()(std::vector<Note>::iterator);	
+};
+
+struct JoinedDecrementAllower {
+	JoinedDecrementAllower(Session&);
+	Session& session_;
+
+	static void operator()(std::vector<Day>::iterator);
+	static void operator()(std::vector<Deal>::iterator);
+	static void operator()(std::vector<Task>::iterator);
+	static void operator()(std::vector<Note>::iterator);	
+};
 #endif // VISITOR_H

@@ -8,17 +8,27 @@ void clearConsole() {
 
 void commandMonitor(const std::string& arg1,
                     const std::string& arg2,
-                    const int& arg3) {
+                    const int& arg3,
+                    Session& thisSession) {
 
 
+    if (!arg1.compare("next")) {
+        std::visit(JoinedIncrement{thisSession}, thisSession.getJoined())  
 
-    if (!arg1.compare("join")) {
+        thisSession.getJoined()->show();
+    }
+    else if (!arg1.compare("prev")) {
+        std::visit(JoinedDecrement{thisSession}, thisSession.getJoined())  
+
+        thisSession.getJoined()->show();
+    }
+    else if (!arg1.compare("join")) {
 
         if (!arg2.compare("deals")) {
             if(!joinedObject_) {
                 std::cout << "Please, open days" << std::endl;
             } else {
-                thisSession->setJoined(joinedObject_->deals.end() - 1);
+                thisSession.setJoined(joinedObject_->deals.end() - 1);
             }
         }
 
@@ -53,12 +63,12 @@ void commandMonitor(const std::string& arg1,
     } 
     else if (!arg1.compare("copy")) {
 
-        thisSession->setCopyable(joinedObject_);
+        thisSession.setCopyable(joinedObject_);
 
     } 
     else if (!arg1.compare("paste")) {
 
-        std::swap(*joinedObject_, *copyableObject_);
+        std::visit(CopyablePaster{thisSession}, copyableObject_);
 
     } 
     else if (!arg1.compare("remove")) {
