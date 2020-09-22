@@ -69,15 +69,10 @@ class User {
             std::cout << "All data have been synchronized from server to local database" << std::endl;
         }
     private:
-        std::string login;
-        std::string hashedPass;
-        std::string encryptingKey;
-        std::string decryptingKey;
-
-        std::shared_ptr<Task> selectedTask = std::make_shared<Task>(Task task);
-        std::shared_ptr<Note> selectedNote = std::make_shared<Note>(Note note);
-        std::shared_ptr<Day> selectedDay = std::make_shared<Day>(Day day);
-        std::shared_ptr<Deal> selectedDeal = std::make_shared<Deal>(Deal deal);
+        std::string login_;
+        std::string hashedPass_;
+        std::string encryptingKey_;
+        std::string decryptingKey_;
 
         std::shared_ptr<sqlite3db> localDb = std::make_shared<sqlite3db>(new sqlite3db);
 };

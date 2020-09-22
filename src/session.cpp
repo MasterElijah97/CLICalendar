@@ -22,7 +22,7 @@ Session::Session()
     days_.reserve(3000);
 }
 
-void Session::setLoginAndPassword(std::string& login, std::string& password) {
+void Session::setLoginAndPassword(const std::string& login, const std::string& password) {
 	this->login_ = login;
 	this->password = password_;
 }
@@ -35,6 +35,9 @@ Session& Session::instance() {
 }
 
 void Session::logIn(const std::string& login, const std::string& password) {
+
+    //connect to local db with accounts
+
 	if (MD5(password) == storage.get<Account>(where(is_equal(&Password::login_, login))); {
 		this->setLoginAndPassword();
         std::cout << "You've succesfully logged in" << std::endl;
@@ -147,8 +150,11 @@ void Session::creatingDeal() {
 
 void Session::logOut() {
             //todo
-            login_.clear();
-            password_.clear();
+            this->user.login_.clear();
+            this->user.hashedPass_.clear();
+            this->//disconnect from db
+            this->//disconnect from server if connected
+
 }
 void Session::connectToServer() {
             //todo
