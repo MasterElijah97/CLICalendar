@@ -24,6 +24,8 @@ class Session { //Singleton
         void logIn(const std::string& login, const std::string& password);
         void logOut();
 
+        void initDatabases(const std::string& login);
+
         void connectToServer();
         void disconnectFromServer();
 
@@ -111,7 +113,7 @@ class Session { //Singleton
         //getters
 
         //setters
-
+        
     private:
         Session();
         Session(const Session&);
