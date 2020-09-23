@@ -326,8 +326,8 @@ void Session::getDays() const {
     std::vector<Note>::iterator,
     std::vector<Task>::iterator,
     std::vector<Deal>::iterator
-> Session::getJoined() const {
-    return joinedObject_;
+>& Session::getJoined() {
+    return this->joinedObject_;
 };
 
 
@@ -336,8 +336,8 @@ std::variant<
     std::vector<Note>::iterator,
     std::vector<Task>::iterator,
     std::vector<Deal>::iterator
-> Session::getCopyable() const {
-    return copyableObject_;
+>& Session::getCopyable() {
+    return this->copyableObject_;
 };
 
 std::variant<
@@ -345,8 +345,8 @@ std::variant<
     std::vector<Note>::iterator,
     std::vector<Task>::iterator,
     std::vector<Deal>::iterator
-> Session::getMoveable() const {
-    return moveableObject_;
+>& Session::getMoveable() {
+    return this->moveableObject_;
 };
 
 /*
