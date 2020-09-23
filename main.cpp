@@ -41,7 +41,9 @@ int main(int argc, char* argv[]) {
     }
 
     databaseName = thisSession.user.login_ + ".sqlite";
-    auto localDb = make_storage(databaseName,
+
+    namespace localDb {
+        auto localDb = make_storage(databaseName,
                                 make_tablle("Days",
 
                                     make_column("id",
@@ -121,9 +123,13 @@ int main(int argc, char* argv[]) {
 
                                     make_column("Description",
                                         &Note::description_)),
-    );;
+        );
 
-    localDb.sync_schema();
+        auto getRefToLocalDb() {
+            return &localDb;
+        }
+    }
+    local::DblocalDb.sync_schema();
 
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;
