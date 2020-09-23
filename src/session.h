@@ -14,6 +14,7 @@
 #include "day.h"
 #include "task.h"
 #include "note.h"
+#include "user.h"
 
 class Session { //Singleton
     public:
@@ -111,16 +112,13 @@ class Session { //Singleton
         //getters
 
         //setters
-        
+        User user;
     private:
         Session();
         Session(const Session&);
         Session(Session&&);
         Session& operator=(const Session&);
         Session& operator=(Session&&);
-
-        std::string login_;
-        std::string password_;
 
         std::vector<Task> tasks_;
         std::vector<Note> notes_;
@@ -149,12 +147,6 @@ class Session { //Singleton
         std::vector<Task>::iterator,
         std::vector<Task>::iterator
         > moveableObject_;
-
-        std::unique_ptr<Connection> thisConnection_ = nullptr;
-        std::shared_ptr<Database> localBase_ = nullptr;
-        std::shared_ptr<Database> serverBase_ = nullptr;
-
-        std::unordered_map<std::string, std::string> logindAndPassword; /*getfrombase*/
 
         //move to public
 };
