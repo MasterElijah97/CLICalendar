@@ -1,0 +1,3 @@
+linker settings
+-lpthread
+-ldl
