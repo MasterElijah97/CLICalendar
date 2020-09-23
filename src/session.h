@@ -59,21 +59,21 @@ class Session { //Singleton
             std::vector<Note>::iterator,
             std::vector<Task>::iterator,
             std::vector<Deal>::iterator
-        > getJoined() const;
+        >& getJoined();
 
         std::variant<
             std::vector<Day>::iterator,
             std::vector<Note>::iterator,
             std::vector<Task>::iterator,
             std::vector<Deal>::iterator
-        > getCopyable() const;
+        >& getCopyable();
 
         std::variant<
             std::vector<Day>::iterator,
             std::vector<Note>::iterator,
             std::vector<Task>::iterator,
             std::vector<Deal>::iterator
-        > getMoveable() const;
+        >& getMoveable();
 
         void setJoined(std::vector<Day>::iterator);
         void setJoined(std::vector<Deal>::iterator);
