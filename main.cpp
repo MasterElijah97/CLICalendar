@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
                                         &User::login_),
                                     make_column("hashed_pass",
                                         &User::hashedPass_ )));
+    accountsDb.sync_schema();
 
     Session& thisSession = Session::instance();
     std::string databaseName;
@@ -121,6 +122,8 @@ int main(int argc, char* argv[]) {
                                     make_column("Description",
                                         &Note::description_)),
     );;
+
+    localDb.sync_schema();
 
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;
