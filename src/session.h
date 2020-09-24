@@ -9,12 +9,13 @@
 #include <map>
 #include <iterator>
 
-#include "MD5.h"
-#include "deal.h"
-#include "day.h"
-#include "task.h"
-#include "note.h"
-#include "user.h"
+#include "src/MD5.h"
+#include "src/deal.h"
+#include "src/day.h"
+#include "src/task.h"
+#include "src/note.h"
+#include "src/user.h"
+#include "src/black_magic.h"
 
 class Session { //Singleton
     public:
@@ -123,6 +124,8 @@ class Session { //Singleton
         std::vector<Task> tasks_;
         std::vector<Note> notes_;
         std::vector<Day> days_;
+
+        base_t* localDb;
 
         std::variant
         <
