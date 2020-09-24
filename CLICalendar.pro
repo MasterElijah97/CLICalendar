@@ -20,6 +20,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Input
 HEADERS += src/commandMonitor.h \
            src/AES.h \
+           src/black_magic.h \
            src/day.h \
            src/deal.h \
            src/important.h \

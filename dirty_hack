@@ -1,0 +1,209 @@
+#include <iostream>
+#include <string>
+#include <variant>
+#include <vector>
+#include <iterator>
+#include <iomanip>
+#include <memory>
+#include <thread>
+#include <mutex>
+#include <typeinfo>
+#include "MD5.h"
+#include "sqlite_orm.h"
+
+using namespace std;
+using namespace sqlite_orm;
+
+class Day {
+public:
+int id_;
+std::string date_;
+};
+
+class Important {
+public:
+int id_;
+std::string important_;
+};
+
+class Deal {
+public:
+int id_;
+std::string name_;
+std::string description_;
+std::string label_;
+std::string date_;
+std::string priority_;
+struct Time {
+    std::string begin;
+    std::string end;
+};
+};
+
+class Task {
+public:
+int id_;
+bool isCompleted_;
+std::string description_;
+};
+
+class Note {
+public:
+int id_;
+std::string label_;
+std::string name_;
+std::string description_;
+};
+
+using base_t = sqlite_orm::internal::storage_t<sqlite_orm::internal::table_t<
+                Day, sqlite_orm::internal::column_t<Day, int, const int& (Day::*)
+                () const, void (Day::*)(int), sqlite_orm::constraints::autoincrement_t,
+                sqlite_orm::constraints::primary_key_t<> >, sqlite_orm::internal::column_t<
+                Day, std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Day::*)() const, void
+                (Day::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)> >, sqlite_orm::internal::table_t<Important,
+                sqlite_orm::internal::column_t<Important, int, const int& (Important::*)()
+                const, void (Important::*)(int), sqlite_orm::constraints::autoincrement_t,
+                sqlite_orm::constraints::primary_key_t<> >, sqlite_orm::internal::column_t<
+                Important, std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Important::*)()
+                const, void (Important::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)> >, sqlite_orm::internal::table_t<Deal,
+                sqlite_orm::internal::column_t<Deal, int, const int& (Deal::*)()
+                const, void (Deal::*)(int), sqlite_orm::constraints::autoincrement_t,
+                sqlite_orm::constraints::primary_key_t<> >, sqlite_orm::internal::column_t<Deal,
+                std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,
+                const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&
+                (Deal::*)() const, void (Deal::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)>, sqlite_orm::internal::column_t<Deal, std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Deal::*)() const, void (Deal::*)
+                (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>,
+                sqlite_orm::internal::column_t<Deal, std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >, const std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >& (Deal::*)() const, void (Deal::*)(std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >)>, sqlite_orm::internal::column_t<
+                Deal, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,
+                const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&
+                (Deal::*)() const, void (Deal::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)>, sqlite_orm::internal::column_t<Deal, std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Deal::*)() const, void (Deal::*)
+                (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>,
+                sqlite_orm::internal::column_t<Deal::Time, std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Deal::Time::*)() const, void (Deal::Time::*)
+                (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>,
+                sqlite_orm::internal::column_t<Deal::Time, std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >, const std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >& (Deal::Time::*)() const, void (Deal::Time::*)
+                (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)> >,
+                sqlite_orm::internal::table_t<Task, sqlite_orm::internal::column_t<Task, int, const int&
+                (Task::*)() const, void (Task::*)(int), sqlite_orm::constraints::autoincrement_t,
+                sqlite_orm::constraints::primary_key_t<> >, sqlite_orm::internal::column_t<Task, bool, const bool&
+                (Task::*)() const, void (Task::*)(bool)>, sqlite_orm::internal::column_t<Task,
+                std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,
+                const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >& (Task::*)
+                () const, void (Task::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)> >, sqlite_orm::internal::table_t<Note, sqlite_orm::internal::column_t<
+                Note, int, const int& (Note::*)() const, void (Note::*)(int), sqlite_orm::constraints::autoincrement_t,
+                sqlite_orm::constraints::primary_key_t<> >, sqlite_orm::internal::column_t<Note,
+                std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >,
+                const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&
+                (Note::*)() const, void (Note::*)(std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >)>, sqlite_orm::internal::column_t<Note, std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >& (Note::*)() const, void (Note::*)
+                (std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)>,
+                sqlite_orm::internal::column_t<Note, std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >, const std::__cxx11::basic_string<char, std::char_traits<char>,
+                std::allocator<char> >& (Note::*)() const, void (Note::*)(std::__cxx11::basic_string<char,
+                std::char_traits<char>, std::allocator<char> >)> > >;
+
+base_t storage = make_storage("db.sqlite",
+                                make_table("Days",
+
+                                    make_column("id",
+                                        &Day::id_,
+                                        autoincrement(),
+                                        primary_key()),
+
+                                    make_column("Date",
+                                        &Day::date_)),
+
+                                make_table("Importants",
+
+                                    make_column("id",
+                                        &Important::id_,
+                                        autoincrement(),
+                                        primary_key()),
+
+                                    make_column("Important",
+                                        &Important::important_ )),
+
+                                make_table("Deals",
+
+                                    make_column("id",
+                                        &Deal::id_,
+                                        autoincrement(),
+                                        primary_key()),
+
+                                    make_column("Name",
+                                        &Deal::name_),
+
+                                    make_column("Description",
+                                        &Deal::description_),
+
+                                    make_column("Label",
+                                        &Deal::label_),
+
+                                    make_column("Priority",
+                                        &Deal::priority_),
+
+                                    make_column("date",
+                                        &Deal::date_),
+
+                                    make_column("TimeBegin",
+                                        &Deal::Time::begin),
+
+                                    make_column("TimeEnd",
+                                        &Deal::Time::end)),
+
+                                make_table("Tasks",
+
+                                    make_column("id",
+                                        &Task::id_,
+                                        autoincrement(),
+                                        primary_key()),
+
+                                    make_column("IsCompleted",
+                                        &Task::isCompleted_),
+
+                                    make_column("Description",
+                                        &Task::description_)),
+
+                                make_table("Notes",
+
+                                    make_column("id",
+                                        &Note::id_,
+                                        autoincrement(),
+                                        primary_key()),
+
+                                    make_column("Label",
+                                        &Note::label_),
+
+                                    make_column("Name",
+                                        &Note::name_),
+
+                                    make_column("Description",
+                                        &Note::description_))
+        );
+
+
+    base_t* get_reference_to_local_db() {
+        return &storage;
+    }
+
