@@ -82,32 +82,22 @@ void Session::logIn() {
         std::cout << "You've succesfully logged in" << std::endl;
         this->user.isLoggedIn_ = true;
         this->initDatabases(login);
-    else {
+    } else {
         std::cout << "Wrong login or password" << std::endl;
         std::cout << "Please, try again" << std::endl;
     }
 }
 
 void Session::logOut() {
-            //todo
             this->user.login_.clear();
             this->user.hashedPass_.clear();
             this->user.isLoggedIn_ = false;
-
-            tasksDb = nullptr;
-            notesDb = nullptr;
-            daysDb = nullptr;
-            dealsDb = nullptr;
-
-            //this->//disconnect from db by
-            //this->//disconnect from server if connected
-
 }
 
 
 void getDataFromLocalBase() {
 	try {
-		tasks_ = storage.get_all<Task>;
+		this->tasks_ = storage.get_all<Task>;
 	}
 	catch (sqlite_orm::not_found_exception) {
     	std::cout << "No one task found" << std::endl;
@@ -118,7 +108,7 @@ void getDataFromLocalBase() {
 
 
 	try {
-    	notes_ = storage.get_all<Note>;
+    	this->notes_ = storage.get_all<Note>;
 	}
 	catch (sqlite_orm::not_found_exception) {
     	std::cout << "No one note found" << std::endl;
@@ -128,7 +118,7 @@ void getDataFromLocalBase() {
 	}	
 
 	try {
-    	days_ = storage.get_all<Day>;
+    	this->days_ = storage.get_all<Day>;
 	}
 	catch (sqlite_orm::not_found_exception) {
       	std::cout << "No one task found" << std::endl;
@@ -139,7 +129,7 @@ void getDataFromLocalBase() {
 
 	for (auto it = days_.begin(); it != days_.end(); ++it) {
     	try {
-        	it->deals_ = storage.get_all<Deal>(where(is_equal(&Deal::date_, it->getDate())));
+        	it->deals_ = storage.get_all<Deal>(where(is_equal(&Deal::date_, it->date_)));
     	}
     	catch(sqlite_orm::not_found_exception) {
         	continue;
@@ -147,6 +137,16 @@ void getDataFromLocalBase() {
     	catch(...) {
         	std::cout << "Unknown exception" << std::endl;
     	}
+
+        try {
+            it->importants_ = storage.get_all<Important>(where(is_equal(&Deal::date_, it->date_)));
+        }
+        catch(sqlite_orm::not_found_exception) {
+            continue;
+        }
+        catch(...) {
+            std::cout << "Unknown exception" << std::endl;
+        }
 	}
 }
 
@@ -154,7 +154,13 @@ void Session::creatingTask() {
     std::string description;
     std::cout << "Please, enter description" << std::endl;
     std::cin >> description;
-    tasks_.emplace_back(Task(description));
+
+    Task task(description);
+    auto insertedId = this->localDb->insert(task);
+    task.id_= insertedId;
+    tasks_.push_back(task);
+
+    std::cout << "New tas has been created :)" << std::endl:
 }
 void Session::creatingNote() {
     std::string name;
@@ -167,14 +173,26 @@ void Session::creatingNote() {
     std::cin >> description;
     std::cout << "Please, enter label" << std::endl;
     std::cin >> label;
-    notes_.emplace_back(Note(name, description, label));
+
+    Note note(name, description, label);
+    auto insertedId = this->localDb->insert(note);
+    note.id_= insertedId;
+    notes_.push_back(note);
+
+    std::cout << "New note has been created :)" << std::endl:
 }
 
 void Session::creatingDay() {
     std::string date;
-    std::cout << "Please, enter date in format DDMMYYYY" << std::endl;
+    std::cout << "Please, enter date in format YYYYMMDD" << std::endl;
     std::cin >> date;
-    days_.emplace_back(Day(date));
+
+    Day day(date);
+    auto insertedId = this->localDb->insert(day);
+    note.id_= insertedId;
+    days_.push_back(day);
+    
+    std::cout << "New day has been created :)" << std::endl:
 }
 
 void Session::creatingDeal() {
@@ -194,16 +212,22 @@ void Session::creatingDeal() {
     std::cin >> priority;
     std::cout << "Please, enter time in format HH:MM-HH::MM" << std::endl;
     std::cin >> time;
-    Deal newDeal(name,
+    Deal deal(name,
                 description,
                 label,
                 priority,
                 time.substr(0, 2)+time.substr(4, 5),
                 time.substr(7, 9)+time.substr(11, 12));
-    joinedObject_->addDeal(newDeal);
+
+    auto insertedId = this->localDb->insert(deal);
+    deal.id_= insertedId;
+    this->joinedObject_->addDeal(deal);
+    
+    std::cout << "New day has been created :)" << std::endl:
+    
 }
 
-
+/*Server part
 void Session::connectToServer() {
             //todo
 }
@@ -254,27 +278,18 @@ void Session::getNotesFromServer() {
      this->syncWithLocalBase();
      this->syncWithServerBase();
  }
-
-void Session::getTasks() const {
-	return tasks_;
-};
-void Session::getNotes() const {
-	return notes_;
-};
-void Session::getDays() const {
-	return days_;
-};
+*/
 
  void Session::addTask(Task task) {
-     this->tasks.push_back(task);
+     this->tasks_.push_back(task);
  }
 
  void Session::addNote(Note note) {
-     this->notes.push_back(note);
+     this->notes_.push_back(note);
  }
 
  void Session::addDay(Day day) {
-     this->tasks.push_back(day);
+     this->days_.push_back(day);
  }
 
  void Session::showJoined() {

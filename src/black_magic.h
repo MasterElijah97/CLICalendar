@@ -8,6 +8,7 @@
 #include "src/task.h"
 #include "src/note.h"
 
+using namespace sqlite_orm;
 /* WARNING!!!
  * For educational purposes only!!!
  * Never do this way  in serious projects
