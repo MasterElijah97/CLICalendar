@@ -21,6 +21,37 @@ class Session { //Singleton
     public:
         static Session& instance();
 
+        User user;
+        base_t* localDb;
+        
+        std::vector<Task> tasks_;
+        std::vector<Note> notes_;
+        std::vector<Day> days_;
+
+        std::variant
+        <
+        std::vector<Day>::iterator,
+        std::vector<Note>::iterator,
+        std::vector<Task>::iterator,
+        std::vector<Deal>::iterator
+        > joinedObject_;
+
+        std::variant
+        <
+        std::vector<Day>::iterator,
+        std::vector<Note>::iterator,
+        std::vector<Task>::iterator,
+        std::vector<Task>::iterator
+        > copyableObject_;
+
+        std::variant
+        <
+        std::vector<Day>::iterator,
+        std::vector<Note>::iterator,
+        std::vector<Task>::iterator,
+        std::vector<Task>::iterator
+        > moveableObject_;
+
         void addingNewUser();
         void setLoginAndPassword(std::string&, std::string&);
         void logIn(const std::string& login, const std::string& password);
@@ -110,48 +141,13 @@ class Session { //Singleton
         void eraseJoinedTask();
         void eraseJoinedNote();
         void eraseJoinedDay();
-        //getters
 
-        //setters
-        User user;
     private:
         Session();
         Session(const Session&);
         Session(Session&&);
         Session& operator=(const Session&);
         Session& operator=(Session&&);
-
-        std::vector<Task> tasks_;
-        std::vector<Note> notes_;
-        std::vector<Day> days_;
-
-        base_t* localDb;
-
-        std::variant
-        <
-        std::vector<Day>::iterator,
-        std::vector<Note>::iterator,
-        std::vector<Task>::iterator,
-        std::vector<Deal>::iterator
-        > joinedObject_;
-
-        std::variant
-        <
-        std::vector<Day>::iterator,
-        std::vector<Note>::iterator,
-        std::vector<Task>::iterator,
-        std::vector<Task>::iterator
-        > copyableObject_;
-
-        std::variant
-        <
-        std::vector<Day>::iterator,
-        std::vector<Note>::iterator,
-        std::vector<Task>::iterator,
-        std::vector<Task>::iterator
-        > moveableObject_;
-
-        //move to public
 };
 
 #endif // SESSION_H
