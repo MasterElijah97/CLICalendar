@@ -206,7 +206,7 @@ class Deal : public IVersion, public IUniqueId {
             std::cout << description_ << std::endl;
         }
 
-        void edit() {
+        void edit(base_t* base) {
             std::string input;
 
             this->show();
@@ -256,6 +256,8 @@ class Deal : public IVersion, public IUniqueId {
             }
 
             std::cout << std::endl;
+
+            base->update(*this);
         }
 
         std::string concatenate() {
@@ -309,7 +311,7 @@ class Deal : public IVersion, public IUniqueId {
             }
             description_ = msg.substr(posBegin);
         }
-    private:
+
         std::string name_;
         std::string description_;
         std::string label_;

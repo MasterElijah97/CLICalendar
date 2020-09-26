@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+#include "src/session.h"
+
 #include "src/deal.h"
 #include "src/day.h"
 #include "src/task.h"
@@ -12,6 +14,7 @@
 #include "src/sqlite_orm.h"
 //todo ptr on local db
 class User {
+    friend class Session;
     public:
         User() = delete;
         User(const User& user) = delete;
@@ -32,11 +35,11 @@ class User {
 
         //setters
         void setEncryptingKey(std::string key) {
-            this->encryptingKey = key;
+            this->encryptingKey = std::move(key);
         }
 
         void setDecryptKey(std::string key) {
-            this->decryptingKey = key;
+            this->decryptingKey = std::move(key);
         }
         //other funcs
         std::string encryptMessage(std::string message) {
@@ -68,15 +71,17 @@ class User {
             }
             std::cout << "All data have been synchronized from server to local database" << std::endl;
         }
-    private:
+    
+    bool isLogged() const {
+        return isLoggedIn_;
+    }
         std::string login_;
         std::string hashedPass_;
+        int id_;
+    private:
+        bool isLoggedIn_;
         std::string encryptingKey_;
         std::string decryptingKey_;
-        int id_;
-        bool isLoggedIn_;
-
-        std::shared_ptr<sqlite3db> localDb = std::make_shared<sqlite3db>(new sqlite3db);
 };
 
 #endif // USER_H

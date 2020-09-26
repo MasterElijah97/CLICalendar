@@ -46,7 +46,7 @@ class Day : public IVersion, public IUniqueId {
             return deals_;
         }
 
-        std::vector<std::string> getImportants() const {
+        std::vector<Impportant> getImportants() const {
             return importants_;
         }
 
@@ -56,7 +56,7 @@ class Day : public IVersion, public IUniqueId {
 
         void addDeal(Deal deal) {
             deals_.emplace_back(deal);
-            deals_.end()->setDate(date_);
+            (deals_.end()-1)->setDate(date_);
         }
 
         void addImportant(std::string important) {
@@ -141,7 +141,7 @@ class Day : public IVersion, public IUniqueId {
             showImportants();
         }
 
-        void edit() {
+        void edit(base_t* base) {
             std::string input;
 
             this->show();
@@ -170,6 +170,8 @@ class Day : public IVersion, public IUniqueId {
             }
             
             std::cout << std::endl;
+
+            base->update(*this);
         }        
 
         std::string concatenate() {
@@ -206,8 +208,6 @@ class Day : public IVersion, public IUniqueId {
                 }
             }
         }
-
-    private:
         std::string date_;
         std::vector<Deal> deals_;
         std::vector<Important> importants_;

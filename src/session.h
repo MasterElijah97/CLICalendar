@@ -24,6 +24,8 @@ class Session { //Singleton
         User user;
         base_t* localDb;
         
+        void addBasePtr(base_t&);
+        
         std::vector<Task> tasks_;
         std::vector<Note> notes_;
         std::vector<Day> days_;
@@ -54,7 +56,7 @@ class Session { //Singleton
 
         void addingNewUser();
         void setLoginAndPassword(std::string&, std::string&);
-        void logIn(const std::string& login, const std::string& password);
+        void logIn();
         void logOut();
 
         void connectToServer();

@@ -6,9 +6,11 @@ JoinedLabelSetter::JoinedLabelSetter(std::string&& msg) {
 }
 void JoinedLabelSetter::operator()(std::vector<Deal>::iterator it) {
     it->setLabel(msg_);
+    base->update(*it);
 }
 void JoinedLabelSetter::operator()(std::vector<Deal>::iterator it) {
     it->setLabel(msg_);
+    base->update(*it);
 }
 
 JoinedNameSetter::JoinedNameSetter(std::string&& msg) {
@@ -16,9 +18,11 @@ JoinedNameSetter::JoinedNameSetter(std::string&& msg) {
 }
 void JoinedNameSetter::operator()(std::vector<Deal>::iterator it) {
     it->setName(msg_);
+    base->update(*it);
 }
 void JoinedNameSetter::operator()(std::vector<Note>::iterator it) {
     it->setName(msg_);
+    base->update(*it);
 }
 
 JoinedDescriptionSetter::JoinedDescriptionSetter(std::string&& msg) {
@@ -26,12 +30,15 @@ JoinedDescriptionSetter::JoinedDescriptionSetter(std::string&& msg) {
 }
 void JoinedDescriptionSetter::operator()(std::vector<Deal>::iterator it) {
     it->setDescription(msg_);
+    base->update(*it);
 }
 void JoinedDescriptionSetter::operator()(std::vector<Task>::iterator it) {
     it->setDescription(msg_);
+    base->update(*it);
 }
 void JoinedDescriptionSetter::operator()(std::vector<Note>::iterator it) {
     it->setDescription(msg_);
+    base->update(*it);
 }
 
 JoinedPrioritySetter::JoinedPrioritySetter(std::string&& msg) {
@@ -39,6 +46,7 @@ JoinedPrioritySetter::JoinedPrioritySetter(std::string&& msg) {
 }
 void JoinedPrioritySetter::operator()(std::vector<Deal>::iterator it) {
    	it->setPriority(msg_);
+    base->update(*it);
 }
 
 JoinedTimeSetter::JoinedTimeSetter(std::string&& msg) {
@@ -46,6 +54,7 @@ JoinedTimeSetter::JoinedTimeSetter(std::string&& msg) {
 }
 void JoinedTimeSetter::operator()(std::vector<Deal>::iterator it) {
     it->setTime(msg_);
+    base->update(*it);
 }
 
 JoinedComplitedSetter::JoinedComplitedSetter(bool&& msg) {
@@ -53,6 +62,7 @@ JoinedComplitedSetter::JoinedComplitedSetter(bool&& msg) {
 }
 void JoinedComplitedSetter::operator()(std::vector<Task>::iterator it) {
    	it->setComplited(msg_);
+    base->update(*it);
 }
 
 JoinedDateSetter::JoinedDateSetter(std::string&& msg) {
@@ -60,6 +70,7 @@ JoinedDateSetter::JoinedDateSetter(std::string&& msg) {
 }
 void JoinedDateSetter::operator()(std::vector<Day>::iterator it) {
    	it->setDate(msg_);
+    base->update(*it);
 }
 
 CopyablePaster::CopyablePaster(Session& session) {
