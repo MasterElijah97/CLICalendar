@@ -20,6 +20,7 @@ int main(int argc, char* argv[]) {
     accountsDb.sync_schema();
 
     Session& thisSession = Session::instance();
+    
     std::string databaseName;
     std::string arg1;
     std::string arg2;
@@ -42,8 +43,7 @@ int main(int argc, char* argv[]) {
 
     databaseName = thisSession.user.login_ + ".sqlite";
 
-    namespace localDb {
-        auto localDb = make_storage(databaseName,
+    auto localDb = make_storage(databaseName,
                                 make_tablle("Days",
 
                                     make_column("id",
@@ -125,11 +125,9 @@ int main(int argc, char* argv[]) {
                                         &Note::description_)),
         );
 
-        auto getRefToLocalDb() {
-            return &localDb;
-        }
-    }
-    local::DblocalDb.sync_schema();
+    localDb.sync_schema();
+
+    thisSession->addBasePtr(&localDb);
 
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;

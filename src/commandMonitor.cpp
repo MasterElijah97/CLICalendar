@@ -12,16 +12,16 @@ void commandMonitor(const std::string& arg1,
                     const int& arg3,
                     Session& thisSession) {
 
-
+    //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
         std::visit(JoinedIncrement{thisSession}, thisSession.getJoined())  
 
-        thisSession.getJoined()->show();
+        thisSession->showJoined();
     }
     else if (!arg1.compare("prev")) {
         std::visit(JoinedDecrement{thisSession}, thisSession.getJoined())  
 
-        thisSession.getJoined()->show();
+        thisSession->showJoined();
     }
     else if (!arg1.compare("join")) {
 

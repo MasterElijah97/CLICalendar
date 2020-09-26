@@ -1,3 +1,6 @@
+/*
+ * https://github.com/fnc12/sqlite_orm
+ */
 #pragma once
 
 #if defined(_MSC_VER)

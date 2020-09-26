@@ -16,7 +16,6 @@ template<class... Ts>
 class Task : public IVersion, public IUniqueId {
     public:
 
-    friend  sqlite_orm::internal::storage_t<Ts...> make_storage(const std::string&, Ts...);
         //constructors
         Task() {
             isCompleted_ = false;
@@ -126,7 +125,7 @@ class Task : public IVersion, public IUniqueId {
             std::cout << description_ << std::endl;
         }
 
-        void edit() {
+        void edit(base_t* base) {
             std::string input;
 
             this->show();
@@ -155,6 +154,8 @@ class Task : public IVersion, public IUniqueId {
             }
             
             std::cout << std::endl;
+
+            base->update(*this);
         }   
 
         std::string concatenate() {
@@ -187,9 +188,9 @@ class Task : public IVersion, public IUniqueId {
             }
             description_ = msg.substr(posBegin);
         }
-    private:
         bool isCompleted_;
         std::string description_;
+    private:
 
         static std::size_t numberOfTasks;
 };

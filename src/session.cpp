@@ -52,6 +52,9 @@ void Session::setLoginAndPassword(const std::string& login, const std::string& p
 	this->user.hashedPass_ = password;
 }
 
+void Session::addBasePtr(base_t& base) {
+    this->localDb = base;
+}
 //public
 
 Session& Session::instance() {
@@ -97,7 +100,7 @@ void Session::logOut() {
 
 void getDataFromLocalBase() {
 	try {
-		this->tasks_ = storage.get_all<Task>;
+		this->tasks_ = localDb->get_all<Task>;
 	}
 	catch (sqlite_orm::not_found_exception) {
     	std::cout << "No one task found" << std::endl;
@@ -108,7 +111,7 @@ void getDataFromLocalBase() {
 
 
 	try {
-    	this->notes_ = storage.get_all<Note>;
+    	this->notes_ = localDb->get_all<Note>;
 	}
 	catch (sqlite_orm::not_found_exception) {
     	std::cout << "No one note found" << std::endl;
@@ -118,7 +121,7 @@ void getDataFromLocalBase() {
 	}	
 
 	try {
-    	this->days_ = storage.get_all<Day>;
+    	this->days_ = localDb->get_all<Day>;
 	}
 	catch (sqlite_orm::not_found_exception) {
       	std::cout << "No one task found" << std::endl;
@@ -129,7 +132,7 @@ void getDataFromLocalBase() {
 
 	for (auto it = days_.begin(); it != days_.end(); ++it) {
     	try {
-        	it->deals_ = storage.get_all<Deal>(where(is_equal(&Deal::date_, it->date_)));
+        	it->deals_ = localDb->get_all<Deal>(where(is_equal(&Deal::date_, it->date_)));
     	}
     	catch(sqlite_orm::not_found_exception) {
         	continue;
@@ -139,7 +142,7 @@ void getDataFromLocalBase() {
     	}
 
         try {
-            it->importants_ = storage.get_all<Important>(where(is_equal(&Deal::date_, it->date_)));
+            it->importants_ = localDb->get_all<Important>(where(is_equal(&Deal::date_, it->date_)));
         }
         catch(sqlite_orm::not_found_exception) {
             continue;
@@ -371,7 +374,7 @@ void Session::setJoined(std::vector<T>::iterator it) {
 }
 */
 void Session::setJoined(std::vector<Day>::iterator it) {
-   joinedObject_ = it;
+   this->joinedObject_ = std::move(it);
 }
 void Session::setJoined(std::vector<Deal>::iterator it) {
    joinedObject_ = it;
@@ -453,18 +456,23 @@ void Session::setJoinedDate(const std::string msg) {
 }
 
 void Session::eraseDealFromJoined(int& pos) {
+    this->localDb->remove<Deal>(joinedObject_->deals_[pos-1]);
     (std::get<std::vector<Day>::iterator>(joinedObject_))->removeDeal(pos);
 }
 void Session::eraseImportantFromJoined(int& pos) {
+    this->localDb->remove<Impportant>(joinedObject_->importants_[pos-1]);
     (std::get<std::vector<Day>::iterator>(joinedObject_))->removeImportant(pos);
 }
 
 void Session::eraseJoinedTask() {
+    this->localDb ->remove<Task>(joinedObject_->id_);
     tasks_.erase(std::get<std::vector<Task>::iterator>(joinedObject_));
 }
 void Session::eraseJoinedNote() {
+    this->localDb ->remove<Note>(joinedObject_->id_);
     note_.erase(std::get<std::vector<Note>::iterator>(joinedObject_));
 }
 void Session::eraseJoinedDay() {
+    this->localDb ->remove<Day>(joinedObject_->id_);
     days_.erase(std::get<std::vector<Day>::iterator>(joinedObject_));
 }

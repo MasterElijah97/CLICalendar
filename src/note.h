@@ -150,7 +150,7 @@ class Note : public IVersion, public IUniqueId {
             std::cout << description_ << std::endl;
         }
 
-        void edit() {
+        void edit(base_t* base) {
             std::string input;
 
             this->show();
@@ -179,6 +179,8 @@ class Note : public IVersion, public IUniqueId {
             }
 
             std::cout << std::endl;
+
+            base->update(*this);
         }
 
 
@@ -216,10 +218,10 @@ class Note : public IVersion, public IUniqueId {
             }
             description_ = msg.substr(posBegin);
         }
-    private:
         std::string label_;
         std::string name_;
         std::string description_;
+    private:
 
         static std::size_t numberOfNotes;
 };
