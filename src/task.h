@@ -12,193 +12,50 @@
 
 const std::string SEPARATOR(3, '&');
 
-template<class... Ts>
 class Task : public IVersion, public IUniqueId {
     public:
 
         //constructors
-        Task() {
-            isCompleted_ = false;
-            description_ = "New Task";
-            numberOfTasks++;
-        }
-
-        Task(std::string description) {
-            isCompleted_ = false;
-            description_ = description;
-            numberOfTasks++;
-        }
-
-
-        Task(const Task& right) {
-            isCompleted_ = right.getIsCompleted();
-            description_ = right.getDescription();
-            version_ = right.getVersion();
-            numberOfTasks++;
-        }
-
-        Task(Task&& right) {
-            isCompleted_ = right.getIsCompleted();
-            description_ = right.getDescription();
-            version_ = right.getVersion();
-
-            right.clearDescription();
-        }
+        Task();
+        Task(std::string);
+        Task(const Task&);
+        Task(Task&&);
         //destructors
-        ~Task() {
-            numberOfTasks--;
-        }
+        ~Task();
         //operators
         friend bool operator==(const Task& left, const Task& right);
 
-        Task& operator=(const Task& other) {
-            if (this == &other) {
-                return *this;
-            }
-            isCompleted_ = other.getIsCompleted();
-            description_ = other.getDescription();
-            version_ = other.getVersion();
-
-            return *this;
-        }
-
-        Task& operator=(Task&& other) {
-            if (this == &other) {
-                return *this;
-            }
-            isCompleted_ = other.getIsCompleted();
-            description_ = other.getDescription();
-            version_ = other.getVersion();
-
-            other.clearDescription();
-
-            return *this;
-        }
+        Task& operator=(const Task&);
+        Task& operator=(Task&&);
         //getters
-        bool getIsCompleted() const {
-            return isCompleted_;
-        }
-
-        std::string getDescription() const {
-            return description_;
-        }
-
-        friend const std::size_t getNumberOfTasks();
-
-        std::size_t getVersion() const {
-            return version_;
-        }
-
-        std::size_t getUniqueId() const {
-            return uniqueId_;
-        }
-
+        bool getIsCompleted() const;
+        std::string getDescription() const;
+        std::size_t getVersion() const;
+        std::size_t getUniqueId() const;
+        static std::size_t getNumberOfTasks() const;
         //setters
-        void setIsCompleted(const bool isCompleted) {
-            isCompleted_ = isCompleted;
-            updateVersion();
-        }
-
-        void setDescription(const std::string description) {
-            description_ = description;
-            updateVersion();
-        }
-
-        void setAllFields(const std::string description = "New Task",
-                          const bool isCompleted = false) {
-            isCompleted_ = isCompleted;
-            description_ = description;
-            updateVersion();
-        }
-
+        void setIsCompleted(base_t* base, const bool);
+        void setDescription(base_t* base, const std::string);
+        void setAllFields(base_t* base, const std::string,
+                          const bool);
         //clearing
-        void clearDescription() {
-            description_.clear();
-        }
+        void clearDescription();
         //funcs
-        void show() {
-            if (isCompleted_) {
-                std::cout << "Completed" << std::endl;
-            } else {
-                std::cout << "Uncompleted" << std::endl;
-            }
-            std::cout << description_ << std::endl;
-        }
+        void show();
 
-        void edit(base_t* base) {
-            std::string input;
+        void edit(base_t*);
 
-            this->show();
+        std::string concatenate();
+        void deconcatenate(const std::string&);
 
-            std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
-
-            std::cout << "Description: ";
-            std::cin >> input;
-            if (!input.empty()) {
-                this->description_ = input;
-                input.clear();
-            }
-
-
-            std::cout << "Completed? [Y / N]: ";
-            std::cin >> input;
-            if (!input.empty()) {
-
-                if ((input.find("Y") != std::string::npos) || (input.find("y") != std::string::npos)) {
-                    this->isCompleted_ = true;
-                } else {
-                    this->isCompleted_ = false;
-                }
-                input.clear();
-                
-            }
-            
-            std::cout << std::endl;
-
-            base->update(*this);
-        }   
-
-        std::string concatenate() {
-            return std::to_string(uniqueId_)    +SEPARATOR+
-                   std::to_string(version_)     +SEPARATOR+
-                   std::to_string(isCompleted_) +SEPARATOR+
-                   description_;
-        }
-
-        void deconcatenate(const std::string& msg) {
-            std::size_t counter = 0;
-            std::size_t posBegin = 0;
-
-            for (std::size_t i = 0; i != msg.size(); ++i) {
-                if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
-                    if (counter == 0) {
-                        counter++;
-                        uniqueId_ = std::stoi(msg.substr(posBegin, i-1));
-                        posBegin = i+SEPARATOR.size();
-                    } else if (counter == 1) {
-                        counter++;
-                        version_ = std::stoi(msg.substr(posBegin, i-1));
-                        posBegin = i+SEPARATOR.size();
-                    } else if (counter == 2) {
-                        counter++;
-                        isCompleted_ = std::stoi(msg.substr(posBegin, i-1));
-                        posBegin = i+SEPARATOR.size();
-                    }
-                }
-            }
-            description_ = msg.substr(posBegin);
-        }
         bool isCompleted_;
         std::string description_;
+        
     private:
-
         static std::size_t numberOfTasks;
 };
 
 std::size_t Task::numberOfTasks = 0;
-const std::size_t getNumberOfTasks() {
-            return Task::numberOfTasks;
-}
 
 bool operator==(const Task& left, const Task& right) {
     return (left.getDescription() == right.getDescription()) &&
