@@ -36,18 +36,18 @@ class Day : public IVersion, public IUniqueId, public IDatabase {
         void addImportant(std::string);
 
         //todo -------------
-        void removeDeal(int, base_t*);
-        void editDeal(int, base_t*);
+        void removeDeal(int);
+        void editDeal(int);
 
-        void removeImportant(int, base_t*);
-        void editImportant(int, base_t*);
+        void removeImportant(int);
+        void editImportant(int);
         //------------------
         //funcs
         void showDeals();
         void showImportants();
         void show();
 
-        void edit(base_t*);
+        void edit();
 
         std::string concatenate();
         void deconcatenate(const std::string&);

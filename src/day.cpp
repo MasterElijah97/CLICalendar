@@ -25,10 +25,10 @@ std::vector<Impportant> Day::getImportants() const {
     return importants_;
 }
 
-void Day::setDate(std::string date, base_t* base) {
+void Day::setDate(std::string date) {
     date_ = date;
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 
 }
 
@@ -42,14 +42,14 @@ void Day::addImportant(Important important) {
 }
 
 //todo -------------
-void Day::removeDeal(int pos, base_t* base) {
+void Day::removeDeal(int pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
-    base->remove<Deal>(it->id_);
+    base_->remove<Deal>(it->id_);
     deals_.erase(it);
 }
 
-void Day::editDeal(int pos, base_t* base) {
+void Day::editDeal(int pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
     std::cout << "Editing deal..." << std::endl;
@@ -80,17 +80,17 @@ void Day::editDeal(int pos, base_t* base) {
         it->setDescription(tmp);
     }
     it->updateVersion();
-    base->update(*it);
+    base_->update(*it);
 }
 
-void Day::removeImportant(int pos, base_t* base) {
+void Day::removeImportant(int pos) {
 	pos--;
     auto it = this->importants_.begin() + pos;
-    base->remove<Important>(it->id_);
+    base_->remove<Important>(it->id_);
     importants_.erase(it);
 }
 
-void Day::editImportant(int pos, base_t* base) {
+void Day::editImportant(int pos) {
     pos--;
     auto it = this->importants_.begin() + pos;
     std::cout << "Editing important..." << std::endl;
@@ -99,7 +99,7 @@ void Day::editImportant(int pos, base_t* base) {
     std::cin >> tmp;
     it->important_ = tmp;
     it->updateVersion();
-    base->update(*it);
+    base_->update(*it);
 }
 //------------------
 //funcs
@@ -123,7 +123,7 @@ void Day::show() {
     showImportants();
 }
 
-void Day::edit(base_t* base) {
+void Day::edit() {
     std::string input;
 
     this->show();
@@ -154,7 +154,7 @@ void Day::edit(base_t* base) {
     std::cout << std::endl;
 
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }        
 
 std::string Day::concatenate() {

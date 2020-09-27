@@ -39,10 +39,10 @@ class Note : public IVersion, public IUniqueId, public IDatabase {
 
         friend const std::size_t getNumberOfNotes();
         //setters
-        void setLabel(base_t*, std::string);
-        void setName(base_t*, std::string);
-        void setDescription(base_t*, std::string);
-        void setAllFields(base_t*, std::string,
+        void setLabel(std::string);
+        void setName(std::string);
+        void setDescription(std::string);
+        void setAllFields(std::string,
                           std::string,
                           std::string);
         //clearing
@@ -52,7 +52,7 @@ class Note : public IVersion, public IUniqueId, public IDatabase {
         //funcs
         void show();
 
-        void edit(base_t*);
+        void edit();
 
         std::string concatenate();
         void deconcatenate(const std::string&);

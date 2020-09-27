@@ -140,41 +140,41 @@ std::pair< std::string, std::string > getTime() const {
 
 //setters
 
-void setName(std::string name, base_t* base) {
+void setName(std::string name) {
     name_ = name;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void setDescription(std::string description, base_t* base) {
+void setDescription(std::string description) {
     description_ = description;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void setLabel(std::string label, base_t* base) {
+void setLabel(std::string label) {
     label_ = label;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void setPriority(std::string priority, base_t* base) {
+void setPriority(std::string priority) {
     priority_ = priority;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void setTime(std::string begin, std::string end, base_t* base) {
+void setTime(std::string begin, std::string end) {
     thisTime.begin = begin;
     thisTime.end = end;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
 void setDate(std::string date) {
     this->date_ = date;
     updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
 void show() {
@@ -189,7 +189,7 @@ void show() {
     std::cout << description_ << std::endl;
 }
 
-void edit(base_t* base) {
+void edit() {
     std::string input;
 
     this->show();
@@ -240,7 +240,7 @@ void edit(base_t* base) {
 
     std::cout << std::endl;
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
 std::string concatenate() {
