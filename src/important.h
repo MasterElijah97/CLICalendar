@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Important : public IVersion, public IUniqueId
+class Important : public IVersion, public IUniqueId, public IDatabase
 {
 public:
     important() = default;

@@ -43,7 +43,7 @@ void Session::addingNewUser() {
         std::cout << "New account has been created" << std::endl;
         std::cout << "Now you can log in with entered login and password" << std:: endl;
     } else {
-        std::cout << "Sorry, this login is exists. Please, try again." << std::endl;
+        std::cout << "Sorry, this login is already exists. Please, try again." << std::endl;
     }
 }
 
@@ -159,6 +159,7 @@ void Session::creatingTask() {
     std::cin >> description;
 
     Task task(description);
+    task.addBasePtr(&localDb);
     auto insertedId = this->localDb->insert(task);
     task.id_= insertedId;
     tasks_.push_back(task);
@@ -178,6 +179,7 @@ void Session::creatingNote() {
     std::cin >> label;
 
     Note note(name, description, label);
+    note.addBasePtr(&localDb);
     auto insertedId = this->localDb->insert(note);
     note.id_= insertedId;
     notes_.push_back(note);
@@ -191,6 +193,7 @@ void Session::creatingDay() {
     std::cin >> date;
 
     Day day(date);
+    day.addBasePtr(&localDb);
     auto insertedId = this->localDb->insert(day);
     note.id_= insertedId;
     days_.push_back(day);
@@ -213,7 +216,7 @@ void Session::creatingDeal() {
     std::cin >> label;
     std::cout << "Please, enter priority" << std::endl;
     std::cin >> priority;
-    std::cout << "Please, enter time in format HH:MM-HH::MM" << std::endl;
+    std::cout << "Please, enter time in format HH:MM-HH:MM" << std::endl;
     std::cin >> time;
     Deal deal(name,
                 description,
@@ -221,13 +224,26 @@ void Session::creatingDeal() {
                 priority,
                 time.substr(0, 2)+time.substr(4, 5),
                 time.substr(7, 9)+time.substr(11, 12));
-
+    deal.addBasePtr(&localDb);
     auto insertedId = this->localDb->insert(deal);
     deal.id_= insertedId;
     this->joinedObject_->addDeal(deal);
     
     std::cout << "New day has been created :)" << std::endl:
     
+}
+
+void Session::creatingImportant() {
+    std::string tmp;
+    std::cout << "Please, enter important" << std::endl;
+    std::cin >> tmp;
+    Important important(tmp);
+    important.addBasePtr(&localDb);
+    auto insertedId = this->localDb->insert(important);
+    important.id_ = insertedId;
+    this->joinedObject_->addImportant(important);
+
+    std::cout << "New important has been created :)" << std::endl;
 }
 
 /*Server part

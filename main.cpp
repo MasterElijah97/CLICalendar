@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
 
     localDb.sync_schema();
 
-    thisSession->addBasePtr(&localDb);
+    thisSession.addBasePtr(&localDb);
 
     while (1) {
         std::cin >> arg1 >> arg2 >> arg3;

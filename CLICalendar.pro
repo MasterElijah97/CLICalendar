@@ -23,6 +23,7 @@ HEADERS += src/commandMonitor.h \
            src/black_magic.h \
            src/day.h \
            src/deal.h \
+           src/idatabase.h \
            src/important.h \
            src/iuniqueid.h \
            src/iversion.h \
@@ -40,6 +41,7 @@ SOURCES += main.cpp \
            src/commandMonitor.cpp \
            src/day.cpp \
            src/deal.cpp \
+           src/idatabase.cpp \
            src/important.cpp \
            src/iuniqueid.cpp \
            src/iversion.cpp \

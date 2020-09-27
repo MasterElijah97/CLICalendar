@@ -16,7 +16,7 @@
 
 const std::string SEPARATOR(3, '&');
 
-class Day : public IVersion, public IUniqueId {
+class Day : public IVersion, public IUniqueId, public IDatabase {
 
     public:
         Day();
