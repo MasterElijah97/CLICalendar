@@ -6,17 +6,14 @@
 class IVersion {
 
     public:
-        IVersion() {
-            this->version_ = 0;
-        }
-
+        IVersion();
         std::size_t getVersion() const {
             return this->version_;
         }
 
-        void updateVersion() {
-            this->version_++;
-        }
+        void setVersion(std::size_t);
+
+        void updateVersion();
 
         std::size_t version_;
 };
