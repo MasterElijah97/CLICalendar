@@ -15,7 +15,7 @@
 
 const std::string SEPARATOR(3, '&');
 
-class Note : public IVersion, public IUniqueId {
+class Note : public IVersion, public IUniqueId, public IDatabase {
     public:
         //constructors
         Note();

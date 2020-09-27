@@ -12,7 +12,7 @@
 
 const std::string SEPARATOR(3, '&');
 
-class Task : public IVersion, public IUniqueId {
+class Task : public IVersion, public IUniqueId, public IDatabase {
     public:
 
         //constructors
