@@ -5,7 +5,6 @@
 
 template<class... Ts>
 class IUniqueId {
-    friend  sqlite_orm::internal::storage_t<Ts...> make_storage(const std::string&, Ts...);
 
     public:
         IUniqueId() {
@@ -20,7 +19,6 @@ class IUniqueId {
             uniqueId_ = id;
         }
 
-    protected:
         std::size_t uniqueId_;
 };
 
