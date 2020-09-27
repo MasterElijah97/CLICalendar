@@ -17,38 +17,20 @@
 const std::string SEPARATOR(3, '&');
 
 class Day : public IVersion, public IUniqueId {
-        template<class... Ts>
-    friend  sqlite_orm::internal::storage_t<Ts...> make_storage(const std::string&, Ts...);
+
     public:
-        Day() {
-            date_ = "01 January 1970";
-            importants_.emplace_back("Nothing");
-            deals_.emplace_back("Frist of All");
-        }
+        Day();
+        Day(const std::string);
 
-        Day(const std::string date) {
-            date_ = date;
-            importants_.emplace_back("Nothing");
-            deals_.emplace_back("Frist of All");
-        }
-
-        ~Day() {
-
-        }
+        ~Day() = default;
 
         friend bool operator==(const Day& left, const Day& right);
 
-        std::string getDate() const {
-            return date_;
-        }
+        std::string getDate() const;
 
-        std::vector<Deal> getDeals() const {
-            return deals_;
-        }
+        std::vector<Deal> getDeals() const;
 
-        std::vector<Impportant> getImportants() const {
-            return importants_;
-        }
+        std::vector<Impportant> getImportants() const;
 
         void setDate(std::string date) {
             date_ = date;
