@@ -3,13 +3,11 @@
 
 #include "src/sqlite_orm.h"
 
-template<class... Ts>
 class IVersion {
 
-    friend  sqlite_orm::internal::storage_t<Ts...> make_storage(const std::string&, Ts...);
     public:
-        IVersion() : version_(0) {
-
+        IVersion() {
+            this->version_ = 0;
         }
 
         std::size_t getVersion() const {
@@ -20,7 +18,6 @@ class IVersion {
             this->version_++;
         }
 
-    protected:
         std::size_t version_;
 };
 

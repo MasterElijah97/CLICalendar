@@ -2,8 +2,14 @@
 #include <string>
 
 #include "src/MD5.h"
+#include "src/black_magic.h"
 
 using namespace sqlite_orm;
+/* WARNING!!!
+ * For educational purposes only!!!
+ * Never do this way  in serious projects
+ */
+
 
 int main(int argc, char* argv[]) {
 
@@ -43,36 +49,42 @@ int main(int argc, char* argv[]) {
 
     databaseName = thisSession.user.login_ + ".sqlite";
 
-    auto localDb = make_storage(databaseName,
-                                make_tablle("Days",
+    base_t localDb = make_storage(databaseName,
+                                make_table("Days",
 
                                     make_column("id",
                                         &Day::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
 
+                                    make_column("Version",
+                                        &Day::version_),
+
                                     make_column("Date",
-                                        &Day::date_),
+                                        &Day::date_)),
 
-                                    make_column("HashedPass",
-                                        &User::hashedPass_ )),
-
-                                make_tablle("Importants",
+                                make_table("Importants",
 
                                     make_column("id",
                                         &Important::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
+
+                                    make_column("Version",
+                                        &Important::version_),
 
                                     make_column("HashedPass",
                                         &Important::important_ )),
 
-                                make_tablle("Deals",
+                                make_table("Deals",
 
                                     make_column("id",
                                         &Deal::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
+
+                                    make_column("Version",
+                                        &Deal::version_),
 
                                     make_column("Name",
                                         &Deal::name_),
@@ -90,30 +102,36 @@ int main(int argc, char* argv[]) {
                                         &Deal::date_),
 
                                     make_column("TimeBegin",
-                                        &Time::begin),
+                                        &Deal::Time::begin),
 
-                                    make_column("TimeBegin",
-                                        &Time::end)),
+                                    make_column("TimeEnd",
+                                        &Deal::Time::end)),
 
-                                make_tablle("Tasks",
+                                make_table("Tasks",
 
                                     make_column("id",
                                         &Task::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
 
+                                    make_column("Version",
+                                        &Task::version_),
+
                                     make_column("IsCompleted",
-                                        &Task::IsCompleted_),
+                                        &Task::isCompleted_),
 
                                     make_column("Description",
                                         &Task::description_)),
 
-                                make_tablle("Notes",
+                                make_table("Notes",
 
                                     make_column("id",
                                         &Note::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
+
+                                    make_column("Version",
+                                        &Note::version_),
 
                                     make_column("Label",
                                         &Note::label_),
@@ -122,8 +140,8 @@ int main(int argc, char* argv[]) {
                                         &Note::name_),
 
                                     make_column("Description",
-                                        &Note::description_)),
-        );
+                                        &Note::description_))
+    );
 
     localDb.sync_schema();
 
