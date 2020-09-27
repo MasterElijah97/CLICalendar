@@ -3,7 +3,6 @@
 
 #include "src/sqlite_orm.h"
 
-template<class... Ts>
 class IUniqueId {
 
     public:
@@ -11,15 +10,10 @@ class IUniqueId {
             uniqueId_ = 0;
         }
 
-        std::size_t getUniqueId() const {
-            return this->uniqueId_;
-        }
+        int getId() const;
+        void setId(std::size_t);
 
-        void setUniqueId(std::size_t id) {
-            uniqueId_ = id;
-        }
-
-        std::size_t uniqueId_;
+        int id_;
 };
 
 #endif // IUNIQUEID_H
