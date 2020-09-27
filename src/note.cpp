@@ -88,32 +88,32 @@ std::size_t Note::getNumberOfNotes() const  {
     return Note::numberOfNotes;
 }
         //setters
-void Note::setLabel(base_t* base, std::string label) {
+void Note::setLabel(std::string label) {
     this->label_ = std::move(label);
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void Note::setName(base_t* base, std::string name) {
+void Note::setName(std::string name) {
     this->name_ = std::move(name);
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void Note::setDescription(base_t* base, std::string description) {
+void Note::setDescription(std::string description) {
     this->description_ = std::move(description);
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
-void Note::setAllFields(base_t* base, std::string name,
+void Note::setAllFields(std::string name,
                   std::string description = "New Note",
                   std::string label = "Buffer") {
     this->name_ = std::move(name);
     this->description_ = std::move(description);
     this->label_ = std::move(label);
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
         //clearing
 void Note::clearName() {
@@ -134,7 +134,7 @@ void Note::show() {
     std::cout << description_ << std::endl;
 }
 
-void Note::edit(base_t* base) {
+void Note::edit() {
     std::string input;
 
     this->show();
@@ -165,7 +165,7 @@ void Note::edit(base_t* base) {
     std::cout << std::endl;
 
     this->updateVersion();
-    base->update(*this);
+    base_->update(*this);
 }
 
 

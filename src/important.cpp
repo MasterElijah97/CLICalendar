@@ -6,4 +6,5 @@ std::string Important::getImportant() const {
 
 void Impportant::setImportant(std::string msg) {
 	this->important_ = std::move(msg);
+	base_->insert(*this);
 }

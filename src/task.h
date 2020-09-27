@@ -34,16 +34,16 @@ class Task : public IVersion, public IUniqueId, public IDatabase {
         std::size_t getUniqueId() const;
         static std::size_t getNumberOfTasks() const;
         //setters
-        void setIsCompleted(base_t* base, const bool);
-        void setDescription(base_t* base, const std::string);
-        void setAllFields(base_t* base, const std::string,
+        void setIsCompleted(const bool);
+        void setDescription(const std::string);
+        void setAllFields(const std::string,
                           const bool);
         //clearing
         void clearDescription();
         //funcs
         void show();
 
-        void edit(base_t*);
+        void edit();
 
         std::string concatenate();
         void deconcatenate(const std::string&);

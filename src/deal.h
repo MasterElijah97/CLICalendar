@@ -54,14 +54,14 @@ class Deal : public IVersion, public IUniqueId, public IDatabase {
 
         //setters
 
-        void setName(std::string, base_t*);
-        void setDescription(std::string), base_t*;
-        void setLabel(std::string, base_t*);
+        void setName(std::string);
+        void setDescription(std::string);
+        void setLabel(std::string);
         void setPriority(std::string);
-        void setTime(std::string, std::string), base_t*;
-        void setDate(std::string, base_t*);
+        void setTime(std::string, std::string);
+        void setDate(std::string);
        
-        void edit(base_t*);
+        void edit();
 
         void show();
 

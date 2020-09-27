@@ -104,7 +104,7 @@ void Task::show() {
     std::cout << description_ << std::endl;
 }
 
-void Task::edit(base_t* base) {
+void Task::edit() {
     std::string input;
 
     this->show();
@@ -134,7 +134,7 @@ void Task::edit(base_t* base) {
             
     std::cout << std::endl;
 
-    base->update(*this);
+    base_->update(*this);
 }   
 
 std::string Task::concatenate() {
