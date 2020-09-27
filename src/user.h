@@ -16,7 +16,7 @@
 class User {
     friend class Session;
     public:
-        User() = delete;
+        User() = default;
         User(const User& user) = delete;
         User(User&& user) = delete;
         User& operator=(const User& user) = delete;
@@ -75,6 +75,7 @@ class User {
     bool isLogged() const {
         return isLoggedIn_;
     }
+    
         std::string login_;
         std::string hashedPass_;
         int id_;
