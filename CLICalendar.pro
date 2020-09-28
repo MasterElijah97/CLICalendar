@@ -28,7 +28,6 @@ HEADERS += src/black_magic.h \
            src/iversion.h \
            src/MD5.h \
            src/note.h \
-           src/operationsWithDb.h \
            src/session.h \
            src/sqlite3.h \
            src/sqlite_orm.h \
@@ -45,7 +44,6 @@ SOURCES += main.cpp \
            src/iversion.cpp \
            src/MD5.cpp \
            src/note.cpp \
-           src/operationsWithDb.cpp \
            src/session.cpp \
            src/sqlite3.c \
            src/task.cpp \
