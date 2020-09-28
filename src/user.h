@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+#include "src/MD5.h"
+
 #include "src/session.h"
 
 #include "src/deal.h"
@@ -22,67 +24,22 @@ class User {
         User& operator=(const User& user) = delete;
         User& operator=(User&& user) = delete;
 
-        User(std::string login, std::string hashedPass) {
-            this->login = login;
-            this->hashedPass = hashedPass;
-        }
+        User(std::string, std::string);
 
-        ~User() {
+        ~User() = default;
 
-        }
-
-        //getters
-
-        //setters
-        void setEncryptingKey(std::string key) {
-            this->encryptingKey = std::move(key);
-        }
-
-        void setDecryptKey(std::string key) {
-            this->decryptingKey = std::move(key);
-        }
-        //other funcs
-        std::string encryptMessage(std::string message) {
-            //todo
-            //encrypting function
-        }
-
-        std::string decryptMessage(std::string message) {
-            //todo
-            //decrypting function
-        }
-
-        std::string syncFromLocalToServerDb() {
-            try {
-
-            }
-            catch(...) {
-                std::cout << "Something get wrong. Try again later" << std::endl;
-            }
-            std::cout << "All data have been synchronized from local to server database" << std::endl;
-        }
-
-        std::string syncFromServerToLocalDb() {
-            try {
-
-            }
-            catch(...) {
-                std::cout << "Something get wrong. Try again later" << std::endl;
-            }
-            std::cout << "All data have been synchronized from server to local database" << std::endl;
-        }
-    
-    bool isLogged() const {
-        return isLoggedIn_;
-    }
-    
+        bool isLogged() const;
         std::string login_;
         std::string hashedPass_;
         int id_;
     private:
         bool isLoggedIn_;
-        std::string encryptingKey_;
-        std::string decryptingKey_;
+        int key_;
+
+        void key_gen();
+        std::string User::doCryptoMessage(std::string);
+
+        
 };
 
 #endif // USER_H
