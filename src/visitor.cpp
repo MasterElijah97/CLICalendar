@@ -1,7 +1,7 @@
 #include "visitor.h"
 
 
-JoinedLabelSetter::JoinedLabelSetter(std::string&& msg) {
+JoinedLabelSetter::JoinedLabelSetter(std::string msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedLabelSetter::operator()(std::vector<Deal>::iterator it) {
@@ -13,7 +13,7 @@ void JoinedLabelSetter::operator()(std::vector<Deal>::iterator it) {
     base->update(*it);
 }
 
-JoinedNameSetter::JoinedNameSetter(std::string&& msg) {
+JoinedNameSetter::JoinedNameSetter(std::string msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedNameSetter::operator()(std::vector<Deal>::iterator it) {
@@ -25,7 +25,7 @@ void JoinedNameSetter::operator()(std::vector<Note>::iterator it) {
     base->update(*it);
 }
 
-JoinedDescriptionSetter::JoinedDescriptionSetter(std::string&& msg) {
+JoinedDescriptionSetter::JoinedDescriptionSetter(std::string msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedDescriptionSetter::operator()(std::vector<Deal>::iterator it) {
@@ -41,7 +41,7 @@ void JoinedDescriptionSetter::operator()(std::vector<Note>::iterator it) {
     base->update(*it);
 }
 
-JoinedPrioritySetter::JoinedPrioritySetter(std::string&& msg) {
+JoinedPrioritySetter::JoinedPrioritySetter(std::string msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedPrioritySetter::operator()(std::vector<Deal>::iterator it) {
@@ -49,7 +49,7 @@ void JoinedPrioritySetter::operator()(std::vector<Deal>::iterator it) {
     base->update(*it);
 }
 
-JoinedTimeSetter::JoinedTimeSetter(std::string&& msg) {
+JoinedTimeSetter::JoinedTimeSetter(std::string msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedTimeSetter::operator()(std::vector<Deal>::iterator it) {
@@ -57,7 +57,7 @@ void JoinedTimeSetter::operator()(std::vector<Deal>::iterator it) {
     base->update(*it);
 }
 
-JoinedComplitedSetter::JoinedComplitedSetter(bool&& msg) {
+JoinedComplitedSetter::JoinedComplitedSetter(bool msg) {
     this->msg_ = std::move(msg);
 }
 void JoinedComplitedSetter::operator()(std::vector<Task>::iterator it) {
@@ -65,7 +65,7 @@ void JoinedComplitedSetter::operator()(std::vector<Task>::iterator it) {
     base->update(*it);
 }
 
-JoinedDateSetter::JoinedDateSetter(std::string&& msg) {
+JoinedDateSetter::JoinedDateSetter(std::string msg) {
 	this->msg_ = std::move(msg);
 }
 void JoinedDateSetter::operator()(std::vector<Day>::iterator it) {

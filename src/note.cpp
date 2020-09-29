@@ -12,26 +12,26 @@ Note::Note() {
 Note::Note(std::string name,
     std::string description = "New Note",
     std::string label = "Buffer") {
-    label_ = label;
-    name_ = name;
-    description_ = description;
+    label_ = std::move(label);
+    name_ = std::move(name);
+    description_ = std::move(description);
 
     numberOfNotes++;
 }
 
 
 Note::Note(const Note& right) {
-    label_ = right.getLabel();
-    name_ = right.getName();
-    description_ = right.getDescription();
-    version_ = right.getVersion();
+    label_ = right.label_;
+    name_ = right.name_;
+    description_ = right.description_;
+    version_ = right.version_;
 }
 
 Note::Note(Note&& right) {
-    label_ = right.getLabel();
-    name_ = right.getName();
-    description_ = right.getDescription();
-    version_ = right.getVersion();
+    label_ = right.label_;
+    name_ = right.name_;
+    description_ = right.description_;
+    version_ = right.version_;
 
 
     right.clearLabel();
@@ -48,10 +48,10 @@ Note& Note::operator=(const Note& other) {
         return *this;
     }
 
-    label_ = other.getLabel();
-    name_ = other.getName();
-    description_ = other.getDescription();
-    version_ = other.getVersion();
+    label_ = other.label_;
+    name_ = other.name_;
+    description_ = other.description_;
+    version_ = other.version_;
 
     return *this;
 }
@@ -60,10 +60,10 @@ Note& Note::operator=(Note&& right) {
     if (this == &right) {
         return *this;
     }
-    label_ = right.getLabel();
-    name_ = right.getName();
-    description_ = right.getDescription();
-    version_ = right.getVersion();
+    label_ = right.label_;
+    name_ = right.name_;
+    description_ = right.description_;
+    version_ = right.version_;
 
     right.clearLabel();
     right.clearName();
@@ -72,17 +72,6 @@ Note& Note::operator=(Note&& right) {
     return *this;
 }
         //getters
-std::string Note::getLabel() const {
-    return label_;
-}
-
-std::string Note::getName() const {
-    return name_;
-}
-
-std::string Note::getDescription() const {
-    return description_;
-}
 
 std::size_t Note::getNumberOfNotes() const  {
     return Note::numberOfNotes;

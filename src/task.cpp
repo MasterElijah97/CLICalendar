@@ -1,29 +1,29 @@
 #include "task.h"
 
 Task::Task() {
-    isCompleted_ = false;
+    this->isCompleted_ = false;
     description_ = "New Task";
     numberOfTasks++;
 }
 
 Task::Task(std::string description) {
     isCompleted_ = false;
-    description_ = description;
+    description_ = std::move(description);
     numberOfTasks++;
 }
 
 
 Task::Task(const Task& right) {
-    isCompleted_ = right.getIsCompleted();
-    description_ = right.getDescription();
-    version_ = right.getVersion();
+    isCompleted_ = right.isCompleted_;
+    description_ = right.description_;
+    version_ = right.version_;
     numberOfTasks++;
 }
 
 Task::Task(Task&& right) {
-    isCompleted_ = right.getIsCompleted();
-    description_ = right.getDescription();
-    version_ = right.getVersion();
+    isCompleted_ = right.isCompleted_;
+    description_ = right.description_;
+    version_ = right.version_;
 
     right.clearDescription();
 }
@@ -36,9 +36,9 @@ Task& Task::operator=(const Task& other) {
     if (this == &other) {
         return *this;
     }
-    isCompleted_ = other.getIsCompleted();
-    description_ = other.getDescription();
-    version_ = other.getVersion();
+    isCompleted_ = right.isCompleted_;
+    description_ = right.description_;
+    version_ = right.version_;
 
     return *this;
 }
@@ -47,47 +47,34 @@ Task& Task::operator=(Task&& other) {
     if (this == &other) {
 	    return *this;
     }
-    isCompleted_ = other.getIsCompleted();
-    description_ = other.getDescription();
-    version_ = other.getVersion();
+    isCompleted_ = right.isCompleted_;
+    description_ = right.description_;
+    version_ = right.version_;
 
     other.clearDescription();
 
     return *this;
 }
-        //getters
-bool Task::getIsCompleted() const {
-    return isCompleted_;
-}
-
-std::string Task::getDescription() const {
-    return description_;
-}
-
-std::size_t Task::getVersion() const {
-    return version_;
-}
-
-std::size_t Task::getUniqueId() const {
-    return id_;
-}
 
         //setters
 void Task::setIsCompleted(const bool isCompleted) {
-    isCompleted_ = isCompleted;
-    updateVersion();
+    isCompleted_ = std::move(isCompleted);
+    this->updateVersion();
+    this->base_->update(*this);
 }
 
 void Task::setDescription(const std::string description) {
-    description_ = description;
-    updateVersion();
+    description_ = std::move(description);
+    this->base_->update(*this);
+    this->updateVersion();
 }
 
 void Task::setAllFields(const std::string description = "New Task",
                   const bool isCompleted = false) {
-    isCompleted_ = isCompleted;
-    description_ = description;
-    updateVersion();
+    isCompleted_ = std::move(isCompleted);
+    description_ = std::move(description);
+    this->base_->update(*this);
+    this->updateVersion();
 }
 
         //clearing
@@ -138,7 +125,7 @@ void Task::edit() {
 }   
 
 std::string Task::concatenate() {
-    return std::to_string(uniqueId_)    +SEPARATOR+
+    return std::to_string(id_)    +SEPARATOR+
            std::to_string(version_)     +SEPARATOR+
            std::to_string(isCompleted_) +SEPARATOR+
            description_;
@@ -152,7 +139,7 @@ void Task::deconcatenate(const std::string& msg) {
         if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
             if (counter == 0) {
                 counter++;
-                uniqueId_ = std::stoi(msg.substr(posBegin, i-1));
+                id_ = std::stoi(msg.substr(posBegin, i-1));
                 posBegin = i+SEPARATOR.size();
             } else if (counter == 1) {
                 counter++;

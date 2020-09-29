@@ -14,12 +14,12 @@ void commandMonitor(const std::string& arg1,
 
     //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
-        std::visit(JoinedIncrement{thisSession}, thisSession.getJoined())  
+        std::visit(JoinedIncrementAllower{thisSession}, thisSession.joinedObject_);  
 
         thisSession->showJoined();
     }
     else if (!arg1.compare("prev")) {
-        std::visit(JoinedDecrement{thisSession}, thisSession.getJoined())  
+        std::visit(JoinedDecrementAllower{thisSession}, thisSession.joinedObject_);  
 
         thisSession->showJoined();
     }
@@ -59,7 +59,7 @@ void commandMonitor(const std::string& arg1,
     } 
     else if (!arg1.compare("edit")) {
 
-        joinedObject_->edit();
+        thisSession.joinedObject_->edit();
 
     } 
     else if (!arg1.compare("copy")) {
@@ -76,22 +76,27 @@ void commandMonitor(const std::string& arg1,
 
         if (!arg2.compare("task")) {
 
+            thisSession.localDb->remove<Task>(thisSession.joinedObject_->id_);
             tasks_.erase(joinedObject_);
 
         } else if (!arg2.compare("note")) {
 
+            thisSession.localDb->remove<Note>(thisSession.joinedObject_->id_);
             notes_.erase(joinedObject_);
 
         } else if (!arg2.compare("day")) {
 
+            thisSession.localDb->remove<Day>(thisSession.joinedObject_->id_);
             days_.erase(joinedObject_);
 
         } else if (!arg2.compare("deal")) {
 
+            thisSession.localDb->remove<Deal>(thisSession.joinedObject_->deals_[arg3-1].id_);
             joinedObject_->removeDeal(arg3);
 
         } else if (!arg2.compare("important")) {
 
+            thisSession.localDb->remove<Important>(thisSession.joinedObject_->importants_[arg3-1].id_);
             joinedObject_->removeImportant(arg3);
 
         } else {
@@ -135,19 +140,19 @@ void commandMonitor(const std::string& arg1,
     } 
     else if (!arg1.compare("connect")) {
 
-        thisSession.connectToServer();
+        t//hisSession.connectToServer(); //todo
 
     } 
     else if ((!arg1.compare("disconnect"))) {
 
-        thisSession.disconnectFromServer();
+        //thisSession.disconnectFromServer(); //todo
 
-    } 
+    }
     else if (arg1 == "sync") {
 
-        thisSession.syncBases();
+        //thisSession.syncBases(); //todo
 
-    } 
+    }
     else if (arg1 == "add") {
 
         if (arg2 == "user") {
@@ -159,8 +164,8 @@ void commandMonitor(const std::string& arg1,
     } 
     else if (arg1 == "exit") {
 
-        thisSession.syncBases();
-        thisSession.disconnectFromServer();
+        //thisSession.syncBases(); // todo
+        //thisSession.disconnectFromServer(); //todo
         thisSession.logOut();
 
     } 
