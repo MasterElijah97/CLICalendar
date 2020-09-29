@@ -15,32 +15,32 @@ Deal::Deal(std::string name,
      std::string priority = "A",
      std::string begin = "0000",
      std::string end = "0000") {
-    name_ = name;
-    description_ = description;
-    label_ = label;
-    priority_ = priority;
-    thisTime.begin = begin;
-    thisTime.end = end;
+    name_ = std::move(name);
+    description_ = std::move(description);
+    label_ = std::move(label);
+    priority_ = std::move(priority);
+    thisTime.begin = std::move(begin);
+    thisTime.end = std::move(end);
 }
 
 Deal::Deal(const Deal& other) {
-    name_ = other.getName();
-    description_ = other.getDescription();
-    label_ = other.getLabel();
-    priority_ = other.getPriority();
-    thisTime.begin = other.getBegin();
-    thisTime.end = other.getEnd();
-    version_ = other.getVersion();
+    name_ = other.name_;
+    description_ = other.description_;
+    label_ = other.label_;
+    priority_ = other.priority_;
+    thisTime.begin = other.thisTime.begin;
+    thisTime.end = other.thisTime.end;
+    version_ = other.version_;
 }
 
 Deal::Deal(Deal&& other) {
-    name_ = other.getName();
-    description_ = other.getDescription();
-    label_ = other.getLabel();
-    priority_ = other.getPriority();
-    thisTime.begin = other.getBegin();
-    thisTime.end = other.getEnd();
-    version_ = other.getVersion();
+    name_ = other.name_;
+    description_ = other.description_;
+    label_ = other.label_;
+    priority_ = other.priority_;
+    thisTime.begin = other.thisTime.begin;
+    thisTime.end = other.thisTime.end;
+    version_ = other.version_;
 
     other.clearName();
     other.clearDescription();
@@ -55,13 +55,13 @@ Deal& Deal::operator=(const Deal& other) {
     if (this == &other) {
         return *this;
     }
-    name_ = other.getName();
-    description_ = other.getDescription();
-    label_ = other.getLabel();
-    priority_ = other.getPriority();
-    thisTime.begin = other.getBegin();
-    thisTime.end = other.getEnd();
-    version_ = other.getVersion();
+    name_ = other.name_;
+    description_ = other.description_;
+    label_ = other.label_;
+    priority_ = other.priority_;
+    thisTime.begin = other.thisTime.begin;
+    thisTime.end = other.thisTime.end;
+    version_ = other.version_;
 
     return *this;
 }
@@ -70,13 +70,13 @@ Deal& Deal::operator=(Deal&& other) {
     if (this == &other) {
         return *this;
     }
-    name_ = other.getName();
-    description_ = other.getDescription();
-    label_ = other.getLabel();
-    priority_ = other.getPriority();
-   	thisTime.begin = other.getBegin();
-    thisTime.end = other.getEnd();
-    version_ = other.getVersion();
+    name_ = other.name_;
+    description_ = other.description_;
+    label_ = other.label_;
+    priority_ = other.priority_;
+    thisTime.begin = other.thisTime.begin;
+    thisTime.end = other.thisTime.end;
+    version_ = other.version_;
 
     other.clearName();
     other.clearDescription();
@@ -108,72 +108,43 @@ void Deal::clearTime() {
     thisTime.end.clear();
 }
 //getters
-std::string Deal::getName() const {
-    return this->name_;
-}
-
-std::string Deal::getDescription() const{
-    return this->description_;
-}
-
-std::string Deal::getLabel() const{
-    return this->label_;
-}
-
-std::string Deal::getPriority() const{
-    return this->priority_;
-}
-
-std::string getBegin() const{
-    return this->thisTime.begin;
-}
-
-std::string getEnd() const{
-    return this->thisTime.end;
-}
-
-std::pair< std::string, std::string > getTime() const {
-    auto time = std::make_pair(this->thisTime.begin, 
-    							this->thisTime.end);
-    return time;
-}
 
 //setters
 
 void setName(std::string name) {
-    name_ = name;
-    updateVersion();
+    name_ = std::move(name);
+    this->updateVersion();
     base_->update(*this);
 }
 
 void setDescription(std::string description) {
-    description_ = description;
+    description_ = std::move(description);
     updateVersion();
     base_->update(*this);
 }
 
 void setLabel(std::string label) {
-    label_ = label;
-    updateVersion();
+    label_ = std::move(label);
+    this->updateVersion();
     base_->update(*this);
 }
 
 void setPriority(std::string priority) {
-    priority_ = priority;
-    updateVersion();
+    priority_ = std::move(priority);
+    this->updateVersion();
     base_->update(*this);
 }
 
 void setTime(std::string begin, std::string end) {
-    thisTime.begin = begin;
-    thisTime.end = end;
-    updateVersion();
+    thisTime.begin = std::move(begin);
+    thisTime.end = std::move(end);
+    this->updateVersion();
     base_->update(*this);
 }
 
 void setDate(std::string date) {
-    this->date_ = date;
-    updateVersion();
+    this->date_ = std::move(date);
+    this->updateVersion();
     base_->update(*this);
 }
 
@@ -250,7 +221,7 @@ std::string concatenate() {
            label_                    +SEPARATOR+
            priority_                 +SEPARATOR+
            std::to_string(version_)  +SEPARATOR+
-           std::to_string(uniqueId_) +SEPARATOR+
+           std::to_string(id_) +SEPARATOR+
            description_;
 }
 
@@ -287,7 +258,7 @@ void deconcatenate(std::string& msg) {
                 posBegin = i+3;
             } else if (counter == 6) {
                 counter++;
-                uniqueId_ = std::stoi(msg.substr(posBegin, i-1));
+                id_ = std::stoi(msg.substr(posBegin, i-1));
                 posBegin = i+3;
             }
         }

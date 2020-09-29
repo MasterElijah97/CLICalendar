@@ -2,19 +2,6 @@
 
 //private
 
-Session::Session(const Session&) {
-
-}
-Session::Session(Session&&) {
-
-}
-Session& Session::operator=(const Session&) {
-
-}
-Session& Session::operator=(Session&&) {
-
-}
-
 Session::Session()
 {
 	tasks_.reserve(100);
@@ -22,6 +9,7 @@ Session::Session()
     days_.reserve(3000);
 }
 
+//public
 void Session::addingNewUser() {
     std::string login;
     std::string password;
@@ -92,9 +80,9 @@ void Session::logIn() {
 }
 
 void Session::logOut() {
-            this->user.login_.clear();
-            this->user.hashedPass_.clear();
-            this->user.isLoggedIn_ = false;
+    this->user.login_.clear();
+    this->user.hashedPass_.clear();
+    this->user.isLoggedIn_ = false;
 }
 
 
@@ -246,59 +234,6 @@ void Session::creatingImportant() {
     std::cout << "New important has been created :)" << std::endl;
 }
 
-/*Server part
-void Session::connectToServer() {
-            //todo
-}
-
-void Session::disconnectFromServer() {
-	//todo
-}
-
-void Session::getTasksFromServer() {
-	//getting info
-
-}
-
-void Session::getNotesFromServer() {
-     //getting info
-
- }
-
- void Session::getDaysFromServer() {
-     //getting info
-
- }
-
- void Session::connectToLocalBase() {
-
- }
-
- void Session::syncWithLocalBase() {
-     //syncDays
-     //syncDeals
-     //syncNotes
-     //syncTasks
-     //sync into tmp variable
-     //clear old version after complete
- }
-
- void Session::syncWithServerBase() {
-     //sending a lot of data by protocol
-     //syncDays
-     //syncDeals
-     //syncNotes
-     //syncTasks
-     //sync into tmp variable
-     //clear old version after complete
- }
-
- void Session::syncBases() {
-     this->syncWithLocalBase();
-     this->syncWithServerBase();
- }
-*/
-
  void Session::addTask(Task task) {
      this->tasks_.push_back(task);
  }
@@ -353,35 +288,6 @@ void Session::getNotesFromServer() {
  }
  //getters
 
- //setters
-
- std::variant<
-    std::vector<Day>::iterator,
-    std::vector<Note>::iterator,
-    std::vector<Task>::iterator,
-    std::vector<Deal>::iterator
->& Session::getJoined() {
-    return this->joinedObject_;
-};
-
-
-std::variant<
-    std::vector<Day>::iterator,
-    std::vector<Note>::iterator,
-    std::vector<Task>::iterator,
-    std::vector<Deal>::iterator
->& Session::getCopyable() {
-    return this->copyableObject_;
-};
-
-std::variant<
-    std::vector<Day>::iterator,
-    std::vector<Note>::iterator,
-    std::vector<Task>::iterator,
-    std::vector<Deal>::iterator
->& Session::getMoveable() {
-    return this->moveableObject_;
-};
 
 /*
 template<typename T>
@@ -393,13 +299,13 @@ void Session::setJoined(std::vector<Day>::iterator it) {
    this->joinedObject_ = std::move(it);
 }
 void Session::setJoined(std::vector<Deal>::iterator it) {
-   joinedObject_ = it;
+   this->joinedObject_ = std::move(it);
 }
 void Session::setJoined(std::vector<Task>::iterator it) {   
-   joinedObject_ = it;
+   this->joinedObject_ = std::move(it);
 }
 void Session::setJoined(std::vector<Note>::iterator it) {   
-   joinedObject_ = it;
+   this->joinedObject_ = std::move(it);
 }
 
 void Session::incrementJoined() {
@@ -422,53 +328,53 @@ void Session::setCopyable(std::vector<T>::iterator it) {
 }
 */
 void Session::setMovable(std::vector<Day>::iterator it) {
-    moveableObject_ = it;
+    moveableObject_ = std::move(it);
 }
 void Session::setMovable(std::vector<Deal>::iterator it) {
-    moveableObject_ = it;
+    moveableObject_ = std::move(it);;
 }
 void Session::setMovable(std::vector<Task>::iterator it) {
-    moveableObject_ = it;
+    moveableObject_ = std::move(it);;
 }
 void Session::setMovable(std::vector<Note>::iterator it) {
-    moveableObject_ = it;
+    moveableObject_ = std::move(it);;
 }
 
 void Session::setCopyable(std::vector<Day>::iterator it) {
-    copyableObject_ = it;
+    copyableObject_ = std::move(it);
 }
 void Session::setCopyable(std::vector<Deal>::iterator it) {
-    copyableObject_ = it;
+    copyableObject_ = std::move(it);
 }
 void Session::setCopyable(std::vector<Task>::iterator it) {
-    copyableObject_ = it;
+    copyableObject_ = std::move(it);
 }
 void Session::setCopyable(std::vector<Note>::iterator it) {
-    copyableObject_ = it;
+    copyableObject_ = std::move(it);
 }
 
 //refactoring needs
 //need visit in runtime!!!
-void Session::setJoinedLabel(const std::string msg) {
-	std::visit(JoinedLabelSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedLabel(const std::string& msg) {
+	std::visit(JoinedLabelSetter{msg}, joinedObject_);
 }
-void Session::setJoinedName(const std::string msg) {
-	std::visit(JoinedNameSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedName(const std::string& msg) {
+	std::visit(JoinedNameSetter{msg}, joinedObject_);
 }
-void Session::setJoinedDescription(const std::string msg) {
-	std::visit(JoinedDescriptionSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedDescription(const std::string& msg) {
+	std::visit(JoinedDescriptionSetter{msg}, joinedObject_);
 }
-void Session::setJoinedPriority(const std::string msg) {
-	std::visit(JoinedPrioritySetter{std::move(msg)}, joinedObject_); 
+void Session::setJoinedPriority(const std::string& msg) {
+	std::visit(JoinedPrioritySetter{msg}, joinedObject_); 
 }
-void Session::setJoinedTime(const std::string msg) {
-	std::visit(JoinedTimeSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedTime(const std::string& msg) {
+	std::visit(JoinedTimeSetter{msg}, joinedObject_);
 }
-void Session::setJoinedComplited(const bool complited) {
-    std::visit(JoinedComplitedSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedComplited(const bool& complited) {
+    std::visit(JoinedComplitedSetter{complited}, joinedObject_);
 }
-void Session::setJoinedDate(const std::string msg) {
-	std::visit(JoinedDateSetter{std::move(msg)}, joinedObject_);
+void Session::setJoinedDate(const std::string& msg) {
+	std::visit(JoinedDateSetter{msg}, joinedObject_);
 }
 
 void Session::eraseDealFromJoined(int& pos) {

@@ -28,10 +28,6 @@ class Task : public IVersion, public IUniqueId, public IDatabase {
         Task& operator=(const Task&);
         Task& operator=(Task&&);
         //getters
-        bool getIsCompleted() const;
-        std::string getDescription() const;
-        std::size_t getVersion() const;
-        std::size_t getUniqueId() const;
         static std::size_t getNumberOfTasks() const;
         //setters
         void setIsCompleted(const bool);

@@ -7,46 +7,69 @@ Day::Day()
     deals_.emplace_back("Frist of All");
 }
 
-Day::Day(const std::string date) {
-    date_ = date;
+Day::Day(std::string date) {
+    date_ = std::move(date);
     importants_.emplace_back("Nothing");
     deals_.emplace_back("Frist of All");
 }
 
-std::string Day::getDate() const {
-    return date_;
+Day::Day(const Day& other) {
+    this->date_ = other.date_;
+    this->deals_ = other.deals_;
+    this->importants_ = other.importants_;
+    this->version_ = other.version;
+}
+Day::Day(Day&& other) {
+    this->date_ = other.date_;
+    this->deals_ = other.deals_;
+    this->importants_ = other.importants_;
+    this->version_ = other.version;
+}
+Day& Day::operator=(const Day& other) {
+    if (this = &other) {
+        return *this
+    }
+    this->date_ = other.date_;
+    this->deals_ = other.deals_;
+    this->importants_ = other.importants_;
+    this->version_ = other.version;
+    return *this;
+}
+Day& Day::operator=(Day&& other) {
+    if (this = &other) {
+        return *this
+    }
+    this->date_ = other.date_;
+    this->deals_ = other.deals_;
+    this->importants_ = other.importants_;
+    this->version_ = other.version;
+    return *this;
+
 }
 
-std::vector<Deal> Day::getDeals() const {
-    return deals_;
-}
-
-std::vector<Impportant> Day::getImportants() const {
-    return importants_;
-}
 
 void Day::setDate(std::string date) {
-    date_ = date;
+    this->date_ = std::move(date);
     this->updateVersion();
-    base_->update(*this);
+    this->base_->update(*this);
 
 }
 
 void Day::addDeal(Deal deal) {
-    deals_.emplace_back(deal);
-    (deals_.end()-1)->setDate(date_);
+    this->deals_.push_back(deal);
+    (this->deals_.end()-1)->setDate(this->date_);
 }
 
 void Day::addImportant(Important important) {
-    importants_.emplace_back(important);
+    this->importants_.push_back(important);
 }
 
 //todo -------------
 void Day::removeDeal(int pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
-    base_->remove<Deal>(it->id_);
-    deals_.erase(it);
+    this->base_->remove<Deal>(it->id_);
+    this->deals_.erase(it);
 }
 
 void Day::editDeal(int pos) {
@@ -80,14 +103,14 @@ void Day::editDeal(int pos) {
         it->setDescription(tmp);
     }
     it->updateVersion();
-    base_->update(*it);
+    this->base_->update(*it);
 }
 
 void Day::removeImportant(int pos) {
 	pos--;
     auto it = this->importants_.begin() + pos;
-    base_->remove<Important>(it->id_);
-    importants_.erase(it);
+    this->base_->remove<Important>(it->id_);
+    this->importants_.erase(it);
 }
 
 void Day::editImportant(int pos) {
@@ -99,7 +122,7 @@ void Day::editImportant(int pos) {
     std::cin >> tmp;
     it->important_ = tmp;
     it->updateVersion();
-    base_->update(*it);
+    this->base_->update(*it);
 }
 //------------------
 //funcs
@@ -119,8 +142,8 @@ void Day::showImportants() {
 
 void Day::show() {
     std::cout << date_ << std::endl;
-    showDeals();
-    showImportants();
+    this->showDeals();
+    this->showImportants();
 }
 
 void Day::edit() {
@@ -147,14 +170,15 @@ void Day::edit() {
     for (auto it = importants_.begin(); it != importants_.end(); ++it) {
         std::cin >> input;
         if (!input.empty()) {
-        *it = input;
-        input.clear();
+            *it = input;
+            input.clear();
+        }
     }
             
     std::cout << std::endl;
 
     this->updateVersion();
-    base_->update(*this);
+    this->base_->update(*this);
 }        
 
 std::string Day::concatenate() {

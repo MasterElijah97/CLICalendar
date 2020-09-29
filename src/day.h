@@ -12,7 +12,8 @@
 
 #include "src/iversion.h"
 #include "src/iuniqueid.h"
-#include "src/day.h"
+#include "src/deal.h"
+#include "src/important.h"
 
 const std::string SEPARATOR(3, '&');
 
@@ -20,7 +21,11 @@ class Day : public IVersion, public IUniqueId, public IDatabase {
 
     public:
         Day();
-        Day(const std::string);
+        Day(std::string);
+        Day(const Day&);
+        Day(Day&&);
+        Day& operator=(const Day&);
+        Day& operator=(Day&&);
 
         ~Day() = default;
 
@@ -58,9 +63,9 @@ class Day : public IVersion, public IUniqueId, public IDatabase {
 };
 
 bool operator==(const Day& left, const Day& right) {
-    return (left.getDate() == right.getDate())   &&
-           (left.getDeals() == right.getDeals()) &&
-           (left.getImportants() == right.getImportants()) &&
-           (left.getVersion() == right.getVersion());
+    return (left.date_ == right.date_)   &&
+           (left.deals_ == right.deals_) &&
+           (left.importants_ == right.importants) &&
+           (left.version_ == right.version_);
 }
 #endif // DAY_H

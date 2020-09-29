@@ -44,13 +44,6 @@ class Deal : public IVersion, public IUniqueId, public IDatabase {
         void clearPriority();
         void clearTime();
         //getters
-        std::string getName() const;
-        std::string getDescription() const;
-        std::string getLabel() const;
-        std::string getPriority() const;
-        std::string getBegin() const;
-        std::string getEnd() const;
-        std::pair< std::string, std::string > getTime() const;
 
         //setters
 
@@ -81,11 +74,12 @@ class Deal : public IVersion, public IUniqueId, public IDatabase {
 };
 
 bool operator==(const Deal& left, const Deal& right) {
-    return (left.getName()        == right.getName())        &&
-           (left.getDescription() == right.getDescription()) &&
-           (left.getLabel()       == right.getLabel())       &&
-           (left.getPriority()    == right.getPriority())    &&
-           (left.getTime()        == right.getTime())        &&
-           (left.getVersion()     == right.getVersion());
+    return (left.name_          == right.name_)          &&
+           (left.description_   == right.description_)   &&
+           (left.label_         == right.label_)         &&
+           (left.priority_      == right.priority_)      &&
+           (left.thisTime.begin == right.thisTime.begin) &&
+           (left.thisTime.end   == right.thisTime.end)   &&
+           (left.version_       == right.version_);
 }
 #endif // DEAL_H

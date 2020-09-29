@@ -59,22 +59,6 @@ class Session { //Singleton
         void logIn();
         void logOut();
 
-        void connectToServer();
-        void disconnectFromServer();
-
-        void getTasksFromServer();
-        void getNotesFromServer();
-        void getDaysFromServer();
-
-        void connectToLocalBase();
-        void syncWithLocalBase();
-        void syncWithServerBase();
-        void syncBases();
-
-        void getTasks();
-        void getNotes();
-        void getDays();
-
         void addTask(Task);
         void addNote(Note);
         void addDay(Day);
@@ -86,29 +70,9 @@ class Session { //Singleton
         void creatingNote();
         void creatingDay();
         void creatingDeal();
+        void creatingImportant();
 
         void getDataFromLocalBase();
-
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        >& getJoined();
-
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        >& getCopyable();
-
-        std::variant<
-            std::vector<Day>::iterator,
-            std::vector<Note>::iterator,
-            std::vector<Task>::iterator,
-            std::vector<Deal>::iterator
-        >& getMoveable();
 
         void setJoined(std::vector<Day>::iterator);
         void setJoined(std::vector<Deal>::iterator);
@@ -146,10 +110,10 @@ class Session { //Singleton
 
     private:
         Session();
-        Session(const Session&);
-        Session(Session&&);
-        Session& operator=(const Session&);
-        Session& operator=(Session&&);
+        Session(const Session&) = delete;
+        Session(Session&&) = delete;
+        Session& operator=(const Session&) = delete;
+        Session& operator=(Session&&) = delete;
 };
 
 #endif // SESSION_H

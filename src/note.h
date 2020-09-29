@@ -33,11 +33,7 @@ class Note : public IVersion, public IUniqueId, public IDatabase {
         Note& operator=(Note&&);
         //getters
         static std::size_t getNumberOfNotes() const;
-        std::string getLabel() const;
-        std::string getName() const;
-        std::string getDescription() const;
-
-        friend const std::size_t getNumberOfNotes();
+        
         //setters
         void setLabel(std::string);
         void setName(std::string);
@@ -69,10 +65,10 @@ std::size_t Note::numberOfNotes = 0;
 
 
 bool operator==(const Note& left, const Note& right) {
-    return (left.getLabel() == right.getLabel()) &&
-           (left.getName() == right.getName()) &&
-           (left.getDescription() == right.getDescription()) &&
-           (left.getVersion() == right.getVersion());
+    return (left.label_ == right.label_) &&
+           (left.name_ == right.name_) &&
+           (left.description_ == right.description_) &&
+           (left.version_ == right.version_);
 }
 
 #endif // NOTE_H
