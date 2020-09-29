@@ -1,4 +1,4 @@
-// Copyright by Jackie 2014.10.23
+// Copyright by Jackie 2014.10.23 https://github.com/JackieTseng/md5
 // Descriptin : MD5 Algorithm Implementation
 // MD5.cpp
 #include "MD5.h"

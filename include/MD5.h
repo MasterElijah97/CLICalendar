@@ -1,6 +1,6 @@
 #ifndef MD5_H
 #define MD5_H
-// Descriptin : MD5 Algorithm Implementation
+// Descriptin : MD5 Algorithm Implementation https://github.com/JackieTseng/md5
 // MD5.h
 #include <iostream>
 #include <cstring>
