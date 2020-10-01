@@ -1311,7 +1311,7 @@ using Storage = decltype(initLocalDb(""));
 using namespace sqlite_orm;
 class Session {
 public:
-        Session(std::string, std::string);
+        Session(User*);
         ~Session() = default;
         Session() = default;
         Session(const Session&) = default;
@@ -1319,7 +1319,7 @@ public:
         Session& operator=(const Session&) = default;
         Session& operator=(Session&&) = default;
 
-        User user;
+        User* user;
         Accounts accountsDb = initAccountsDb();
         std::shared_ptr<Storage> localDb = nullptr;
 
@@ -1727,12 +1727,11 @@ void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it
 
 //private
 
-Session::Session(std::string name, std::string hashedpass)
+Session::Session(User* user)
 {
-    this->user.login_ = name;
-    this->user.hashedPass_ = hashedpass;
-
-    this->localDb = std::make_shared<Storage>(initLocalDb(std::string(name + ".sqlite")));
+    this->user = user;
+    std::string databaseName = this->user->login_ + ".sqlite";
+    this->localDb = std::make_shared<Storage>(initLocalDb(std::string(databaseName)));
 
 	tasks_.reserve(100);
     notes_.reserve(1000);
@@ -2107,9 +2106,30 @@ void Session::eraseJoinedDay() {
 //--------------------
 
 
+void loginChecker() {
 
+}
 int main()
 {
-    std::cout << "Hello world!" << std::endl;
+    std::cout << "Welcome to CLICalendar. Please, log in or add new user" << std::endl;
+    std::cout << "Write 'help' to get list of commands" << std::endl;
+
+    User user;
+
+    while (!user.isLoggedIn()) {
+        loginChecker();
+    }
+
+    Session thisSession(&user);
+
+    std::string arg1;
+    std::string arg2;
+    int arg3;
+
+    std::cout << "You're successfully logged in" << std::endl;
+
+    while(user.isLoggedIn()) {
+        commandMonitor(arg1, arg2, arg3);
+    }
     return 0;
 }
