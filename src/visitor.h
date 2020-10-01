@@ -6,11 +6,14 @@
 #include <vector>
 #include <iterator>
 
-#include "deal.h"
-#include "day.h"
-#include "task.h"
-#include "note.h"
+#include "include/sqlite_orm.h"
 
+#include "src/black_magic.h"
+#include "src/deal.h"
+#include "src/important.h"
+#include "src/day.h"
+#include "src/task.h"
+#include "src/note.h"
 
 struct JoinedLabelSetter {
 	JoinedLabelSetter(std::string&&);

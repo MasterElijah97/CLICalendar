@@ -10,8 +10,12 @@
 #include <algorithm>
 #include <iterator>
 
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
 #include "src/iversion.h"
 #include "src/iuniqueid.h"
+#include "src/idatabase.h"
 
 const std::string SEPARATOR(3, '&');
 

@@ -1,7 +1,9 @@
 #ifndef IVERSION_H
 #define IVERSION_H
 
-#include "src/sqlite_orm.h"
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
 
 class IVersion {
 

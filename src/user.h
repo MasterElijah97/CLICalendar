@@ -5,7 +5,14 @@
 #include <memory>
 #include <string>
 
-#include "src/MD5.h"
+#include "include/MD5.h"
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
+
+#include "src/iversion.h"
+#include "src/iuniqueid.h"
+#include "src/idatabase.h"
 
 #include "src/session.h"
 
@@ -13,7 +20,6 @@
 #include "src/day.h"
 #include "src/task.h"
 #include "src/note.h"
-#include "src/sqlite_orm.h"
 //todo ptr on local db
 class User {
     friend class Session;
@@ -37,7 +43,7 @@ class User {
         int key_;
 
         void key_gen();
-        std::string User::doCryptoMessage(std::string);
+        std::string doCryptoMessage(std::string);
 
         
 };

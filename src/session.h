@@ -9,13 +9,16 @@
 #include <map>
 #include <iterator>
 
-#include "src/MD5.h"
+#include "include/MD5.h"
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
 #include "src/deal.h"
+#include "src/important.h"
 #include "src/day.h"
 #include "src/task.h"
 #include "src/note.h"
 #include "src/user.h"
-#include "src/black_magic.h"
 
 class Session { //Singleton
     public:
