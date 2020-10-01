@@ -1,7 +1,9 @@
 #ifndef IDATABASE_H
 #define IDATABASE_H
 
-#include "black_magic.h"
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
 
 class IDatabase
 {

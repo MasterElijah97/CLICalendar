@@ -73,7 +73,7 @@ Note& Note::operator=(Note&& right) {
 }
         //getters
 
-std::size_t Note::getNumberOfNotes() const  {
+std::size_t Note::getNumberOfNotes() {
     return Note::numberOfNotes;
 }
         //setters

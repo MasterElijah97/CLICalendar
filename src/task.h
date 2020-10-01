@@ -10,7 +10,13 @@
 #include <algorithm>
 #include <iterator>
 
-const std::string SEPARATOR(3, '&');
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
+
+#include "src/iversion.h"
+#include "src/iuniqueid.h"
+#include "src/idatabase.h"
 
 class Task : public IVersion, public IUniqueId, public IDatabase {
     public:
@@ -28,7 +34,7 @@ class Task : public IVersion, public IUniqueId, public IDatabase {
         Task& operator=(const Task&);
         Task& operator=(Task&&);
         //getters
-        static std::size_t getNumberOfTasks() const;
+        static std::size_t getNumberOfTasks();
         //setters
         void setIsCompleted(const bool);
         void setDescription(const std::string);
@@ -54,9 +60,9 @@ class Task : public IVersion, public IUniqueId, public IDatabase {
 std::size_t Task::numberOfTasks = 0;
 
 bool operator==(const Task& left, const Task& right) {
-    return (left.getDescription() == right.getDescription()) &&
-           (left.getIsCompleted() == right.getIsCompleted()) &&
-           (left.getVersion() == right.getVersion());
+    return (left.description_ == right.description_) &&
+           (left.isCompleted_ == right.isCompleted_) &&
+           (left.version_ == right.version_);
 }
 
 #endif // TASK_H

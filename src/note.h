@@ -10,10 +10,13 @@
 #include <algorithm>
 #include <iterator>
 
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
+
 #include "src/iversion.h"
 #include "src/iuniqueid.h"
-
-const std::string SEPARATOR(3, '&');
+#include "src/idatabase.h"
 
 class Note : public IVersion, public IUniqueId, public IDatabase {
     public:
@@ -32,7 +35,7 @@ class Note : public IVersion, public IUniqueId, public IDatabase {
         Note& operator=(const Note&);
         Note& operator=(Note&&);
         //getters
-        static std::size_t getNumberOfNotes() const;
+        static std::size_t getNumberOfNotes();
         
         //setters
         void setLabel(std::string);

@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+#include  "include/sqlite_orm.h"
+
 #include "src/task.h"
 #include "src/note.h"
 #include "src/important.h"

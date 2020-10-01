@@ -1,10 +1,18 @@
 #include <iostream>
 #include <string>
 
-#include "src/MD5.h"
-#include "src/black_magic.h"
-
+#include "include/MD5.h"
+#include "include/sqlite_orm.h"
 using namespace sqlite_orm;
+#include "src/black_magic.h"
+#include "src/session.h"
+#include "src/deal.h"
+#include "src/important.h"
+#include "src/day.h"
+#include "src/task.h"
+#include "src/note.h"
+#include "src/user.h"
+
 /* WARNING!!!
  * For educational purposes only!!!
  * Never do this way  in serious projects
@@ -17,7 +25,7 @@ int main(int argc, char* argv[]) {
                                 make_tablle("Accounts",
                                     make_column("id",
                                         &User::id_,
-                                        autoincrement();
+                                        autoincrement(),
                                         primary_key()),
                                     make_column("login",
                                         &User::login_),

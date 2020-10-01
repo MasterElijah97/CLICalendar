@@ -1,4 +1,4 @@
-#include "task.h"
+#include "src/task.h"
 
 Task::Task() {
     this->isCompleted_ = false;
@@ -155,6 +155,6 @@ void Task::deconcatenate(const std::string& msg) {
     description_ = msg.substr(posBegin);
 }
 
-std::size_t Task::getNumberOfTasks() const {
+std::size_t Task::getNumberOfTasks() {
     return Task::numberOfTasks;
 }

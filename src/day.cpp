@@ -1,4 +1,4 @@
-#include "day.h"
+#include "src/day.h"
 
 Day::Day()
 {

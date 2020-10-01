@@ -10,12 +10,19 @@
 #include <algorithm>
 #include <iterator>
 
+#include "src/black_magic.h"
+
+#include "src/iversion.h"
+#include "src/iuniqueid.h"
+#include "src/idatabase.h"
+
 #include "src/iversion.h"
 #include "src/iuniqueid.h"
 #include "src/deal.h"
 #include "src/important.h"
 
-const std::string SEPARATOR(3, '&');
+
+
 
 class Day : public IVersion, public IUniqueId, public IDatabase {
 
@@ -33,7 +40,7 @@ class Day : public IVersion, public IUniqueId, public IDatabase {
 
         std::string getDate() const;
         std::vector<Deal> getDeals() const;
-        std::vector<Impportant> getImportants() const;
+        std::vector<Important> getImportants() const;
 
         void setDate(std::string);
 
@@ -65,7 +72,7 @@ class Day : public IVersion, public IUniqueId, public IDatabase {
 bool operator==(const Day& left, const Day& right) {
     return (left.date_ == right.date_)   &&
            (left.deals_ == right.deals_) &&
-           (left.importants_ == right.importants) &&
+           (left.importants_ == right.importants_) &&
            (left.version_ == right.version_);
 }
 #endif // DAY_H

@@ -49,7 +49,6 @@ Deal::Deal(Deal&& other) {
     other.clearTime();
 }
 //operators
-friend bool operator==(const Deal& left, const Deal& right);
 
 Deal& Deal::operator=(const Deal& other) {
     if (this == &other) {

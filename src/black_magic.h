@@ -1,8 +1,9 @@
 #ifndef BLACK_MAGIC
 #define BLACK_MAGIC
 
-#include "src/sqlite_orm.h"
+#include "include/sqlite_orm.h"
 
+#include "src/important.h"
 #include "src/deal.h"
 #include "src/day.h"
 #include "src/task.h"

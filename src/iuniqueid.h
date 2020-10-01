@@ -1,13 +1,15 @@
 #ifndef IUNIQUEID_H
 #define IUNIQUEID_H
 
-#include "src/sqlite_orm.h"
+#include "include/sqlite_orm.h"
+
+#include "src/black_magic.h"
 
 class IUniqueId {
 
     public:
         IUniqueId() {
-            uniqueId_ = 0;
+            id_ = 0;
         }
 
         int getId() const;
