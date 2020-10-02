@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iterator>
 #include <variant>
+#include <cstdlib>
 
 #include "include/sqlite_orm.h"
 #include "include/MD5.h"
@@ -1156,6 +1157,11 @@ class User {
         ~User() = default;
 
         bool isLoggedIn() const;
+
+        void addingNewUser();
+        void logIn();
+        void logOut();
+
         std::string login_;
         std::string hashedPass_;
         int id_;
@@ -1305,10 +1311,10 @@ inline auto initLocalDb(const std::string &path) {
 
 using Accounts = decltype(initAccountsDb());
 using Storage = decltype(initLocalDb(""));
-
 //--------------------
 //--------------------
 using namespace sqlite_orm;
+struct CommandChecker;
 class Session {
 public:
         Session(User*);
@@ -1319,8 +1325,10 @@ public:
         Session& operator=(const Session&) = default;
         Session& operator=(Session&&) = default;
 
+        friend CommandChecker;
+
         User* user;
-        Accounts accountsDb = initAccountsDb();
+
         std::shared_ptr<Storage> localDb = nullptr;
 
         std::vector<Task> tasks_;
@@ -1350,11 +1358,6 @@ public:
         std::vector<Task>::iterator,
         std::vector<Deal>::iterator
         > moveableObject_;
-
-        void addingNewUser();
-
-        void logIn();
-        void logOut();
 
         void addTask(Task);
         void addNote(Note);
@@ -1406,6 +1409,14 @@ public:
         void eraseJoinedDay();
 
     private: //visitors
+
+struct JoinedEditor {
+    void operator()(std::vector<Day>::iterator&);
+	void operator()(std::vector<Deal>::iterator&);
+	void operator()(std::vector<Task>::iterator&);
+	void operator()(std::vector<Note>::iterator&);
+};
+
 
 struct JoinedShower {
     void operator()(std::vector<Day>::iterator&);
@@ -1513,7 +1524,7 @@ struct JoinedDateSetter {
 };
 
 struct CopyablePaster {
-    CopyablePaster(Session&);
+    CopyablePaster(Session*);
 
     Session* session;
 
@@ -1558,7 +1569,7 @@ struct MovableSetter {
 };
 
 struct CopyableSetter {
-	CopyableSetter(Session&);
+	CopyableSetter(Session*);
 
 	Session* session;
 
@@ -1568,8 +1579,8 @@ struct CopyableSetter {
 	void operator()(std::vector<Note>::iterator&);
 };
 };
-Session::CopyableSetter::CopyableSetter(Session& sess) {
-	this->session = &sess;
+Session::CopyableSetter::CopyableSetter(Session* sess) {
+	this->session = sess;
 }
 void Session::CopyableSetter::operator()(std::vector<Deal>::iterator& it) {
 	this->session->copyableObject_ = it;
@@ -1612,6 +1623,20 @@ void Session::JoinedShower::operator()(std::vector<Task>::iterator& it) {
 void Session::JoinedShower::operator()(std::vector<Note>::iterator& it) {
     it->show();
 }
+
+void Session::JoinedEditor::operator()(std::vector<Day>::iterator& it) {
+    it->edit();
+}
+void Session::JoinedEditor::operator()(std::vector<Deal>::iterator& it) {
+    it->edit();
+}
+void Session::JoinedEditor::operator()(std::vector<Task>::iterator& it) {
+    it->edit();
+}
+void Session::JoinedEditor::operator()(std::vector<Note>::iterator& it) {
+    it->edit();
+}
+
 
 Session::JoinedLabelSetter::JoinedLabelSetter(std::string msg) {
     this->msg_ = std::move(msg);
@@ -1686,8 +1711,8 @@ void Session::JoinedDateSetter::operator()(std::vector<Day>::iterator& it) {
  //   base->update(*it);
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Session::CopyablePaster::CopyablePaster(Session& sess) {
-    this->session = &sess;
+Session::CopyablePaster::CopyablePaster(Session* sess) {
+    this->session = sess;
 }
 void Session::CopyablePaster::operator()(std::vector<Day>::iterator& copyable) {
     auto joined = std::get<std::vector<Day>::iterator>(this->session->joinedObject_);
@@ -1739,65 +1764,6 @@ Session::Session(User* user)
 }
 
 //public
-void Session::addingNewUser() {
-    std::string login;
-    std::string password;
-    std::cout << "Please, enter new login" << std::endl;
-    std::cin >> login;
-    try {
-        auto user = accountsDb.get_all<User>(where(is_equal(&User::login_, login)));
-    }
-    catch(...) {
-        std::cout << "Please, enter new password" << std::endl;
-        std::cin >> password;
-
-        this->user.login_ = login;
-        this->user.hashedPass_ = md5(password);
-
-        auto insertedId = accountsDb.insert(this->user);
-        this->user.id_ = insertedId;
-
-        std::cout << "New account has been created" << std::endl;
-        std::cout << "Now you can log in with entered login and password" << std:: endl;
-    }
-        std::cout << "Sorry, this login is already exists. Please, try again." << std::endl;
-}
-//public
-
-void Session::logIn() {
-
-    std::string login;
-    std::string password;
-    std::string hashedPassword;
-
-    std::cout << "Login:";
-    std::cin >> login;
-    std::cout << std::endl;
-
-    std::cout << "Password";
-    std::cin >> password;
-    std::cout << std::endl;
-    hashedPassword = md5(password);
-
-    try {
-        auto ExistingUser = accountsDb.get_all<User>(where(is_equal(&User::login_, login) &&
-                                                    is_equal(&User::hashedPass_, hashedPassword)));
-        this->user.login_ = login;
-		this->user.hashedPass_ = hashedPassword;
-        std::cout << "You've succesfully logged in" << std::endl;
-        this->user.isLoggedIn_ = true;
-
-    } catch(...) {
-        std::cout << "Wrong login or password" << std::endl;
-        std::cout << "Please, try again" << std::endl;
-    }
-}
-void Session::logOut() {
-    this->user.login_.clear();
-    this->user.hashedPass_.clear();
-    this->user.isLoggedIn_ = false;
-}
-
 
 void Session::getDataFromLocalBase() {
 	try {
@@ -2105,31 +2071,408 @@ void Session::eraseJoinedDay() {
 }
 //--------------------
 
+Accounts accountsDb = initAccountsDb();
 
-void loginChecker() {
+struct AccessProvider {
+    AccessProvider(User*);
+    User* user;
+    void addingNewUser();
+    void logIn();
+    void logOut();
+    void accessChecker(const std::string&, const std::string&);
 
+};
+
+AccessProvider::AccessProvider(User* user) {
+    this->user = user;
 }
+
+void AccessProvider::addingNewUser() {
+    std::string login;
+    std::string password;
+    std::cout << "Please, enter new login" << std::endl;
+    std::cin >> login;
+        //throws an exception if such user doesn't exist
+
+        std::vector<User> isUserExists = ::accountsDb.get_all<User>(where(is_equal(&User::login_, login)));
+
+        if (isUserExists.empty()) {
+            std::cout << "Please, enter new password" << std::endl;
+            std::cin >> password;
+
+            this->user->login_ = login;
+            this->user->hashedPass_ = md5(password);
+
+            auto insertedId = accountsDb.insert(*(this->user));
+            this->user->id_ = insertedId;
+            ::accountsDb.update(*user);
+
+            std::cout << "New account has been created" << std::endl;
+            std::cout << "Now you can log in with entered login and password" << std:: endl;
+        } else {
+            std::cout << "Sorry, this login is already exists. Please, try again." << std::endl;
+        }
+}
+//public
+
+void AccessProvider::logIn() {
+
+    std::string login;
+    std::string password;
+    std::string hashedPassword;
+
+    std::cout << "Login: ";
+    std::cin >> login;
+    std::cout << std::endl;
+
+    std::cout << "Password: ";
+    std::cin >> password;
+    std::cout << std::endl;
+    hashedPassword = md5(password);
+
+    try {
+        //throws an exception if such user doesn't exist
+        auto ExistingUser = accountsDb.get_all<User>(where(is_equal(&User::login_, login) &&
+                                                    is_equal(&User::hashedPass_, hashedPassword)));
+        //if user exists ...
+        this->user->login_ = login;
+		this->user->hashedPass_ = hashedPassword;
+        std::cout << "You've succesfully logged in" << std::endl;
+        this->user->isLoggedIn_ = true;
+
+    } catch(...) {
+        std::cout << "Wrong login or password" << std::endl;
+        std::cout << "Please, try again" << std::endl;
+        std::cout << "You can also add new user. Write 'add user'" << std::endl;
+        return;
+    }
+}
+
+void AccessProvider::logOut() {
+    this->user->login_.clear();
+    this->user->hashedPass_.clear();
+    this->user->isLoggedIn_ = false;
+}
+
+void AccessProvider::accessChecker(const std::string& arg1, const std::string& arg2) {
+        if (!arg1.compare("log")) {
+            if(!arg2.compare("in")) {
+                this->logIn();
+            } else {
+                std::cout << "Wrong command. Please, check 'help'" << std::endl;
+            }
+        }
+
+        else if (!arg1.compare("add")) {
+
+            if (!arg2.compare("user")) {
+                this->addingNewUser();
+            } else {
+                std::cout << "Wrong command. Please, check 'help'" << std::endl;
+            }
+        }
+
+        else if(!arg1.compare("exit")) {
+            exit(0);
+        }
+
+        else if(!arg1.compare("help")) {
+            std::cout << "---List of supported commands before you log in---"                                          << std::endl;
+            std::cout << std::endl;
+
+            std::cout << "add user                  -allows to create new account"                                     << std::endl;
+            std::cout << "log in                    -allows to log in in account"                                      << std::endl;
+            std::cout << "exit                      -allow to close this app"                                          << std::endl;
+        }
+
+        else {
+            std::cout << "Wrong command. Please, check 'help'" << std::endl;
+        }
+}
+
+struct CommandChecker {
+    CommandChecker(Session*, AccessProvider*);
+    Session* thisSession;
+    AccessProvider* accessProvider;
+    void clearConsole();
+    void commandMonitor(const std::string&,
+                        const std::string&,
+                        const int&);
+};
+
+CommandChecker::CommandChecker(Session* session, AccessProvider* accessProvider) {
+    this->thisSession = session;
+    this->accessProvider = accessProvider;
+}
+
+void CommandChecker::clearConsole() {
+    for (int i = 0; i != 100; ++i) {
+        std::cout << "\n";
+    }
+}
+void CommandChecker::commandMonitor(const std::string& arg1,
+                                    const std::string& arg2,
+                                    const int& arg3) {
+
+    //method compare returns 0 if string are fully equal
+    if (!arg1.compare("next")) {
+        std::visit(Session::JoinedIncrementAllower{}, this->thisSession->joinedObject_);
+        std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+    }
+    else if (!arg1.compare("prev")) {
+        std::visit(Session::JoinedDecrementAllower{}, this->thisSession->joinedObject_);
+        std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+    }
+    else if (!arg1.compare("join")) {
+
+        if (!arg2.compare("deals")) {
+            //need to check
+                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+                auto to_set = it->deals_.end() - 1;
+                thisSession->setJoined(to_set);
+        }
+
+    }
+    else if (!arg1.compare("create")) {
+
+        if (!arg2.compare("task")) {
+
+            thisSession->creatingTask();
+
+        } else if (!arg2.compare("note")) {
+
+            thisSession->creatingNote();
+
+        } else if (!arg2.compare("day")) {
+
+            thisSession->creatingDay();
+
+        } else if (!arg2.compare("deal")){
+
+            thisSession->creatingDeal();
+
+        } else {
+            std::cout << "Wrong command. Please, check 'help'" << std::endl;
+        }
+
+    }
+    else if (!arg1.compare("edit")) {
+
+        std::visit(Session::JoinedEditor{}, thisSession->joinedObject_);
+
+    }
+    else if (!arg1.compare("copy")) {
+
+        std::visit(Session::CopyableSetter{thisSession}, thisSession->joinedObject_);
+        //or thisSession->copyableObject = thisSession->joinedObject_; ???
+    }
+    else if (!arg1.compare("paste")) {
+
+        std::visit(Session::CopyablePaster{thisSession}, thisSession->copyableObject_);
+
+    }
+    else if (!arg1.compare("remove")) {
+
+        if (!arg2.compare("task")) {
+
+            auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
+
+            thisSession->localDb->remove<Task>(it->id_);
+            thisSession->tasks_.erase(it);
+
+        } else if (!arg2.compare("note")) {
+
+            auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
+
+            thisSession->localDb->remove<Note>(it->id_);
+            thisSession->notes_.erase(it);
+
+        } else if (!arg2.compare("day")) {
+
+            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+
+            thisSession->localDb->remove<Day>(it->id_);
+            thisSession->days_.erase(it);
+
+        } else if (!arg2.compare("deal")) {
+
+            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+
+            if (arg3 <= (it->deals_.size())) {
+                thisSession->localDb->remove<Deal>(it->deals_[arg3-1].id_);
+                it->removeDeal(arg3);
+            } else {
+                std::cout << "There is no such deal" << std::endl;
+            }
+
+        } else if (!arg2.compare("important")) {
+
+            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+
+            if (arg3 <= (it->importants_.size())) {
+                thisSession->localDb->remove<Important>(it->importants_[arg3-1].id_);
+                it->removeImportant(arg3);
+            } else {
+                std::cout << "There is no suchi mportant" << std::endl;
+            }
+
+        } else {
+
+            std::cout << "Wrong command. Please, check 'help'" << std::endl;
+
+        }
+    }
+    else if (!arg1.compare("open")) {
+
+        if (!arg2.compare("tasks")) {
+            auto it = thisSession->tasks_.end() - 1;
+            thisSession->setJoined(it);
+
+            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+
+        } else if (!arg2.compare("notes")) {
+            auto it = thisSession->notes_.end() - 1;
+            thisSession->setJoined(it);
+
+            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+
+        } else if (!arg2.compare("days")) {
+
+            auto it = thisSession->days_.end() - 1;
+            thisSession->setJoined(it);
+
+            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+
+        } else {
+
+            std::cout << "Wrong command. Please, check 'help'" << std::endl;
+
+        }
+    }
+
+    else if (!arg1.compare("logout")) {
+
+        this->accessProvider->logOut();
+
+    }
+    else if (!arg1.compare("connect")) {
+
+        //thisSession.connectToServer(); //todo
+
+    }
+    else if ((!arg1.compare("disconnect"))) {
+
+        //thisSession.disconnectFromServer(); //todo
+
+    }
+    else if (!arg1.compare("sync")) {
+
+        //thisSession.syncBases(); //todo
+
+    }
+    else if (!arg1.compare("exit")) {
+
+        //thisSession.syncBases(); // todo
+        //thisSession.disconnectFromServer(); //todo
+        accessProvider->logOut();
+        exit(0);
+
+    }
+    else if (!arg1.compare("help")) {
+
+        thisSession->showHelp();
+
+    }
+    else {
+        std::cout << "Wrong command. Please, check 'help'" << std::endl;
+    }
+}
+
+std::vector<std::string> split(const std::string& input, char separator)
+{
+    std::vector<std::string> args;
+
+    std::istringstream input_ss {input};
+
+    for (std::string arg; std::getline(input_ss, arg, separator); ) {
+        args.push_back(arg);
+    }
+
+    return args;
+}
+
+
+
 int main()
 {
+    accountsDb.sync_schema();
+    User user;
+    AccessProvider accessProvider(&user);
+
     std::cout << "Welcome to CLICalendar. Please, log in or add new user" << std::endl;
     std::cout << "Write 'help' to get list of commands" << std::endl;
 
-    User user;
+    while(1) {
 
-    while (!user.isLoggedIn()) {
-        loginChecker();
-    }
+        while (!user.isLoggedIn()) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter command (login, add user, help or exit)" << std::endl;
 
-    Session thisSession(&user);
+            std::string input;
+            std::getline(std::cin, input);
+            if (input.empty()) {
+                std::cout << "Empty command" << std::endl;
+                continue;
+            }
 
-    std::string arg1;
-    std::string arg2;
-    int arg3;
+            std::vector<std::string> v = split(input, ' ');
 
-    std::cout << "You're successfully logged in" << std::endl;
+            if ( v.size() == 1 ) {
+                accessProvider.accessChecker(v[0], std::string(""));
+            }
+            else if ( v.size() == 2) {
+                accessProvider.accessChecker(v[0], v[1]);
+            }
+        }
 
-    while(user.isLoggedIn()) {
-        commandMonitor(arg1, arg2, arg3);
+        Session thisSession(&user);
+        thisSession.localDb->sync_schema();
+
+        CommandChecker commandChecker(&thisSession, &accessProvider);
+
+        std::cout << "Please enter command" << std::endl;
+
+        while(user.isLoggedIn()) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter command (login, add user, help or exit)" << std::endl;
+
+            std::string input;
+            std::getline(std::cin, input);
+            if (input.empty()) {
+                std::cout << "Empty command" << std::endl;
+                continue;
+            }
+
+            std::vector<std::string> v = split(input, ' ');
+
+            if ( v.size() == 1 ) {
+                commandChecker.commandMonitor(v[0], std::string(""), -1);
+            }
+            else if ( v.size() == 2) {
+                commandChecker.commandMonitor(v[0], v[1], -1);
+            }
+            else if ( v.size() == 3) {
+                    int arg3 = -1;
+                try {
+                    arg3 = std::stoi(v[2]);
+                } catch(...) {
+                    std::cout << "Third argument must be an integer!" << std::endl;
+                    std::cout << "Try again" << std::endl;
+                    continue;
+                }
+                commandChecker.commandMonitor(v[0], v[1], arg3);
+            }
+        }
     }
     return 0;
 }

@@ -128,11 +128,7 @@ void commandMonitor(const std::string& arg1,
 
         }
     } 
-    else if (!arg1.compare("login")) {
 
-        thisSession.logIn();
-
-    } 
     else if (!arg1.compare("logout")) {
 
         thisSession.logOut();
@@ -148,28 +144,19 @@ void commandMonitor(const std::string& arg1,
         //thisSession.disconnectFromServer(); //todo
 
     }
-    else if (arg1 == "sync") {
+    else if (!arg1.compare("sync")) {
 
         //thisSession.syncBases(); //todo
 
     }
-    else if (arg1 == "add") {
-
-        if (arg2 == "user") {
-            thisSession.addingNewUser();
-        } else {
-            std::cout << "Wrong command. Please, check 'help'" << std::endl;
-        }
-
-    } 
-    else if (arg1 == "exit") {
+    else if (!arg1.compare("exit")) {
 
         //thisSession.syncBases(); // todo
         //thisSession.disconnectFromServer(); //todo
         thisSession.logOut();
 
     } 
-    else if (arg1 == "help") {
+    else if (!arg1.compare("help")) {
 
         thisSession.showHelp();
 
