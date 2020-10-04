@@ -1819,7 +1819,7 @@ void Session::getDataFromLocalBase() {
     	std::cout << "No one task found" << std::endl;
 	}
 	catch(...) {
-    	std::cout << "Unknown exception" << std::endl;
+    	std::cout << std::setw(24) << "Tasks::New user detected" << std::endl;
 	}
 
 
@@ -1830,17 +1830,17 @@ void Session::getDataFromLocalBase() {
     	std::cout << "No one note found" << std::endl;
 	}
 	catch(...) {
-    	std::cout << "Unknown exception" << std::endl;
+    	std::cout << std::setw(24) << "Notes::New user detected" << std::endl;
 	}
 
 	try {
     	this->days_ = localDb->get_all<Day>();
 	}
 	catch (sqlite_orm::orm_error_code) {
-      	std::cout << "No one task found" << std::endl;
+      	std::cout << "No one day found" << std::endl;
 	}
 	catch(...) {
-    	std::cout << "Unknown exception" << std::endl;
+    	std::cout << std::setw(24) << "Days::New user detected" << std::endl;
 	}
 
 	for (auto it = days_.begin(); it != days_.end(); ++it) {
@@ -2008,8 +2008,6 @@ void Session::creatingImportant() {
  	std::cout << std::endl;
 
  	std::cout << "--Manipulating with accounts--"                                                              << std::endl;
- 	std::cout << "add user                  -allows to create new account"                                     << std::endl;
- 	std::cout << "login                     -allows to login in account"                                       << std::endl;
  	std::cout << "logout                    -allows to logout from  account"                                   << std::endl;
 
  	std::cout << std::endl;
