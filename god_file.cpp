@@ -239,14 +239,22 @@ void Deal::setDate(std::string date) {
 
 void Deal::show() {
     //todo formatting time
-    std::cout << begin_[0] << begin_[1] << ":" << begin_[2] << begin_[3]
+    std::cout << std::setw(13)  << "Begins at: ";
+    std::cout << begin_.substr(0, 2) << ":" << begin_.substr(2, 2)
               << "-"
-              << end_[0] << end_[1] << ":" << end_[3] << end_[4]
+              << end_.substr(0, 2) << ":" << end_.substr(2, 2)
               << std::endl;
+    std::cout << std::setw(13)  << "Label: ";
     std::cout << "#" << label_ << std::endl;
+    std::cout << std::setw(13)  << "Priority: ";
     std::cout << priority_ << std::endl;
+    std::cout << std::setw(13)  << "Name: ";
     std::cout << name_ << std::endl;
+    std::cout << std::setw(13)  << "Description: ";
     std::cout << description_ << std::endl;
+
+    std::cout << std::endl;
+
 }
 
 void Deal::edit() {
@@ -255,48 +263,52 @@ void Deal::edit() {
     this->show();
 
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Name: ";
+    std::cout << std::setw(13) << "Name: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->name_ = input;
         input.clear();
     }
 
-    std::cout << "Description: ";
+    std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->description_ = input;
         input.clear();
     }
 
-    std::cout << "Label: ";
+    std::cout << std::setw(13) <<  "Label: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->label_ = input;
         input.clear();
     }
 
-    std::cout << "Priority: ";
+    std::cout << std::setw(13) <<  "Priority: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->priority_ = input;
         input.clear();
     }
 
-    std::cout << "Begins at ";
+    std::cout << std::setw(13) <<  "Begins at ";
     std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
+    //need to refactor
+    if (!input.empty() && input.size() == 4) {
         this->begin_ = input;
         input.clear();
     }
 
-    std::cout << "Ends at ";
+    std::cout << std::setw(13) <<  "Ends at ";
     std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
+    if (!input.empty() && input.size() == 4) {
         this->end_ = input;
         input.clear();
     }
+
+    std::cout << std::endl;
 
     std::cout << std::endl;
     this->updateVersion();
@@ -310,7 +322,7 @@ std::string Deal::concatenate() {
            label_                    +SEPARATOR+
            priority_                 +SEPARATOR+
            std::to_string(version_)  +SEPARATOR+
-           std::to_string(id_) +SEPARATOR+
+           std::to_string(id_)       +SEPARATOR+
            description_;
 }
 
@@ -550,11 +562,16 @@ void Task::clearDescription() {
         //funcs
 void Task::show() {
     if (isCompleted_) {
+        std::cout << std::setw(13) << "Status: ";
         std::cout << "Completed" << std::endl;
     } else {
+        std::cout << std::setw(13) << "Status: ";
         std::cout << "Uncompleted" << std::endl;
     }
+    std::cout << std::setw(13) << "Description: ";
     std::cout << description_ << std::endl;
+
+    std::cout << std::endl;
 }
 
 void Task::edit() {
@@ -563,8 +580,9 @@ void Task::edit() {
     this->show();
 
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Description: ";
+    std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->description_ = input;
@@ -572,7 +590,7 @@ void Task::edit() {
     }
 
 
-    std::cout << "Completed? [Y / N]: ";
+    std::cout << std::setw(13) << "Completed? [Y / N]: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
 
@@ -586,12 +604,13 @@ void Task::edit() {
     }
 
     std::cout << std::endl;
+    std::cout << std::endl;
 
 //    base_->update(*this);
 }
 
 std::string Task::concatenate() {
-    return std::to_string(id_)    +SEPARATOR+
+    return std::to_string(id_)          +SEPARATOR+
            std::to_string(version_)     +SEPARATOR+
            std::to_string(isCompleted_) +SEPARATOR+
            description_;
@@ -804,8 +823,11 @@ void Note::clearLabel() {
 }
         //funcs
 void Note::show() {
+    std::cout << std::setw(13) << "Label: ";
     std::cout << "#" << label_ << std::endl;
+    std::cout << std::setw(13) << "Name: ";
     std::cout << name_ << std::endl;
+    std::cout << std::setw(13) << "Description: ";
     std::cout << description_ << std::endl;
 }
 
@@ -815,28 +837,30 @@ void Note::edit() {
     this->show();
 
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Label: ";
+    std::cout << std::setw(13) << "Label: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->label_ = input;
         input.clear();
     }
 
-    std::cout << "Name: ";
+    std::cout << std::setw(13) << "Name: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->name_ = input;
         input.clear();
     }
 
-    std::cout << "Description: ";
+    std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->description_ = input;
         input.clear();
     }
 
+    std::cout << std::endl;
     std::cout << std::endl;
 
     this->updateVersion();
@@ -848,7 +872,7 @@ std::string Note::concatenate() {
     return label_                    +SEPARATOR+
            name_                     +SEPARATOR+
            std::to_string(version_)  +SEPARATOR+
-           std::to_string(id_) +SEPARATOR+
+           std::to_string(id_)       +SEPARATOR+
            description_;
 }
 
@@ -936,13 +960,13 @@ Day::Day()
 {
 	date_ = "01 January 1970";
     importants_.emplace_back("Nothing");
-    deals_.emplace_back("Frist of All");
+    deals_.emplace_back("First of All");
 }
 
 Day::Day(std::string date) {
     date_ = std::move(date);
     importants_.emplace_back("Nothing");
-    deals_.emplace_back("Frist of All");
+    deals_.emplace_back("First of All");
 }
 
 Day::Day(const Day& other) {
@@ -1007,33 +1031,37 @@ void Day::removeDeal(int pos) {
 void Day::editDeal(int pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
-    std::cout << "Editing deal..." << std::endl;
+
     std::string tmp;
-    std::cout << "Please, enter time in such format HH:MM-HH:MM" << std::endl;
+    std::cout << std::setw(20) << "Time (HH:MM-HH:MM): " << std::endl;
+    std::cout << std::endl;
+
     std::getline(std::cin, tmp, '\n');
     if (!tmp.empty()) {
         it->setTime(tmp.substr(0, 1)+tmp.substr(3, 4), tmp.substr(6, 7)+tmp.substr(9, 10));
     }
-    std::cout << "Please, enter label" << std::endl;
+    std::cout << std::setw(20) <<  "Label: " << std::endl;
     std::getline(std::cin, tmp, '\n');
     if (!tmp.empty()) {
         it->setLabel(tmp);
     }
-    std::cout << "Please, enter priority" << std::endl;
+    std::cout << std::setw(20) <<  "Priority: " << std::endl;
     std::getline(std::cin, tmp, '\n');
     if (!tmp.empty()) {
         it->setPriority(tmp);
     }
-    std::cout << "Please, enter name" << std::endl;
+    std::cout << std::setw(20) << "Name: " << std::endl;
     std::getline(std::cin, tmp, '\n');
     if (!tmp.empty()) {
         it->setName(tmp);
     }
-    std::cout << "Please, enter description" << std::endl;
+    std::cout << std::setw(20) << "Description: " << std::endl;
     std::getline(std::cin, tmp, '\n');
     if (!tmp.empty()) {
         it->setDescription(tmp);
     }
+
+    std::cout << std::endl;
     it->updateVersion();
 //    this->base_->update(*it);
 }
@@ -1049,10 +1077,14 @@ void Day::editImportant(int pos) {
     pos--;
     auto it = this->importants_.begin() + pos;
     std::cout << "Editing important..." << std::endl;
-    std::cout << "Please, enter new important" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Please, enter new important: ";
     std::string tmp;
     std::cin >> tmp;
     it->important_ = tmp;
+    std::cout << std::endl;
+
     it->updateVersion();
 //    this->base_->update(*it);
 }
@@ -1074,7 +1106,9 @@ void Day::showImportants() {
 }
 
 void Day::show() {
-    std::cout << date_ << std::endl;
+    std::cout << std::setw(13) << "Date: ";
+    std::cout<< date_ << std::endl;
+    std::cout << std::endl;
     this->showDeals();
     this->showImportants();
 }
@@ -1085,8 +1119,9 @@ void Day::edit() {
     this->show();
 
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+    std::cout << std::endl;
 
-    std::cout << "Date: ";
+    std::cout << std::setw(13) << "Date: ";
     std::getline(std::cin, input, '\n');
     if (!input.empty()) {
         this->date_ = input;
@@ -1094,12 +1129,12 @@ void Day::edit() {
     }
 
 
-    std::cout << "Deals: ";
+    std::cout << std::setw(13) << "Deals: ";
     for (auto it = deals_.begin(); it != deals_.end(); ++it) {
         it->edit();
     }
 
-    std::cout << "Importants: ";
+    std::cout << std::setw(13) << "Importants: ";
     for (auto it = importants_.begin(); it != importants_.end(); ++it) {
         std::getline(std::cin, input, '\n');
         if (!input.empty()) {
@@ -1108,6 +1143,7 @@ void Day::edit() {
         }
     }
 
+    std::cout << std::endl;
     std::cout << std::endl;
 
     this->updateVersion();
@@ -1832,28 +1868,30 @@ void Session::getDataFromLocalBase() {
 
 void Session::creatingTask() {
     std::string description;
-    std::cout << "Please, enter description" << std::endl;
+    std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, description, '\n');
+    std::cout << std::endl;
 
     Task task(description);
     auto insertedId = localDb->insert(task);
     task.id_= insertedId;
     tasks_.push_back(task);
 
-    std::cout << "New tas has been created :)" << std::endl;
+    std::cout << "New task has been created :)" << std::endl;
+    std::cout << std::endl;
 }
 void Session::creatingNote() {
     std::string name;
     std::string description;
     std::string label;
 
-    std::cout << "Please, enter name" << std::endl;
+    std::cout << std::setw(13) << "Name: ";
     std::getline(std::cin, name, '\n');
-    std::cout << "Please, enter description" << std::endl;
+    std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, description, '\n');
-    std::cout << "Please, enter label" << std::endl;
+    std::cout << std::setw(13) << "Label: ";
     std::getline(std::cin, label, '\n');
-
+    std::cout << std::endl;
     Note note(name, description, label);
 
     auto insertedId = localDb->insert(note);
@@ -1861,12 +1899,14 @@ void Session::creatingNote() {
     notes_.push_back(note);
 
     std::cout << "New note has been created :)" << std::endl;
+    std::cout << std::endl;
 }
 
 void Session::creatingDay() {
     std::string date;
-    std::cout << "Please, enter date in format YYYYMMDD" << std::endl;
+    std::cout << "Date (YYYYMMDD): ";
     std::getline(std::cin, date, '\n');
+    std::cout << std::endl;
 
     Day day(date);
 
@@ -1875,6 +1915,7 @@ void Session::creatingDay() {
     days_.push_back(day);
 
     std::cout << "New day has been created :)" << std::endl;
+    std::cout << std::endl;
 }
 
 void Session::creatingDeal() {
@@ -1884,22 +1925,24 @@ void Session::creatingDeal() {
     std::string priority;
     std::string time;
 
-    std::cout << "Please, enter name" << std::endl;
+    std::cout << std::setw(20) << "Name: ";
     std::getline(std::cin, name, '\n');
-    std::cout << "Please, enter description" << std::endl;
+    std::cout << std::setw(20) << "Description: ";
     std::getline(std::cin, description, '\n');
-    std::cout << "Please, enter label" << std::endl;
+    std::cout << std::setw(20) << "Labe: ";
     std::getline(std::cin, label, '\n');
-    std::cout << "Please, enter priority" << std::endl;
+    std::cout << std::setw(20) << "Priority: ";
     std::getline(std::cin, priority, '\n');
-    std::cout << "Please, enter time in format HH:MM-HH:MM" << std::endl;
+    std::cout << std::setw(20) << "Time (HH:MM-HH:MM): ";
     std::getline(std::cin, time, '\n');
+    std::cout << std::endl;
+
     Deal deal(name,
                 description,
                 label,
                 priority,
-                time.substr(0, 2)+time.substr(4, 5),
-                time.substr(7, 9)+time.substr(11, 12));
+                time.substr(0, 2)+time.substr(3, 2),
+                time.substr(6, 2)+time.substr(9, 2));
 
     auto insertedId = localDb->insert(deal);
     deal.id_= insertedId;
@@ -1907,13 +1950,15 @@ void Session::creatingDeal() {
 
 
     std::cout << "New day has been created :)" << std::endl;
+    std::cout << std::endl;
 
 }
 
 void Session::creatingImportant() {
     std::string tmp;
-    std::cout << "Please, enter important" << std::endl;
+    std::cout << std::setw(13) << "Important: ";
     std::getline(std::cin, tmp, '\n');
+    std::cout << std::endl;
     Important important(tmp);
 
     auto insertedId = localDb->insert(important);
@@ -1921,6 +1966,7 @@ void Session::creatingImportant() {
     std::get<std::vector<Day>::iterator>(joinedObject_)->addImportant(important);
 
     std::cout << "New important has been created :)" << std::endl;
+    std::cout << std::endl;
 }
 
  void Session::addTask(Task task) {
@@ -1942,9 +1988,12 @@ void Session::creatingImportant() {
  	std::cout << "---List of supported commands---"                                                            << std::endl;
 
  	std::cout << std::endl;
+
  	std::cout << "--Navigation--"                                                                              << std::endl;
  	std::cout << "next                      -allows to get next item"                                          << std::endl;
  	std::cout << "prev                      -allows to get previous item"                                      << std::endl;
+
+    std::cout << std::endl;
 
  	std::cout << "--Manipulating with data--"                                                                  << std::endl;
  	std::cout << "open tasks/notes/days     -open tasks or notes or days"                                      << std::endl;
@@ -1974,6 +2023,8 @@ void Session::creatingImportant() {
 
  	std::cout << "--Other--"                                                                                   << std::endl;
  	std::cout << "exit                      -sync bases, disconnect from server and logout"                    << std::endl;
+
+ 	std::cout << std::endl;
  }
  //getters
 
@@ -2118,8 +2169,10 @@ void AccessProvider::addingNewUser() {
 
             std::cout << "New account has been created" << std::endl;
             std::cout << "Now you can log in with entered login and password" << std:: endl;
+            std::cout << std::endl;
         } else {
             std::cout << "Sorry, this login is already exists. Please, try again." << std::endl;
+            std::cout << std::endl;
         }
 }
 //public
@@ -2130,11 +2183,13 @@ void AccessProvider::logIn() {
     std::string password;
     std::string hashedPassword;
 
-    std::cout << "Login: " << std::endl;;
+    std::cout << std::setw(13) << "Login: ";
     std::getline(std::cin, login, '\n');
+    std::cout << std::endl;
 
-    std::cout << "Password: " << std::endl;
+    std::cout << std::setw(13) << "Password: ";
     std::getline(std::cin, password, '\n');
+    std::cout << std::endl;
 
     hashedPassword = md5(password);
 
@@ -2144,11 +2199,13 @@ void AccessProvider::logIn() {
         this->user->login_ = login;
         this->user->hashedPass_ = hashedPassword;
         std::cout << "You've succesfully logged in" << std::endl;
+        std::cout << std::endl;
         this->user->isLoggedIn_ = true;
     } else {
         std::cout << "Wrong login or password" << std::endl;
         std::cout << "Please, try again" << std::endl;
         std::cout << "You can also add new user. Write 'add user'" << std::endl;
+        std::cout << std::endl;
         return;
     }
 }
@@ -2165,6 +2222,7 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
                 this->logIn();
             } else {
                 std::cout << "Wrong command. Please, check 'help'" << std::endl;
+                std::cout << std::endl;
             }
         }
 
@@ -2174,6 +2232,7 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
                 this->addingNewUser();
             } else {
                 std::cout << "Wrong command. Please, check 'help'" << std::endl;
+                std::cout << std::endl;
             }
         }
 
@@ -2183,15 +2242,19 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
 
         else if(!arg1.compare("help")) {
             std::cout << "---List of supported commands before you log in---"                                          << std::endl;
+
             std::cout << std::endl;
 
             std::cout << "add user                  -allows to create new account"                                     << std::endl;
             std::cout << "log in                    -allows to log in in account"                                      << std::endl;
             std::cout << "exit                      -allow to close this app"                                          << std::endl;
+
+            std::cout << std::endl;
         }
 
         else {
             std::cout << "Wrong command. Please, check 'help'" << std::endl;
+            std::cout << std::endl;
         }
 }
 
@@ -2308,6 +2371,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 it->removeDeal(arg3);
             } else {
                 std::cout << "There is no such deal" << std::endl;
+                std::cout << std::endl;
             }
 
         } else if (!arg2.compare("important")) {
@@ -2319,11 +2383,13 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 it->removeImportant(arg3);
             } else {
                 std::cout << "There is no suchi mportant" << std::endl;
+                std::cout << std::endl;
             }
 
         } else {
 
             std::cout << "Wrong command. Please, check 'help'" << std::endl;
+            std::cout << std::endl;
 
         }
     }
@@ -2351,6 +2417,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         } else {
 
             std::cout << "Wrong command. Please, check 'help'" << std::endl;
+            std::cout << std::endl;
 
         }
     }
@@ -2390,6 +2457,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else {
         std::cout << "Wrong command. Please, check 'help'" << std::endl;
+        std::cout << std::endl;
     }
 }
 
@@ -2416,15 +2484,17 @@ int main()
 
     std::cout << "Welcome to CLICalendar. Please, log in or add new user" << std::endl;
     std::cout << "Write 'help' to get list of commands" << std::endl;
+    std::cout << std::endl;
 
     while(1) {
 
         while (user.isLoggedIn() == false) {
-            std::cout << "Please enter command (login, add user, help or exit)" << std::endl;
+            std::cout << std::setw(13) << "Command: ";
 
             std::string input;
 
             std::getline(std::cin, input, '\n');
+            std::cout << std::endl;
 
             /*if (input.empty()) {
                 std::cout << "Empty command" << std::endl;
@@ -2448,7 +2518,7 @@ int main()
         CommandChecker commandChecker(&thisSession, &accessProvider);
 
         while(user.isLoggedIn() == true) {
-            std::cout << "Please enter command" << std::endl;
+            std::cout << std::setw(13) << "Command: ";
 
             std::string input;
 
@@ -2475,6 +2545,7 @@ int main()
                 } catch(...) {
                     std::cout << "Third argument must be an integer!" << std::endl;
                     std::cout << "Try again" << std::endl;
+                    std::cout << std::endl;
                     continue;
                 }
                 commandChecker.commandMonitor(v[0], v[1], arg3);
