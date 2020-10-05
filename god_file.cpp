@@ -14,7 +14,20 @@
 
 using namespace sqlite_orm;
 
-const std::string SEPARATOR(3, '&');
+const std::string SEPARATOR(1, '`');
+
+std::vector<std::string> split(const std::string& input, char separator) {
+
+    std::vector<std::string> args;
+
+    std::istringstream input_ss {input};
+
+    for (std::string arg; std::getline(input_ss, arg, separator); ) {
+        args.push_back(arg);
+    }
+
+    return args;
+}
 
 class Deal {
     public:
@@ -81,56 +94,56 @@ class Deal {
 };
 
 bool operator==(const Deal& left, const Deal& right) {
-    return (left.name_          == right.name_)          &&
-           (left.description_   == right.description_)   &&
-           (left.label_         == right.label_)         &&
-           (left.priority_      == right.priority_)      &&
-           (left.begin_ == right.begin_) &&
-           (left.end_   == right.end_)   &&
+    return (left.name_          == right.name_)        &&
+           (left.description_   == right.description_) &&
+           (left.label_         == right.label_)       &&
+           (left.priority_      == right.priority_)    &&
+           (left.begin_         == right.begin_)       &&
+           (left.end_           == right.end_)         &&
            (left.version_       == right.version_);
 }
 
 Deal::Deal() {
     description_ = "New Deal";
-    name_ = "New Deal";
-    label_ = "My Deals";
-    priority_ = "A";
-    begin_ = "0000";
-    end_ = "0100";
+    name_        = "New Deal";
+    label_       = "My Deals";
+    priority_    = "A";
+    begin_       = "0000";
+    end_         = "0100";
 }
 
 Deal::Deal(std::string name,
      std::string description = "No description",
-     std::string label = "My Deals",
-     std::string priority = "A",
-     std::string begins = "0000",
-     std::string ends = "0000") {
-    name_ = std::move(name);
-    description_ = std::move(description);
-    label_ = std::move(label);
-    priority_ = std::move(priority);
-    begin_ = std::move(begins);
-    end_ = std::move(ends);
+     std::string label       = "My Deals",
+     std::string priority    = "A",
+     std::string begins      = "0000",
+     std::string ends        = "0000") {
+    name_        = name;
+    description_ = description;
+    label_       = label;
+    priority_    = priority;
+    begin_       = begins;
+    end_         = ends;
 }
 
 Deal::Deal(const Deal& other) {
-    name_ = other.name_;
+    name_        = other.name_;
     description_ = other.description_;
-    label_ = other.label_;
-    priority_ = other.priority_;
-    begin_ = other.begin_;
-    end_ = other.end_;
-    version_ = other.version_;
+    label_       = other.label_;
+    priority_    = other.priority_;
+    begin_       = other.begin_;
+    end_         = other.end_;
+    version_     = other.version_;
 }
 
 Deal::Deal(Deal&& other) {
-    name_ = other.name_;
+    name_        = other.name_;
     description_ = other.description_;
-    label_ = other.label_;
-    priority_ = other.priority_;
-    begin_ = other.begin_;
-    end_ = other.end_;
-    version_ = other.version_;
+    label_       = other.label_;
+    priority_    = other.priority_;
+    begin_       = other.begin_;
+    end_         = other.end_;
+    version_     = other.version_;
 
     other.clearName();
     other.clearDescription();
@@ -144,13 +157,13 @@ Deal& Deal::operator=(const Deal& other) {
     if (this == &other) {
         return *this;
     }
-    name_ = other.name_;
+    name_        = other.name_;
     description_ = other.description_;
-    label_ = other.label_;
-    priority_ = other.priority_;
-    begin_ = other.begin_;
-    end_ = other.end_;
-    version_ = other.version_;
+    label_       = other.label_;
+    priority_    = other.priority_;
+    begin_       = other.begin_;
+    end_         = other.end_;
+    version_     = other.version_;
 
     return *this;
 }
@@ -159,13 +172,13 @@ Deal& Deal::operator=(Deal&& other) {
     if (this == &other) {
         return *this;
     }
-    name_ = other.name_;
+    name_        = other.name_;
     description_ = other.description_;
-    label_ = other.label_;
-    priority_ = other.priority_;
-    begin_ = other.begin_;
-    end_ = other.end_;
-    version_ = other.version_;
+    label_       = other.label_;
+    priority_    = other.priority_;
+    begin_       = other.begin_;
+    end_         = other.end_;
+    version_     = other.version_;
 
     other.clearName();
     other.clearDescription();
@@ -201,55 +214,59 @@ void Deal::clearTime() {
 //setters
 
 void Deal::setName(std::string name) {
-    name_ = std::move(name);
+    name_ = name;
     this->updateVersion();
     //base_->update(*this);
 }
 
 void Deal::setDescription(std::string description) {
-    description_ = std::move(description);
+    description_ = description;
     updateVersion();
     //base_->update(*this);
 }
 
 void Deal::setLabel(std::string label) {
-    label_ = std::move(label);
+    label_ = label;
     this->updateVersion();
     //base_->update(*this);
 }
 
 void Deal::setPriority(std::string priority) {
-    priority_ = std::move(priority);
+    priority_ = priority;
     this->updateVersion();
     //base_->update(*this);
 }
 
 void Deal::setTime(std::string begins, std::string ends) {
-    begin_ = std::move(begins);
-    end_ = std::move(ends);
+    begin_ = begins;
+    end_ = ends;
     this->updateVersion();
     //base_->update(*this);
 }
 
 void Deal::setDate(std::string date) {
-    this->date_ = std::move(date);
+    this->date_ = date;
     this->updateVersion();
     //base_->update(*this);
 }
 
 void Deal::show() {
     //todo formatting time
-    std::cout << std::setw(13)  << "Begins at: ";
+    std::cout << std::setw(13)  << "Time: ";
     std::cout << begin_.substr(0, 2) << ":" << begin_.substr(2, 2)
               << "-"
               << end_.substr(0, 2) << ":" << end_.substr(2, 2)
               << std::endl;
+
     std::cout << std::setw(13)  << "Label: ";
     std::cout << "#" << label_ << std::endl;
+
     std::cout << std::setw(13)  << "Priority: ";
     std::cout << priority_ << std::endl;
+
     std::cout << std::setw(13)  << "Name: ";
     std::cout << name_ << std::endl;
+
     std::cout << std::setw(13)  << "Description: ";
     std::cout << description_ << std::endl;
 
@@ -327,44 +344,15 @@ std::string Deal::concatenate() {
 }
 
 void Deal::deconcatenate(std::string& msg) {
-    std::size_t counter = 0;
-    std::size_t posBegin = 0;
-
-    for (std::size_t i = 0; i != msg.size(); ++i) {
-
-        if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
-            if (counter == 0) {
-                counter++;
-                begin_ = msg.substr(posBegin, i-1);
-                posBegin = i+3;
-            } else if (counter == 1) {
-                counter++;
-                end_ = msg.substr(posBegin, i-1);
-                posBegin = i+3;
-            } else if (counter == 2) {
-                counter++;
-                name_ = msg.substr(posBegin, i-1);
-                posBegin = i+3;
-            } else if (counter == 3) {
-            	counter++;
-                label_ = msg.substr(posBegin, i-1);
-                posBegin = i+3;
-            } else if (counter == 4) {
-                counter++;
-                priority_ = msg.substr(posBegin, i-1);
-                posBegin = i+3;
-            } else if (counter == 5) {
-                counter++;
-                version_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+3;
-            } else if (counter == 6) {
-                counter++;
-                id_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+3;
-            }
-        }
-    }
-    description_ = msg.substr(posBegin);
+    std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
+    begin_       = v[0];
+    end_         = v[1];
+    name_        = v[2];
+    label_       = v[3];
+    priority_    = v[4];
+    version_     = std::stoi(v[5]);
+    id_          = std::stoi(v[6]);
+    description_ = v[7];
 }
 
 class Important
@@ -475,7 +463,7 @@ std::size_t Task::numberOfTasks = 0;
 bool operator==(const Task& left, const Task& right) {
     return (left.description_ == right.description_) &&
            (left.isCompleted_ == right.isCompleted_) &&
-           (left.version_ == right.version_);
+           (left.version_     == right.version_);
 }
 
 Task::Task() {
@@ -486,7 +474,7 @@ Task::Task() {
 
 Task::Task(std::string description) {
     isCompleted_ = false;
-    description_ = std::move(description);
+    description_ = description;
     numberOfTasks++;
 }
 
@@ -494,14 +482,14 @@ Task::Task(std::string description) {
 Task::Task(const Task& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
     numberOfTasks++;
 }
 
 Task::Task(Task&& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 
     right.clearDescription();
 }
@@ -516,7 +504,7 @@ Task& Task::operator=(const Task& right) {
     }
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 
     return *this;
 }
@@ -527,7 +515,7 @@ Task& Task::operator=(Task&& right) {
     }
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 
     right.clearDescription();
 
@@ -536,21 +524,21 @@ Task& Task::operator=(Task&& right) {
 
         //setters
 void Task::setIsCompleted(const bool isCompleted) {
-    isCompleted_ = std::move(isCompleted);
+    isCompleted_ = std::isCompleted;
     this->updateVersion();
 //    this->base_->update(*this);
 }
 
 void Task::setDescription(const std::string description) {
-    description_ = std::move(description);
+    description_ = description;
 //    this->base_->update(*this);
     this->updateVersion();
 }
 
 void Task::setAllFields(const std::string description = "New Task",
                   const bool isCompleted = false) {
-    isCompleted_ = std::move(isCompleted);
-    description_ = std::move(description);
+    isCompleted_ = isCompleted;
+    description_ = description;
 //    this->base_->update(*this);
     this->updateVersion();
 }
@@ -617,27 +605,11 @@ std::string Task::concatenate() {
 }
 
 void Task::deconcatenate(const std::string& msg) {
-    std::size_t counter = 0;
-    std::size_t posBegin = 0;
-
-    for (std::size_t i = 0; i != msg.size(); ++i) {
-        if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
-            if (counter == 0) {
-                counter++;
-                id_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 1) {
-                counter++;
-                version_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 2) {
-                counter++;
-                isCompleted_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            }
-        }
-    }
-    description_ = msg.substr(posBegin);
+    std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
+    id_          = std::stoi(v[0]);
+    version_     = std::stoi(v[1]);
+    isCompleted_ = std::stoi(v[2]);
+    description_ = v[3];
 }
 
 std::size_t Task::getNumberOfTasks() {
@@ -699,10 +671,10 @@ std::size_t Note::numberOfNotes = 0;
 
 
 bool operator==(const Note& left, const Note& right) {
-    return (left.label_ == right.label_) &&
-           (left.name_ == right.name_) &&
+    return (left.label_       == right.label_) &&
+           (left.name_        == right.name_) &&
            (left.description_ == right.description_) &&
-           (left.version_ == right.version_);
+           (left.version_     == right.version_);
 }
 
 Note::Note() {
@@ -717,26 +689,26 @@ Note::Note() {
 Note::Note(std::string name,
     std::string description = "New Note",
     std::string label = "Buffer") {
-    label_ = std::move(label);
-    name_ = std::move(name);
-    description_ = std::move(description);
+    label_       = label;
+    name_        = name;
+    description_ = description;
 
     numberOfNotes++;
 }
 
 
 Note::Note(const Note& right) {
-    label_ = right.label_;
-    name_ = right.name_;
+    label_       = right.label_;
+    name_        = right.name_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 }
 
 Note::Note(Note&& right) {
-    label_ = right.label_;
-    name_ = right.name_;
+    label_       = right.label_;
+    name_        = right.name_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 
 
     right.clearLabel();
@@ -753,10 +725,10 @@ Note& Note::operator=(const Note& other) {
         return *this;
     }
 
-    label_ = other.label_;
-    name_ = other.name_;
+    label_       = other.label_;
+    name_        = other.name_;
     description_ = other.description_;
-    version_ = other.version_;
+    version_     = other.version_;
 
     return *this;
 }
@@ -765,10 +737,10 @@ Note& Note::operator=(Note&& right) {
     if (this == &right) {
         return *this;
     }
-    label_ = right.label_;
-    name_ = right.name_;
+    label_       = right.label_;
+    name_        = right.name_;
     description_ = right.description_;
-    version_ = right.version_;
+    version_     = right.version_;
 
     right.clearLabel();
     right.clearName();
@@ -783,19 +755,19 @@ std::size_t Note::getNumberOfNotes() {
 }
         //setters
 void Note::setLabel(std::string label) {
-    this->label_ = std::move(label);
+    this->label_ = label;
     this->updateVersion();
 //    base_->update(*this);
 }
 
 void Note::setName(std::string name) {
-    this->name_ = std::move(name);
+    this->name_ = name;
     this->updateVersion();
 //    base_->update(*this);
 }
 
 void Note::setDescription(std::string description) {
-    this->description_ = std::move(description);
+    this->description_ = description;
     this->updateVersion();
 //    base_->update(*this);
 }
@@ -803,9 +775,9 @@ void Note::setDescription(std::string description) {
 void Note::setAllFields(std::string name,
                   std::string description = "New Note",
                   std::string label = "Buffer") {
-    this->name_ = std::move(name);
-    this->description_ = std::move(description);
-    this->label_ = std::move(label);
+    this->name_        = name;
+    this->description_ = description;
+    this->label_       = label;
     this->updateVersion();
 //    base_->update(*this);
 }
@@ -825,8 +797,10 @@ void Note::clearLabel() {
 void Note::show() {
     std::cout << std::setw(13) << "Label: ";
     std::cout << "#" << label_ << std::endl;
+
     std::cout << std::setw(13) << "Name: ";
     std::cout << name_ << std::endl;
+
     std::cout << std::setw(13) << "Description: ";
     std::cout << description_ << std::endl;
 }
@@ -877,30 +851,12 @@ std::string Note::concatenate() {
 }
 
 void Note::deconcatenate(const std::string& msg) {
-    std::size_t counter = 0;
-    std::size_t posBegin = 0;
-    for (std::size_t i = 0; i != msg.size(); ++i) {
-    if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
-            if (counter == 0) {
-                counter++;
-               	label_ = msg.substr(posBegin, i-1);
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 1) {
-                counter++;
-                name_ = msg.substr(posBegin, i-1);
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 2) {
-                counter++;
-                version_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 3) {
-                counter++;
-                id_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            }
-        }
-    }
-    description_ = msg.substr(posBegin);
+    std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
+    label_       = v[0];
+    name_        = v[1];
+    version_     = std::stoi(v[2]);
+    id_          = std::stoi(v[3]);
+    description_ = v[4];
 }
 
 class Day {
@@ -950,10 +906,10 @@ class Day {
 };
 
 bool operator==(const Day& left, const Day& right) {
-    return (left.date_ == right.date_)   &&
-           (left.deals_ == right.deals_) &&
+    return (left.date_       == right.date_)   &&
+           (left.deals_      == right.deals_) &&
            (left.importants_ == right.importants_) &&
-           (left.version_ == right.version_);
+           (left.version_    == right.version_);
 }
 
 Day::Day()
@@ -964,48 +920,48 @@ Day::Day()
 }
 
 Day::Day(std::string date) {
-    date_ = std::move(date);
+    date_ = date;
     importants_.emplace_back("Nothing");
     deals_.emplace_back("First of All");
 }
 
 Day::Day(const Day& other) {
-    this->date_ = other.date_;
-    this->deals_ = other.deals_;
+    this->date_       = other.date_;
+    this->deals_      = other.deals_;
     this->importants_ = other.importants_;
-    this->version_ = other.version_;
+    this->version_    = other.version_;
 }
 Day::Day(Day&& other) {
-    this->date_ = other.date_;
-    this->deals_ = other.deals_;
+    this->date_       = other.date_;
+    this->deals_      = other.deals_;
     this->importants_ = other.importants_;
-    this->version_ = other.version_;
+    this->version_    = other.version_;
 }
 Day& Day::operator=(const Day& other) {
     if (this == &other) {
         return *this;
     }
-    this->date_ = other.date_;
-    this->deals_ = other.deals_;
+    this->date_       = other.date_;
+    this->deals_      = other.deals_;
     this->importants_ = other.importants_;
-    this->version_ = other.version_;
+    this->version_    = other.version_;
     return *this;
 }
 Day& Day::operator=(Day&& other) {
     if (this == &other) {
         return *this;
     }
-    this->date_ = other.date_;
-    this->deals_ = other.deals_;
+    this->date_       = other.date_;
+    this->deals_      = other.deals_;
     this->importants_ = other.importants_;
-    this->version_ = other.version_;
+    this->version_    = other.version_;
     return *this;
 
 }
 
 
 void Day::setDate(std::string date) {
-    this->date_ = std::move(date);
+    this->date_ = date;
     this->updateVersion();
 //    this->base_->update(*this);
 
@@ -1151,37 +1107,25 @@ void Day::edit() {
 }
 
 std::string Day::concatenate() {
-    std::string tmp;
+    std::string tmp = importants_.begin()->important_;
+
     for (auto it = importants_.begin(); it != importants_.end(); ++it) {
-        tmp += it->important_;
+        tmp = SEPARATOR + it->important_;
     }
+
     return (date_           +SEPARATOR+
         std::to_string(id_) +SEPARATOR+
         tmp);
 }
 
 void Day::deconcatenate(const std::string& msg) {
-    std::size_t counter = 0;
-    std::size_t posBegin = 0;
-    std::size_t numOfImportant = 0;
+    std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
+    date_ = v[0];
+    id_   = std::stoi(v[1]);
 
-    for (std::size_t i = 0; i != msg.size(); ++i) {
-        if (msg.substr(i, i+SEPARATOR.size()-1) == SEPARATOR) {
-            if (counter == 0) {
-                counter++;
-                date_ = msg.substr(posBegin, i-1);
-                posBegin = i+SEPARATOR.size();
-            } else if (counter == 1) {
-                counter++;
-                id_ = std::stoi(msg.substr(posBegin, i-1));
-                posBegin = i+SEPARATOR.size();
-            } else if (counter > 1) {
-                addImportant(std::string(std::to_string(numOfImportant)+
-                             msg.substr(posBegin, i-1)));
-                posBegin = i+SEPARATOR.size();
-                numOfImportant++;
-            }
-        }
+    for (int i = 2; i != v.size(); i++) {
+        Important important(v[i]);
+        this->importants_.push_back(important);
     }
 }
 
@@ -1801,6 +1745,7 @@ Session::Session(User* user)
     this->user = user;
     std::string databaseName = this->user->login_ + ".sqlite";
     this->localDb = std::make_shared<Storage>(initLocalDb(std::string(databaseName)));
+    this->localDb->sync_schema();
     this->getDataFromLocalBase();
 
 	tasks_.reserve(100);
@@ -1851,7 +1796,7 @@ void Session::getDataFromLocalBase() {
         	continue;
     	}
     	catch(...) {
-        	std::cout << "Unknown exception" << std::endl;
+        	std::cout << "Deals::New user detected" << std::endl;
     	}
 
         try {
@@ -1861,7 +1806,7 @@ void Session::getDataFromLocalBase() {
             continue;
         }
         catch(...) {
-            std::cout << "Unknown exception" << std::endl;
+            std::cout << "Importants::New user detected" << std::endl;
         }
 	}
 }
@@ -1929,7 +1874,7 @@ void Session::creatingDeal() {
     std::getline(std::cin, name, '\n');
     std::cout << std::setw(20) << "Description: ";
     std::getline(std::cin, description, '\n');
-    std::cout << std::setw(20) << "Labe: ";
+    std::cout << std::setw(20) << "Label: ";
     std::getline(std::cin, label, '\n');
     std::cout << std::setw(20) << "Priority: ";
     std::getline(std::cin, priority, '\n');
@@ -1944,12 +1889,14 @@ void Session::creatingDeal() {
                 time.substr(0, 2)+time.substr(3, 2),
                 time.substr(6, 2)+time.substr(9, 2));
 
+    deal.setDate(std::get<std::vector<Day>::iterator>(joinedObject_)->date_);
+
     auto insertedId = localDb->insert(deal);
     deal.id_= insertedId;
     std::get<std::vector<Day>::iterator>(joinedObject_)->addDeal(deal);
 
 
-    std::cout << "New day has been created :)" << std::endl;
+    std::cout << "New deal has been created :)" << std::endl;
     std::cout << std::endl;
 
 }
@@ -2458,21 +2405,6 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         std::cout << std::endl;
     }
 }
-
-std::vector<std::string> split(const std::string& input, char separator)
-{
-    std::vector<std::string> args;
-
-    std::istringstream input_ss {input};
-
-    for (std::string arg; std::getline(input_ss, arg, separator); ) {
-        args.push_back(arg);
-    }
-
-    return args;
-}
-
-
 
 int main()
 {
