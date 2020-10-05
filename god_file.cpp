@@ -104,12 +104,14 @@ bool operator==(const Deal& left, const Deal& right) {
 }
 
 Deal::Deal() {
-    description_ = "New Deal";
-    name_        = "New Deal";
-    label_       = "My Deals";
-    priority_    = "A";
-    begin_       = "0000";
-    end_         = "0100";
+    this->description_ = "New Deal";
+    this->name_        = "New Deal";
+    this->label_       = "My Deals";
+    this->priority_    = "A";
+    this->begin_       = "0000";
+    this->end_         = "0100";
+    this->id_          = -1;
+    this->version_     = 1;
 }
 
 Deal::Deal(std::string name,
@@ -118,12 +120,14 @@ Deal::Deal(std::string name,
      std::string priority    = "A",
      std::string begins      = "0000",
      std::string ends        = "0000") {
-    name_        = name;
-    description_ = description;
-    label_       = label;
-    priority_    = priority;
-    begin_       = begins;
-    end_         = ends;
+    this->name_        = name;
+    this->description_ = description;
+    this->label_       = label;
+    this->priority_    = priority;
+    this->begin_       = begins;
+    this->end_         = ends;
+    this->id_          = -1;
+    this->version_     = 1;
 }
 
 Deal::Deal(const Deal& other) {
@@ -134,6 +138,7 @@ Deal::Deal(const Deal& other) {
     begin_       = other.begin_;
     end_         = other.end_;
     version_     = other.version_;
+    id_          = other.id_;
 }
 
 Deal::Deal(Deal&& other) {
@@ -144,6 +149,7 @@ Deal::Deal(Deal&& other) {
     begin_       = other.begin_;
     end_         = other.end_;
     version_     = other.version_;
+    id_          = other.id_;
 
     other.clearName();
     other.clearDescription();
@@ -164,6 +170,7 @@ Deal& Deal::operator=(const Deal& other) {
     begin_       = other.begin_;
     end_         = other.end_;
     version_     = other.version_;
+    id_          = other.id_;
 
     return *this;
 }
@@ -179,6 +186,7 @@ Deal& Deal::operator=(Deal&& other) {
     begin_       = other.begin_;
     end_         = other.end_;
     version_     = other.version_;
+    id_          = other.id_;
 
     other.clearName();
     other.clearDescription();
@@ -363,7 +371,7 @@ public:
     void updateVersion() {
         this->version_++;
     }
-    Important() = default;
+    Important();
     Important(std::string);
     Important(const Important&);
     Important(Important&&);
@@ -371,9 +379,11 @@ public:
     Important& operator=(Important&&);
 
     std::string important_;
+    std::string date_;
 
     std::string getImportant() const;
     void setImportant(std::string);
+    void setDate(std::string);
 
 };
 
@@ -381,20 +391,32 @@ bool operator==(const Important& left, const Important& right) {
     return left.important_ == right.important_;
 }
 
+Important::Important() {
+    this->id_ = -1;
+    this->version_ = 1;
+}
 Important::Important(std::string important) {
     this->important_ = important;
+    this->id_          = -1;
+    this->version_     = 1;
 }
 Important::Important(const Important& other) {
 	this->important_ = other.important_;
+	this->id_        = other.id_;
+	this->version_   = other.version_;
 }
 Important::Important(Important&& other) {
 	this->important_ = other.important_;
+	this->id_        = other.id_;
+	this->version_   = other.version_;
 }
 Important& Important::operator=(const Important& other) {
 	if (this == &other) {
         return *this;
     }
 	this->important_ = other.important_;
+	this->id_        = other.id_;
+	this->version_   = other.version_;
 	return *this;
 
 }
@@ -403,6 +425,8 @@ Important& Important::operator=(Important&& other) {
         return *this;
     }
 	this->important_ = other.important_;
+	this->id_        = other.id_;
+	this->version_   = other.version_;
 	return *this;
 }
 
@@ -412,6 +436,9 @@ std::string Important::getImportant() const {
 void Important::setImportant(std::string msg) {
 	this->important_ = std::move(msg);
 	//base_->insert(*this);
+}
+void Important::setDate(std::string date) {
+    this->date_ = date;
 }
 
 class Task {
@@ -468,13 +495,17 @@ bool operator==(const Task& left, const Task& right) {
 
 Task::Task() {
     this->isCompleted_ = false;
-    description_ = "New Task";
+    this->description_ = "New Task";
+    this->id_          = -1;
+    this->version_     = 1;
     numberOfTasks++;
 }
 
 Task::Task(std::string description) {
-    isCompleted_ = false;
-    description_ = description;
+    this->isCompleted_ = false;
+    this->description_ = description;
+    this->id_          = -1;
+    this->version_     = 1;
     numberOfTasks++;
 }
 
@@ -483,6 +514,7 @@ Task::Task(const Task& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
     numberOfTasks++;
 }
 
@@ -490,6 +522,7 @@ Task::Task(Task&& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 
     right.clearDescription();
 }
@@ -505,6 +538,7 @@ Task& Task::operator=(const Task& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 
     return *this;
 }
@@ -516,6 +550,7 @@ Task& Task::operator=(Task&& right) {
     isCompleted_ = right.isCompleted_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 
     right.clearDescription();
 
@@ -524,7 +559,7 @@ Task& Task::operator=(Task&& right) {
 
         //setters
 void Task::setIsCompleted(const bool isCompleted) {
-    isCompleted_ = std::isCompleted;
+    isCompleted_ = isCompleted;
     this->updateVersion();
 //    this->base_->update(*this);
 }
@@ -678,9 +713,11 @@ bool operator==(const Note& left, const Note& right) {
 }
 
 Note::Note() {
-    label_ = "Buffer";
-    name_ = "New Task";
-    description_ = "New Task";
+    this->label_       = "Buffer";
+    this->name_        = "New Task";
+    this->description_ = "New Task";
+    this->id_          = -1;
+    this->version_     = 1;
 
     numberOfNotes++;
 
@@ -689,9 +726,11 @@ Note::Note() {
 Note::Note(std::string name,
     std::string description = "New Note",
     std::string label = "Buffer") {
-    label_       = label;
-    name_        = name;
-    description_ = description;
+    this->label_       = label;
+    this->name_        = name;
+    this->description_ = description;
+    this->id_          = -1;
+    this->version_     = 1;
 
     numberOfNotes++;
 }
@@ -702,6 +741,7 @@ Note::Note(const Note& right) {
     name_        = right.name_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 }
 
 Note::Note(Note&& right) {
@@ -709,6 +749,7 @@ Note::Note(Note&& right) {
     name_        = right.name_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 
 
     right.clearLabel();
@@ -729,6 +770,7 @@ Note& Note::operator=(const Note& other) {
     name_        = other.name_;
     description_ = other.description_;
     version_     = other.version_;
+    id_          = other.id_;
 
     return *this;
 }
@@ -741,6 +783,7 @@ Note& Note::operator=(Note&& right) {
     name_        = right.name_;
     description_ = right.description_;
     version_     = right.version_;
+    id_          = right.id_;
 
     right.clearLabel();
     right.clearName();
@@ -774,7 +817,7 @@ void Note::setDescription(std::string description) {
 
 void Note::setAllFields(std::string name,
                   std::string description = "New Note",
-                  std::string label = "Buffer") {
+                  std::string label       = "Buffer") {
     this->name_        = name;
     this->description_ = description;
     this->label_       = label;
@@ -914,15 +957,19 @@ bool operator==(const Day& left, const Day& right) {
 
 Day::Day()
 {
-	date_ = "01 January 1970";
-    importants_.emplace_back("Nothing");
-    deals_.emplace_back("First of All");
+	this->date_ = "01 January 1970";
+    this->importants_.emplace_back("Nothing");
+    this->deals_.emplace_back("First of All");
+    this->id_          = -1;
+    this->version_     = 1;
 }
 
 Day::Day(std::string date) {
-    date_ = date;
-    importants_.emplace_back("Nothing");
-    deals_.emplace_back("First of All");
+    this->date_ = date;
+    this->importants_.emplace_back("Nothing");
+    this->deals_.emplace_back("First of All");
+    this->id_          = -1;
+    this->version_     = 1;
 }
 
 Day::Day(const Day& other) {
@@ -930,12 +977,14 @@ Day::Day(const Day& other) {
     this->deals_      = other.deals_;
     this->importants_ = other.importants_;
     this->version_    = other.version_;
+    this->id_         = other.id_;
 }
 Day::Day(Day&& other) {
     this->date_       = other.date_;
     this->deals_      = other.deals_;
     this->importants_ = other.importants_;
     this->version_    = other.version_;
+    this->id_         = other.id_;
 }
 Day& Day::operator=(const Day& other) {
     if (this == &other) {
@@ -945,6 +994,7 @@ Day& Day::operator=(const Day& other) {
     this->deals_      = other.deals_;
     this->importants_ = other.importants_;
     this->version_    = other.version_;
+    this->id_         = other.id_;
     return *this;
 }
 Day& Day::operator=(Day&& other) {
@@ -955,6 +1005,7 @@ Day& Day::operator=(Day&& other) {
     this->deals_      = other.deals_;
     this->importants_ = other.importants_;
     this->version_    = other.version_;
+    this->id_         = other.id_;
     return *this;
 
 }
@@ -1153,11 +1204,13 @@ class User {
 
 User::User() {
     this->isLoggedIn_ = false;
+    this->id_          = -1;
 }
 
 User::User(std::string login, std::string hashedPass) {
     this->login_ = login;
     this->hashedPass_ = hashedPass;
+    this->id_          = -1;
 }
 
 bool User::isLoggedIn() const {
@@ -1226,8 +1279,11 @@ inline auto initLocalDb(const std::string &path) {
                                     make_column("Version",
                                         &Important::version_),
 
-                                    make_column("HashedPass",
-                                        &Important::important_ )),
+                                    make_column("Impportant",
+                                        &Important::important_),
+
+                                    make_column("Date",
+                                        &Important::date_ )),
 
                                 make_table("Deals",
 
@@ -1242,12 +1298,6 @@ inline auto initLocalDb(const std::string &path) {
                                     make_column("Name",
                                         &Deal::name_),
 
-                                    make_column("Begin",
-                                        &Deal::begin_),
-
-                                    make_column("End",
-                                        &Deal::end_),
-
                                     make_column("Description",
                                         &Deal::description_),
 
@@ -1257,8 +1307,14 @@ inline auto initLocalDb(const std::string &path) {
                                     make_column("Priority",
                                         &Deal::priority_),
 
-                                    make_column("date",
-                                        &Deal::date_)),
+                                    make_column("Date",
+                                        &Deal::date_),
+
+                                    make_column("Begin",
+                                        &Deal::begin_),
+
+                                    make_column("End",
+                                        &Deal::end_)),
 
                                 make_table("Tasks",
 
@@ -1370,15 +1426,9 @@ public:
         void incrementJoined();
         void decrementJoined();
 
-        void setMovable(std::vector<Day>::iterator&);
-        void setMovable(std::vector<Deal>::iterator&);
-        void setMovable(std::vector<Task>::iterator&);
-        void setMovable(std::vector<Note>::iterator&);
+        void setMovable();
 
-        void setCopyable(std::vector<Day>::iterator&);
-        void setCopyable(std::vector<Deal>::iterator&);
-        void setCopyable(std::vector<Task>::iterator&);
-        void setCopyable(std::vector<Note>::iterator&);
+        void setCopyable();
 
         void setJoinedLabel(const std::string&);
         void setJoinedName(const std::string&);
@@ -1512,7 +1562,7 @@ struct JoinedDateSetter {
 };
 
 struct CopyablePaster {
-    CopyablePaster(Session*);
+    CopyablePaster(Session&);
 
     Session* session;
 
@@ -1526,6 +1576,8 @@ struct CopyablePaster {
 };
 
 struct JoinedIncrementAllower {
+    JoinedIncrementAllower(Session&);
+    Session* session;
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
@@ -1536,6 +1588,8 @@ struct JoinedIncrementAllower {
 };
 
 struct JoinedDecrementAllower {
+    JoinedDecrementAllower(Session&);
+    Session* session;
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
@@ -1557,18 +1611,17 @@ struct MovableSetter {
 };
 
 struct CopyableSetter {
-	CopyableSetter(Session*);
-
-	Session* session;
-
+    CopyableSetter(Session&);
+    Session* session;
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
 };
 };
-Session::CopyableSetter::CopyableSetter(Session* sess) {
-	this->session = sess;
+
+Session::CopyableSetter::CopyableSetter(Session& sess) {
+    this->session = &sess;
 }
 void Session::CopyableSetter::operator()(std::vector<Deal>::iterator& it) {
 	this->session->copyableObject_ = it;
@@ -1699,8 +1752,8 @@ void Session::JoinedDateSetter::operator()(std::vector<Day>::iterator& it) {
  //   base->update(*it);
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Session::CopyablePaster::CopyablePaster(Session* sess) {
-    this->session = sess;
+Session::CopyablePaster::CopyablePaster(Session& sess) {
+    this->session = &sess;
 }
 void Session::CopyablePaster::operator()(std::vector<Day>::iterator& copyable) {
     auto joined = std::get<std::vector<Day>::iterator>(this->session->joinedObject_);
@@ -1718,24 +1771,42 @@ void Session::CopyablePaster::operator()(std::vector<Note>::iterator& copyable) 
     this->session->notes_.insert((joined + 1), *copyable);
 }
 
+Session::JoinedDecrementAllower::JoinedDecrementAllower(Session& sess) {
+    this->session = &sess;
+}
 void Session::JoinedDecrementAllower::operator()(std::vector<Day>::iterator& it) {
-    it--;
+    if ( (it) != (session->days_.begin()) ) {
+        it--;
+    }
 }
 void Session::JoinedDecrementAllower::operator()(std::vector<Task>::iterator& it) {
-    it--;
+    if ( (it) != (session->tasks_.begin()) ) {
+        it--;
+    }
 }
 void Session::JoinedDecrementAllower::operator()(std::vector<Note>::iterator& it) {
-    it--;
+    if ( (it) != (session->notes_.begin()) ) {
+        it--;
+    }
 }
 
+Session::JoinedIncrementAllower::JoinedIncrementAllower(Session& sess) {
+    this->session = &sess;
+}
 void Session::JoinedIncrementAllower::operator()(std::vector<Day>::iterator& it) {
-    it++;
+    if ( (it+1) != (session->days_.end()) ) {
+        it++;
+    }
 }
 void Session::JoinedIncrementAllower::operator()(std::vector<Task>::iterator& it) {
-    it++;
+    if ( (it+1) != (session->tasks_.end()) ) {
+        it++;
+    }
 }
 void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it) {
-    it++;
+    if ( (it+1) != (session->notes_.end()) ) {
+        it++;
+    }
 }
 
 //private
@@ -1758,7 +1829,6 @@ Session::Session(User* user)
 void Session::getDataFromLocalBase() {
 	try {
         this->tasks_ = localDb->get_all<Task>();
-		//this->tasks_ = localDb.get_all<Task>();
 	}
 	catch (sqlite_orm::orm_error_code) {
     	std::cout << "No one task found" << std::endl;
@@ -1819,6 +1889,7 @@ void Session::creatingTask() {
 
     Task task(description);
     auto insertedId = localDb->insert(task);
+    std::cout << insertedId << std::endl;
     task.id_= insertedId;
     tasks_.push_back(task);
 
@@ -1868,7 +1939,8 @@ void Session::creatingDeal() {
     std::string description;
     std::string label;
     std::string priority;
-    std::string time;
+    std::string begins;
+    std::string ends;
 
     std::cout << std::setw(20) << "Name: ";
     std::getline(std::cin, name, '\n');
@@ -1878,18 +1950,20 @@ void Session::creatingDeal() {
     std::getline(std::cin, label, '\n');
     std::cout << std::setw(20) << "Priority: ";
     std::getline(std::cin, priority, '\n');
-    std::cout << std::setw(20) << "Time (HH:MM-HH:MM): ";
-    std::getline(std::cin, time, '\n');
+    std::cout << std::setw(20) << "Begins at: ";
+    std::getline(std::cin, begins, '\n');
+    std::cout << std::setw(20) << "Ends at: ";
+    std::getline(std::cin, ends, '\n');
     std::cout << std::endl;
 
     Deal deal(name,
                 description,
                 label,
                 priority,
-                time.substr(0, 2)+time.substr(3, 2),
-                time.substr(6, 2)+time.substr(9, 2));
-
-    deal.setDate(std::get<std::vector<Day>::iterator>(joinedObject_)->date_);
+                begins,
+                ends);
+    std::string date = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
+    deal.setDate(date);
 
     auto insertedId = localDb->insert(deal);
     deal.id_= insertedId;
@@ -1910,6 +1984,7 @@ void Session::creatingImportant() {
 
     auto insertedId = localDb->insert(important);
     important.id_ = insertedId;
+    important.date_ = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
     std::get<std::vector<Day>::iterator>(joinedObject_)->addImportant(important);
 
     std::cout << "New important has been created :)" << std::endl;
@@ -1994,11 +2069,11 @@ void Session::setJoined(std::vector<Note>::iterator it) {
 }
 
 void Session::incrementJoined() {
-	std::visit(Session::JoinedIncrementAllower{}, this->joinedObject_);
+	std::visit(Session::JoinedIncrementAllower{*this}, this->joinedObject_);
 }
 
 void Session::decrementJoined() {
-	std::visit(Session::JoinedDecrementAllower{}, this->joinedObject_);
+	std::visit(Session::JoinedDecrementAllower{*this}, this->joinedObject_);
 }
 
 /*
@@ -2012,21 +2087,12 @@ void Session::setCopyable(std::vector<T>::iterator it) {
 	copyableObject_ = it;
 }
 */
-void Session::setMovable(std::vector<Day>::iterator& it) {
+void Session::setMovable() {
     std::visit(MovableSetter{*this}, this->joinedObject_);
 }
 
-void Session::setCopyable(std::vector<Day>::iterator& it) {
-    copyableObject_ = it;
-}
-void Session::setCopyable(std::vector<Deal>::iterator& it) {
-    copyableObject_ = it;
-}
-void Session::setCopyable(std::vector<Task>::iterator& it) {
-    copyableObject_ = it;
-}
-void Session::setCopyable(std::vector<Note>::iterator& it) {
-    copyableObject_ = it;
+void Session::setCopyable() {
+    std::visit(CopyableSetter{*this}, this->joinedObject_);
 }
 
 //refactoring needs
@@ -2215,6 +2281,7 @@ struct CommandChecker {
 
 CommandChecker::CommandChecker(Session* session, AccessProvider* accessProvider) {
     this->thisSession = session;
+    thisSession->localDb->sync_schema();
     this->accessProvider = accessProvider;
 }
 
@@ -2229,11 +2296,11 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
     //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
-        std::visit(Session::JoinedIncrementAllower{}, this->thisSession->joinedObject_);
+        std::visit(Session::JoinedIncrementAllower{*thisSession}, this->thisSession->joinedObject_);
         std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
     }
     else if (!arg1.compare("prev")) {
-        std::visit(Session::JoinedDecrementAllower{}, this->thisSession->joinedObject_);
+        std::visit(Session::JoinedDecrementAllower{*thisSession}, this->thisSession->joinedObject_);
         std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
     }
     else if (!arg1.compare("join")) {
@@ -2276,36 +2343,42 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("copy")) {
 
-        std::visit(Session::CopyableSetter{thisSession}, thisSession->joinedObject_);
+        std::visit(Session::CopyableSetter{*thisSession}, thisSession->joinedObject_);
         //or thisSession->copyableObject = thisSession->joinedObject_; ???
     }
     else if (!arg1.compare("paste")) {
 
-        std::visit(Session::CopyablePaster{thisSession}, thisSession->copyableObject_);
+        std::visit(Session::CopyablePaster{*thisSession}, thisSession->copyableObject_);
 
     }
     else if (!arg1.compare("remove")) {
 
         if (!arg2.compare("task")) {
 
-            auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
+            if (std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_)) {
+                auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
 
-            thisSession->localDb->remove<Task>(it->id_);
-            thisSession->tasks_.erase(it);
+                this->thisSession->localDb->remove<Task>(it->id_);
+                this->thisSession->tasks_.erase(it);
+            }
 
         } else if (!arg2.compare("note")) {
 
-            auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
+            if (std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_)) {
+                auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
 
-            thisSession->localDb->remove<Note>(it->id_);
-            thisSession->notes_.erase(it);
+                thisSession->localDb->remove<Note>(it->id_);
+                thisSession->notes_.erase(it);
+            }
 
         } else if (!arg2.compare("day")) {
 
-            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+            if (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
+                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
 
-            thisSession->localDb->remove<Day>(it->id_);
-            thisSession->days_.erase(it);
+                thisSession->localDb->remove<Day>(it->id_);
+                thisSession->days_.erase(it);
+            }
 
         } else if (!arg2.compare("deal")) {
 
@@ -2327,7 +2400,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 thisSession->localDb->remove<Important>(it->importants_[arg3-1].id_);
                 it->removeImportant(arg3);
             } else {
-                std::cout << "There is no suchi mportant" << std::endl;
+                std::cout << "There is no such important" << std::endl;
                 std::cout << std::endl;
             }
 
@@ -2341,23 +2414,28 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     else if (!arg1.compare("open")) {
 
         if (!arg2.compare("tasks")) {
-            auto it = thisSession->tasks_.end() - 1;
-            thisSession->setJoined(it);
+            if (!thisSession->tasks_.empty()) {
+                auto it = thisSession->tasks_.end() - 1;
+                thisSession->setJoined(it);
 
-            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            }
 
         } else if (!arg2.compare("notes")) {
-            auto it = thisSession->notes_.end() - 1;
-            thisSession->setJoined(it);
+            if (!thisSession->notes_.empty()) {
+                auto it = thisSession->notes_.end() - 1;
+                thisSession->setJoined(it);
 
-            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            }
 
         } else if (!arg2.compare("days")) {
+            if (!thisSession->days_.empty()) {
+                auto it = thisSession->days_.end() - 1;
+                thisSession->setJoined(it);
 
-            auto it = thisSession->days_.end() - 1;
-            thisSession->setJoined(it);
-
-            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            }
 
         } else {
 
