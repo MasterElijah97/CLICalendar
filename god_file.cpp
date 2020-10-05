@@ -1449,6 +1449,9 @@ public:
     private: //visitors
 
 struct JoinedEditor {
+    JoinedEditor(Session&);
+    Session* session;
+
     void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1665,17 +1668,24 @@ void Session::JoinedShower::operator()(std::vector<Note>::iterator& it) {
     it->show();
 }
 
+Session::JoinedEditor::JoinedEditor(Session& sess) {
+    this->session = &sess;
+}
 void Session::JoinedEditor::operator()(std::vector<Day>::iterator& it) {
     it->edit();
+    this->session->localDb->update(*it);
 }
 void Session::JoinedEditor::operator()(std::vector<Deal>::iterator& it) {
     it->edit();
+    this->session->localDb->update(*it);
 }
 void Session::JoinedEditor::operator()(std::vector<Task>::iterator& it) {
     it->edit();
+    this->session->localDb->update(*it);
 }
 void Session::JoinedEditor::operator()(std::vector<Note>::iterator& it) {
     it->edit();
+    this->session->localDb->update(*it);
 }
 
 
@@ -2338,7 +2348,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("edit")) {
 
-        std::visit(Session::JoinedEditor{}, thisSession->joinedObject_);
+        std::visit(Session::JoinedEditor{*thisSession}, thisSession->joinedObject_);
 
     }
     else if (!arg1.compare("copy")) {
