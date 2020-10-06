@@ -9,6 +9,7 @@
 #include <variant>
 #include <cstdlib>
 #include <ncurses.h>
+#include <exception>
 
 #include "include/sqlite_orm.h"
 #include "include/MD5.h"
@@ -980,16 +981,16 @@ bool operator==(const Day& left, const Day& right) {
 Day::Day()
 {
 	this->date_ = "01 January 1970";
-    this->importants_.emplace_back("Nothing");
-    this->deals_.emplace_back("First of All");
+    /*this->importants_.emplace_back("Nothing");
+    this->deals_.emplace_back("First of All");*/
     this->id_          = -1;
     this->version_     = 1;
 }
 
 Day::Day(std::string date) {
     this->date_ = date;
-    this->importants_.emplace_back("Nothing");
-    this->deals_.emplace_back("First of All");
+    /*this->importants_.emplace_back("Nothing");
+    this->deals_.emplace_back("First of All");*/
     this->id_          = -1;
     this->version_     = 1;
 }
@@ -1409,6 +1410,7 @@ public:
         std::vector<Deal>::iterator,
         std::vector<Important>::iterator
         > joinedObject_;
+        bool isJoinedSetted = false;
 
         std::variant
         <
@@ -1816,7 +1818,7 @@ Session::CopyablePaster::CopyablePaster(Session& sess) {
 }
 void Session::CopyablePaster::operator()(std::vector<Day>::iterator& copyable) {
 
-    if(std::holds_alternative<std::vector<Day>::iterator>(session->joinedObject_)) {
+    if(session->isJoinedSetted && std::holds_alternative<std::vector<Day>::iterator>(session->joinedObject_)) {
         auto joined = std::get<std::vector<Day>::iterator>(this->session->joinedObject_);
         auto insertedId = this->session->localDb->insert(*copyable);
         copyable->id_ = insertedId;
@@ -1949,7 +1951,7 @@ void Session::getDataFromLocalBase() {
     	}
 
         try {
-            it->importants_ = localDb->get_all<Important>(where(is_equal(&Deal::date_, it->date_)));
+            it->importants_ = localDb->get_all<Important>(where(is_equal(&Important::date_, it->date_)));
         }
         catch(sqlite_orm::orm_error_code) {
             continue;
@@ -1968,7 +1970,6 @@ void Session::creatingTask() {
 
     Task task(description);
     auto insertedId = localDb->insert(task);
-    std::cout << insertedId << std::endl;
     task.id_= insertedId;
     tasks_.push_back(task);
 
@@ -2008,13 +2009,13 @@ void Session::creatingDay() {
     auto insertedId = localDb->insert(day);
     day.id_= insertedId;
 
-    (day.deals_.begin())->date_ = day.date_;
+    /*(day.deals_.begin())->date_ = day.date_;
     insertedId = localDb->insert(*(day.deals_.begin()));
     (day.deals_.begin())->id_ = insertedId;
 
     (day.importants_.begin())->date_ = day.date_;
     insertedId = localDb->insert(*(day.importants_.begin()));
-    (day.importants_.begin())->id_ = insertedId;
+    (day.importants_.begin())->id_ = insertedId;*/
 
     days_.push_back(day);
 
@@ -2525,7 +2526,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
         if (!arg2.compare("task")) {
 
-            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->tasks_.empty() &&
+            if ((thisSession->joinedObject_.index() == 2) && !thisSession->tasks_.empty() &&
                 std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_)) {
 
                 auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
@@ -2538,7 +2539,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
         } else if (!arg2.compare("note")) {
 
-            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->notes_.empty() &&
+            if ((thisSession->joinedObject_.index() == 1) && !thisSession->notes_.empty() &&
                 std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_)) {
 
                 auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
@@ -2551,19 +2552,23 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
         } else if (!arg2.compare("day")) {
 
-            if (/*(thisSession->joinedObject_.index() != 0) &&*/ (!thisSession->days_.empty()) &&
+            if ((thisSession->joinedObject_.index() == 0) && (!thisSession->days_.empty()) &&
                 (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_))) {
 
-                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+                    if (thisSession->isJoinedSetted) {
+                        auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+                        thisSession->localDb->remove<Day>(it->id_);
+                        thisSession->days_.erase(it);
+                    } else {
+                        std::cout << "Please, open days and chose day you need to remove" << std::endl;
+                    }
 
-                thisSession->localDb->remove<Day>(it->id_);
-                thisSession->days_.erase(it);
             } else {
                 std::cout << "Please, open days and chose day you need to remove" << std::endl;
             }
 
         } else if (!arg2.compare("deal")) {
-            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->days_.empty() &&
+            if ((thisSession->joinedObject_.index() == 0) && !thisSession->days_.empty() &&
                 std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
 
                 auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
@@ -2585,7 +2590,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
             }
 
         } else if (!arg2.compare("important")) {
-            if (/*(thisSession->joinedObject_.index() != 0) &&*/ (!thisSession->days_.empty()) &&
+            if ((thisSession->joinedObject_.index() == 0) && (!thisSession->days_.empty()) &&
                 std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
 
                 auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
@@ -2639,6 +2644,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
             if (!thisSession->days_.empty()) {
                 auto it = thisSession->days_.end() - 1;
                 thisSession->setJoined(it);
+                thisSession->isJoinedSetted = true;
 
                 std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
             } else {
