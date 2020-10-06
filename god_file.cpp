@@ -8,6 +8,7 @@
 #include <iterator>
 #include <variant>
 #include <cstdlib>
+#include <ncurses.h>
 
 #include "include/sqlite_orm.h"
 #include "include/MD5.h"
@@ -378,6 +379,9 @@ public:
     Important& operator=(const Important&);
     Important& operator=(Important&&);
 
+    void edit();
+    void show();
+
     std::string important_;
     std::string date_;
 
@@ -430,6 +434,24 @@ Important& Important::operator=(Important&& other) {
 	return *this;
 }
 
+void Important::show() {
+    std::cout << std::setw(13) << important_ << std::endl;
+}
+void Important::edit() {
+    std::string input;
+
+    this->show();
+
+    std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
+    std::cout << std::endl;
+
+    std::cout << std::setw(13) << "Important: ";
+    std::getline(std::cin, input, '\n');
+    if (!input.empty()) {
+        this->important_ = input;
+        input.clear();
+    }
+}
 std::string Important::getImportant() const {
     return this->important_;
 }
@@ -1384,7 +1406,8 @@ public:
         std::vector<Day>::iterator,
         std::vector<Note>::iterator,
         std::vector<Task>::iterator,
-        std::vector<Deal>::iterator
+        std::vector<Deal>::iterator,
+        std::vector<Important>::iterator
         > joinedObject_;
 
         std::variant
@@ -1392,7 +1415,8 @@ public:
         std::vector<Day>::iterator,
         std::vector<Note>::iterator,
         std::vector<Task>::iterator,
-        std::vector<Deal>::iterator
+        std::vector<Deal>::iterator,
+        std::vector<Important>::iterator
         > copyableObject_;
 
         std::variant
@@ -1400,7 +1424,8 @@ public:
         std::vector<Day>::iterator,
         std::vector<Note>::iterator,
         std::vector<Task>::iterator,
-        std::vector<Deal>::iterator
+        std::vector<Deal>::iterator,
+        std::vector<Important>::iterator
         > moveableObject_;
 
         void addTask(Task);
@@ -1452,6 +1477,7 @@ struct JoinedEditor {
     JoinedEditor(Session&);
     Session* session;
 
+    void operator()(std::vector<Important>::iterator&);
     void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1460,6 +1486,7 @@ struct JoinedEditor {
 
 
 struct JoinedShower {
+    void operator()(std::vector<Important>::iterator&);
     void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1478,6 +1505,7 @@ struct JoinedLabelSetter {
     //so these are empty
     void operator()(std::vector<Day>::iterator& it){};
     void operator()(std::vector<Task>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedNameSetter {
@@ -1492,6 +1520,7 @@ struct JoinedNameSetter {
     //so these are empty
     void operator()(std::vector<Day>::iterator& it){};
     void operator()(std::vector<Task>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedDescriptionSetter {
@@ -1506,6 +1535,7 @@ struct JoinedDescriptionSetter {
     //variant wants overloaded operator() for each type
     //so these are empty
     void operator()(std::vector<Day>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedPrioritySetter {
@@ -1520,6 +1550,7 @@ struct JoinedPrioritySetter {
     void operator()(std::vector<Day>::iterator& it){};
     void operator()(std::vector<Task>::iterator& it){};
     void operator()(std::vector<Note>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedTimeSetter {
@@ -1535,6 +1566,7 @@ struct JoinedTimeSetter {
     void operator()(std::vector<Day>::iterator& it){};
     void operator()(std::vector<Task>::iterator& it){};
     void operator()(std::vector<Note>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedComplitedSetter {
@@ -1548,6 +1580,7 @@ struct JoinedComplitedSetter {
     void operator()(std::vector<Day>::iterator& it){};
     void operator()(std::vector<Deal>::iterator& it){};
     void operator()(std::vector<Note>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedDateSetter {
@@ -1562,6 +1595,7 @@ struct JoinedDateSetter {
     void operator()(std::vector<Deal>::iterator& it){};
     void operator()(std::vector<Task>::iterator& it){};
     void operator()(std::vector<Note>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct CopyablePaster {
@@ -1576,6 +1610,7 @@ struct CopyablePaster {
     //variant wants overloaded operator() for each type
     //so these are empty
     void operator()(std::vector<Deal>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedIncrementAllower {
@@ -1587,7 +1622,8 @@ struct JoinedIncrementAllower {
 	//not using
     //variant wants overloaded operator() for each type
     //so these are empty
-    void operator()(std::vector<Deal>::iterator& it){};
+	void operator()(std::vector<Deal>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct JoinedDecrementAllower {
@@ -1596,10 +1632,8 @@ struct JoinedDecrementAllower {
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
-	//not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Deal>::iterator& it){};
+	void operator()(std::vector<Deal>::iterator& it){};
+    void operator()(std::vector<Important>::iterator& it){};
 };
 
 struct MovableSetter {
@@ -1611,6 +1645,7 @@ struct MovableSetter {
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
+	void operator()(std::vector<Important>::iterator&);
 };
 
 struct CopyableSetter {
@@ -1620,6 +1655,7 @@ struct CopyableSetter {
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
 	void operator()(std::vector<Note>::iterator&);
+	void operator()(std::vector<Important>::iterator&);
 };
 };
 
@@ -1638,6 +1674,9 @@ void Session::CopyableSetter::operator()(std::vector<Task>::iterator& it) {
 void Session::CopyableSetter::operator()(std::vector<Note>::iterator& it) {
 	this->session->copyableObject_ = it;
 }
+void Session::CopyableSetter::operator()(std::vector<Important>::iterator& it) {
+	this->session->copyableObject_ = it;
+}
 
 Session::MovableSetter::MovableSetter(Session& sess) {
 	this->session = &sess;
@@ -1654,6 +1693,9 @@ void Session::MovableSetter::operator()(std::vector<Task>::iterator& it) {
 void Session::MovableSetter::operator()(std::vector<Note>::iterator& it) {
 	this->session->moveableObject_ = it;
 }
+void Session::MovableSetter::operator()(std::vector<Important>::iterator& it) {
+	this->session->moveableObject_ = it;
+}
 
 void Session::JoinedShower::operator()(std::vector<Deal>::iterator& it) {
     it->show();
@@ -1665,6 +1707,9 @@ void Session::JoinedShower::operator()(std::vector<Task>::iterator& it) {
     it->show();
 }
 void Session::JoinedShower::operator()(std::vector<Note>::iterator& it) {
+    it->show();
+}
+void Session::JoinedShower::operator()(std::vector<Important>::iterator& it) {
     it->show();
 }
 
@@ -1684,6 +1729,10 @@ void Session::JoinedEditor::operator()(std::vector<Task>::iterator& it) {
     this->session->localDb->update(*it);
 }
 void Session::JoinedEditor::operator()(std::vector<Note>::iterator& it) {
+    it->edit();
+    this->session->localDb->update(*it);
+}
+void Session::JoinedEditor::operator()(std::vector<Important>::iterator& it) {
     it->edit();
     this->session->localDb->update(*it);
 }
@@ -1766,20 +1815,40 @@ Session::CopyablePaster::CopyablePaster(Session& sess) {
     this->session = &sess;
 }
 void Session::CopyablePaster::operator()(std::vector<Day>::iterator& copyable) {
-    auto joined = std::get<std::vector<Day>::iterator>(this->session->joinedObject_);
 
-    this->session->days_.insert((joined + 1), *copyable);
+    if(std::holds_alternative<std::vector<Day>::iterator>(session->joinedObject_)) {
+        auto joined = std::get<std::vector<Day>::iterator>(this->session->joinedObject_);
+        auto insertedId = this->session->localDb->insert(*copyable);
+        copyable->id_ = insertedId;
+        this->session->days_.insert((joined + 1), *copyable);
+    } else {
+        std::cout << "The types of the copied and the selected item do not match" << std::endl;
+    }
 }
 void Session::CopyablePaster::operator()(std::vector<Task>::iterator& copyable) {
-    auto joined = std::get<std::vector<Task>::iterator>(this->session->joinedObject_);
 
-    this->session->tasks_.insert((joined + 1), *copyable);
+    if(std::holds_alternative<std::vector<Task>::iterator>(session->joinedObject_)) {
+        auto joined = std::get<std::vector<Task>::iterator>(this->session->joinedObject_);
+        auto insertedId = this->session->localDb->insert(*copyable);
+        copyable->id_ = insertedId;
+        this->session->tasks_.insert((joined + 1), *copyable);
+    } else {
+        std::cout << "The types of the copied and the selected item do not match" << std::endl;
+    }
 }
+
 void Session::CopyablePaster::operator()(std::vector<Note>::iterator& copyable) {
-    auto joined = std::get<std::vector<Note>::iterator>(this->session->joinedObject_);
 
-    this->session->notes_.insert((joined + 1), *copyable);
+    if(std::holds_alternative<std::vector<Note>::iterator>(session->joinedObject_)) {
+        auto joined = std::get<std::vector<Note>::iterator>(this->session->joinedObject_);
+        auto insertedId = this->session->localDb->insert(*copyable);
+        copyable->id_ = insertedId;
+        this->session->notes_.insert((joined + 1), *copyable);
+    } else {
+        std::cout << "The types of the copied and the selected item do not match" << std::endl;
+    }
 }
+
 
 Session::JoinedDecrementAllower::JoinedDecrementAllower(Session& sess) {
     this->session = &sess;
@@ -1938,6 +2007,15 @@ void Session::creatingDay() {
 
     auto insertedId = localDb->insert(day);
     day.id_= insertedId;
+
+    (day.deals_.begin())->date_ = day.date_;
+    insertedId = localDb->insert(*(day.deals_.begin()));
+    (day.deals_.begin())->id_ = insertedId;
+
+    (day.importants_.begin())->date_ = day.date_;
+    insertedId = localDb->insert(*(day.importants_.begin()));
+    (day.importants_.begin())->id_ = insertedId;
+
     days_.push_back(day);
 
     std::cout << "New day has been created :)" << std::endl;
@@ -1991,11 +2069,12 @@ void Session::creatingImportant() {
     std::getline(std::cin, tmp, '\n');
     std::cout << std::endl;
     Important important(tmp);
+    important.date_ = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
 
     auto insertedId = localDb->insert(important);
     important.id_ = insertedId;
-    important.date_ = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
     std::get<std::vector<Day>::iterator>(joinedObject_)->addImportant(important);
+
 
     std::cout << "New important has been created :)" << std::endl;
     std::cout << std::endl;
@@ -2017,42 +2096,43 @@ void Session::creatingImportant() {
  	std::visit(JoinedShower{}, this->joinedObject_);
  }
  void Session::showHelp() {
- 	std::cout << "---List of supported commands---"                                                            << std::endl;
+ 	std::cout << "---List of supported commands---"                                                                      << std::endl;
 
  	std::cout << std::endl;
 
- 	std::cout << "--Navigation--"                                                                              << std::endl;
- 	std::cout << "next                      -allows to get next item"                                          << std::endl;
- 	std::cout << "prev                      -allows to get previous item"                                      << std::endl;
+ 	std::cout << "--Navigation--"                                                                                        << std::endl;
+ 	std::cout << "next                                -allows to get next item"                                          << std::endl;
+ 	std::cout << "prev                                -allows to get previous item"                                      << std::endl;
 
     std::cout << std::endl;
 
- 	std::cout << "--Manipulating with data--"                                                                  << std::endl;
- 	std::cout << "open tasks/notes/days     -open tasks or notes or days"                                      << std::endl;
- 	std::cout << "create task/note/day/deal -create task or note or day or deal"                               << std::endl;
- 	std::cout << "join deals                -allows to manipulate with deals if day is chosen"                 << std::endl;
- 	std::cout << "edit                      -allows to edit joined item"                                       << std::endl;
- 	std::cout << "copy                      -allows to copy joined item (works in pair with command \"paste\"" << std::endl;
- 	std::cout << "past                      -allows to copy joined item (works in pair with command \"copy\""  << std::endl;
- 	std::cout << "remove task/note/day      -removes task/note/day"                                            << std::endl;
- 	std::cout << "remove deal/important N   -removes deal/important with number N"                             << std::endl;
+ 	std::cout << "--Manipulating with data--"                                                                            << std::endl;
+ 	std::cout << "open tasks/notes/days               -open tasks or notes or days and join it"                          << std::endl;
+ 	std::cout << "create task/note/day/deal/important -create task or note or day or deal"                               << std::endl;
+ 	std::cout << "edit                                -allows to edit joined item"                                       << std::endl;
+ 	std::cout << "copy                                -allows to copy joined item (works in pair with command \"paste\"" << std::endl;
+ 	std::cout << "past                                -allows to copy joined item (works in pair with command \"copy\""  << std::endl;
+ 	std::cout << "remove task/note/day                -removes joined task/note/day"                                     << std::endl;
+ 	std::cout << "If day is opened: "                                                                                    << std::endl;
+ 	std::cout << "edit deal/important N               -allows to edit deal/important with number N"                      << std::endl;
+ 	std::cout << "remove deal/important N             -removes deal/important with number N"                             << std::endl;
 
  	std::cout << std::endl;
 
- 	std::cout << "--Manipulating with accounts--"                                                              << std::endl;
- 	std::cout << "logout                    -allows to logout from  account"                                   << std::endl;
+ 	std::cout << "--Manipulating with accounts--"                                                                        << std::endl;
+ 	std::cout << "log out                   -allows to log out from  account"                                            << std::endl;
 
  	std::cout << std::endl;
 
- 	std::cout << "--Manipulating with server--"                                                                << std::endl;
- 	std::cout << "connect                   -allows to connect to server"                                      << std::endl;
- 	std::cout << "disconnect                -allows to disconnect from server"                                 << std::endl;
- 	std::cout << "sync                      -synchronises local and server databases"                          << std::endl;
+ 	std::cout << "--Manipulating with server--"                                                                          << std::endl;
+ 	std::cout << "connect                   -allows to connect to server"                                                << std::endl;
+ 	std::cout << "disconnect                -allows to disconnect from server"                                           << std::endl;
+ 	std::cout << "sync                      -synchronises local and server databases"                                    << std::endl;
 
  	std::cout << std::endl;
 
- 	std::cout << "--Other--"                                                                                   << std::endl;
- 	std::cout << "exit                      -sync bases, disconnect from server and logout"                    << std::endl;
+ 	std::cout << "--Other--"                                                                                             << std::endl;
+ 	std::cout << "exit                      -sync bases, disconnect from server and logout"                              << std::endl;
 
  	std::cout << std::endl;
  }
@@ -2161,8 +2241,39 @@ struct AccessProvider {
     void logIn();
     void logOut();
     void accessChecker(const std::string&, const std::string&);
-
+private:
+    void noechoInput(std::string&);
 };
+
+void AccessProvider::noechoInput(std::string& password) {
+    //initializing c-style string
+    const int MAX_PASSWORD_SIZE = 50;
+    char str[MAX_PASSWORD_SIZE];
+    for (int i = 0; i != 25; i++) {
+        str[i] = '`';
+    }
+    //ncurses.h works here: getting inpit with noecho
+    initscr();
+    noecho();
+    printw("Password: ");
+    scanw("%s", str);
+
+    //copy user's input in c++ string
+    std::string pass(str, MAX_PASSWORD_SIZE);
+    //clear garbage
+    for (auto it = pass.begin(); it != pass.end(); ++it) {
+        if ( (*it) == '`' ) {
+            pass.erase(it, pass.end());
+            break;
+        }
+    }
+
+    //pass.shrink_to_fit();
+    password = pass;
+    //clear ncurses screen and close ncurses
+    clear();
+    endwin();
+}
 
 AccessProvider::AccessProvider(User* user) {
     this->user = user;
@@ -2179,7 +2290,8 @@ void AccessProvider::addingNewUser() {
 
         if (isUserExists.empty()) {
             std::cout << "Please, enter new password" << std::endl;
-            std::getline(std::cin, password, '\n');
+
+            noechoInput(password);
 
             this->user->login_ = login;
             this->user->hashedPass_ = md5(password);
@@ -2204,12 +2316,11 @@ void AccessProvider::logIn() {
     std::string password;
     std::string hashedPassword;
 
-    std::cout << std::setw(13) << "Login: ";
+    std::cout << "Login: ";
     std::getline(std::cin, login, '\n');
     std::cout << std::endl;
-
-    std::cout << std::setw(13) << "Password: ";
-    std::getline(std::cin, password, '\n');
+    noechoInput(password);
+    std::cout << "Password: " << std::endl;
     std::cout << std::endl;
 
     hashedPassword = md5(password);
@@ -2262,13 +2373,13 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
         }
 
         else if(!arg1.compare("help")) {
-            std::cout << "---List of supported commands before you log in---"                                          << std::endl;
+            std::cout << "---List of supported commands before you log in---" << std::endl;
 
             std::cout << std::endl;
 
-            std::cout << "add user                  -allows to create new account"                                     << std::endl;
-            std::cout << "log in                    -allows to log in in account"                                      << std::endl;
-            std::cout << "exit                      -allow to close this app"                                          << std::endl;
+            std::cout << "add user  -allows to create new account"            << std::endl;
+            std::cout << "log in    -allows to log in in account"             << std::endl;
+            std::cout << "exit      -allow to close this app"                 << std::endl;
 
             std::cout << std::endl;
         }
@@ -2306,22 +2417,58 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
     //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
-        std::visit(Session::JoinedIncrementAllower{*thisSession}, this->thisSession->joinedObject_);
-        std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+        if((thisSession->joinedObject_.index() != 0) &&
+            (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_) ||
+            std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_) ||
+            std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_))
+            ) {
+
+            std::visit(Session::JoinedIncrementAllower{*thisSession}, this->thisSession->joinedObject_);
+            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+        } else {
+            std::cout << "Please, open tasks or notes or deal" << std::endl;
+        }
     }
     else if (!arg1.compare("prev")) {
-        std::visit(Session::JoinedDecrementAllower{*thisSession}, this->thisSession->joinedObject_);
-        std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-    }
-    else if (!arg1.compare("join")) {
+        if((thisSession->joinedObject_.index() != 0) &&
+            (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_) ||
+            std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_) ||
+            std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_))
+            ) {
 
-        if (!arg2.compare("deals")) {
-            //need to check
-                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-                auto to_set = it->deals_.end() - 1;
-                thisSession->setJoined(to_set);
+            std::visit(Session::JoinedDecrementAllower{*thisSession}, this->thisSession->joinedObject_);
+            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+        } else {
+            std::cout << "Please, open tasks or notes or deal" << std::endl;
         }
+    }
+    else if (!arg1.compare("edit") && !arg2.compare("deal")) {
+        if((thisSession->joinedObject_.index() != 0) &&
+            std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
 
+            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+            if ( (arg3-1) <= (it->deals_.size()) )  {
+                it->deals_[arg3-1].edit();
+            } else {
+                std::cout << "There is no such deal" << std::endl;
+            }
+        } else {
+            std::cout << "Please, open days and chose day you need" << std::endl;
+        }
+    }
+    else if (!arg1.compare("edit") && !arg2.compare("important")) {
+        if((thisSession->joinedObject_.index() != 0) &&
+            std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
+
+            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+            if ( (arg3-1) <= (it->importants_.size()) )  {
+                it->importants_[arg3-1].edit();
+            } else {
+                std::cout << "There is no such important" << std::endl;
+            }
+        } else {
+            std::cout << "Please, open days and chose day you need" << std::endl;
+        }
     }
     else if (!arg1.compare("create")) {
 
@@ -2341,77 +2488,122 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
             thisSession->creatingDeal();
 
+        }  else if (!arg2.compare("important")){
+
+            thisSession->creatingImportant();
+
         } else {
             std::cout << "Wrong command. Please, check 'help'" << std::endl;
         }
 
     }
     else if (!arg1.compare("edit")) {
-
-        std::visit(Session::JoinedEditor{*thisSession}, thisSession->joinedObject_);
+        if (thisSession->joinedObject_.index() != 0) {
+            std::visit(Session::JoinedEditor{*thisSession}, thisSession->joinedObject_);
+        } else {
+            std::cout << "Please, open  days/tasks/notes and chose the item you want to edit" << std::endl;
+        }
 
     }
     else if (!arg1.compare("copy")) {
-
-        std::visit(Session::CopyableSetter{*thisSession}, thisSession->joinedObject_);
-        //or thisSession->copyableObject = thisSession->joinedObject_; ???
+        if (thisSession->joinedObject_.index() != 0) {
+            std::visit(Session::CopyableSetter{*thisSession}, thisSession->joinedObject_);
+        } else {
+            std::cout << "Please, open  days/tasks/notes and chose the item you want to copy" << std::endl;
+        }
     }
     else if (!arg1.compare("paste")) {
-
-        std::visit(Session::CopyablePaster{*thisSession}, thisSession->copyableObject_);
+        if ( (thisSession->joinedObject_.index() != 0) && (thisSession->copyableObject_.index() != 0)){
+            std::visit(Session::CopyablePaster{*thisSession}, thisSession->copyableObject_);
+        } else {
+            std::cout << "Something went wrong" << std::endl;
+            std::cout << "Please, chose item to copy and then chose item to paste" << std::endl;
+        }
 
     }
     else if (!arg1.compare("remove")) {
 
         if (!arg2.compare("task")) {
 
-            if (std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_)) {
+            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->tasks_.empty() &&
+                std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_)) {
+
                 auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
 
                 this->thisSession->localDb->remove<Task>(it->id_);
                 this->thisSession->tasks_.erase(it);
+            } else {
+                std::cout << "Please, open tasks and chose task you need to remove" << std::endl;
             }
 
         } else if (!arg2.compare("note")) {
 
-            if (std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_)) {
+            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->notes_.empty() &&
+                std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_)) {
+
                 auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
 
                 thisSession->localDb->remove<Note>(it->id_);
                 thisSession->notes_.erase(it);
+            } else {
+                std::cout << "Please, open notes and chose note you need to remove" << std::endl;
             }
 
         } else if (!arg2.compare("day")) {
 
-            if (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
+            if (/*(thisSession->joinedObject_.index() != 0) &&*/ (!thisSession->days_.empty()) &&
+                (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_))) {
+
                 auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
 
                 thisSession->localDb->remove<Day>(it->id_);
                 thisSession->days_.erase(it);
+            } else {
+                std::cout << "Please, open days and chose day you need to remove" << std::endl;
             }
 
         } else if (!arg2.compare("deal")) {
+            if (/*(thisSession->joinedObject_.index() != 0) &&*/ !thisSession->days_.empty() &&
+                std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
 
-            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
 
-            if (arg3 <= (it->deals_.size())) {
-                thisSession->localDb->remove<Deal>(it->deals_[arg3-1].id_);
-                it->removeDeal(arg3);
+                if (!it->deals_.empty()) {
+
+                    if (arg3 <= (it->deals_.size())) {
+                        thisSession->localDb->remove<Deal>(it->deals_[arg3-1].id_);
+                        it->removeDeal(arg3);
+                    } else {
+                        std::cout << "There is no such deal" << std::endl;
+                        std::cout << std::endl;
+                    }
+                } else {
+                    std::cout << "There is no one deal" << std::endl;
+                }
             } else {
-                std::cout << "There is no such deal" << std::endl;
-                std::cout << std::endl;
+                std::cout << "Please open days and chose day from  what you want remove the deal" << std::endl;
             }
 
         } else if (!arg2.compare("important")) {
+            if (/*(thisSession->joinedObject_.index() != 0) &&*/ (!thisSession->days_.empty()) &&
+                std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_)) {
 
-            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
+                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
 
-            if (arg3 <= (it->importants_.size())) {
-                thisSession->localDb->remove<Important>(it->importants_[arg3-1].id_);
-                it->removeImportant(arg3);
+                if (!it->importants_.empty()){
+
+                    if (arg3 <= (it->importants_.size())) {
+                        thisSession->localDb->remove<Important>(it->importants_[arg3-1].id_);
+                        it->removeImportant(arg3);
+                    } else {
+                        std::cout << "There is no such important" << std::endl;
+                        std::cout << std::endl;
+                    }
+                } else {
+                    std::cout << "There is no one important" << std::endl;
+                }
             } else {
-                std::cout << "There is no such important" << std::endl;
-                std::cout << std::endl;
+                std::cout << "Please open days and chose day from  what you want remove the important" << std::endl;
             }
 
         } else {
@@ -2429,6 +2621,8 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 thisSession->setJoined(it);
 
                 std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            } else {
+                std::cout << "There is no one task" << std::endl;
             }
 
         } else if (!arg2.compare("notes")) {
@@ -2437,6 +2631,8 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 thisSession->setJoined(it);
 
                 std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            } else {
+                std::cout << "There is no one note" << std::endl;
             }
 
         } else if (!arg2.compare("days")) {
@@ -2445,6 +2641,8 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                 thisSession->setJoined(it);
 
                 std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
+            } else {
+                std::cout << "There is no one day" << std::endl;
             }
 
         } else {
@@ -2455,7 +2653,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         }
     }
 
-    else if (!arg1.compare("logout")) {
+    else if (!arg1.compare("log out")) {
 
         this->accessProvider->logOut();
 
