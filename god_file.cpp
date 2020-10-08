@@ -446,12 +446,15 @@ void Important::edit() {
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
     std::cout << std::endl;
 
-    std::cout << std::setw(13) << "Important: ";
+    std::cout << std::setw(13) << "Important: " << std::endl;
     std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
+    std::cout << std::endl;
+    if (input.size() > 1) {
         this->important_ = input;
         input.clear();
     }
+
+    this->updateVersion();
 }
 std::string Important::getImportant() const {
     return this->important_;
@@ -1155,31 +1158,33 @@ void Day::edit() {
     std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
     std::cout << std::endl;
 
-    std::cout << std::setw(13) << "Date: ";
+    std::cout << std::setw(13) << "Date: " << std::endl;
     std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
+    if (input.size() > 1) {
         this->date_ = input;
         input.clear();
     }
 
 
-    std::cout << std::setw(13) << "Deals: ";
-    for (auto it = deals_.begin(); it != deals_.end(); ++it) {
-        it->edit();
-    }
-
-    std::cout << std::setw(13) << "Importants: ";
-    for (auto it = importants_.begin(); it != importants_.end(); ++it) {
-        std::getline(std::cin, input, '\n');
-        if (!input.empty()) {
-            it->important_ = input;
-            input.clear();
+    std::cout << std::setw(13) << "Deals: " << std::endl;
+    if (!deals_.empty()) {
+        for (auto it = deals_.begin(); it != deals_.end(); ++it) {
+            it->edit();
         }
     }
 
-    std::cout << std::endl;
-    std::cout << std::endl;
 
+    std::cout << std::setw(13) << "Importants: " << std::endl;
+
+    if(!(importants_.empty())){
+        for (auto it = importants_.begin(); it != importants_.end(); ++it) {
+            it->edit();
+        }
+    }
+
+
+    std::cout << std::endl;
+    std::cout << std::endl;
     this->updateVersion();
 //    this->base_->update(*this);
 }
@@ -1763,6 +1768,26 @@ Session::JoinedEditor::JoinedEditor(Session& sess) {
 }
 void Session::JoinedEditor::operator()(std::vector<Day>::iterator& it) {
     it->edit();
+
+    std::string newdate_ = it->date_;
+
+    if (!(it->deals_.empty())) {
+        for (auto &i : it->deals_) {
+            i.date_ = newdate_;
+            session->localDb->update(i);
+        }
+        /*for (auto deal = it->deals_.begin(); deal != it->deals_.end(); ++it) {
+            deal->date_ = newdate_;
+            session->localDb->update(*deal);
+        }*/
+    }
+
+    if (!(it->importants_.empty())) {
+        for (auto &i : it->importants_) {
+            i.date_ = newdate_;
+            session->localDb->update(i);
+        }
+    }
     this->session->localDb->update(*it);
 }
 void Session::JoinedEditor::operator()(std::vector<Deal>::iterator& it) {
@@ -2205,6 +2230,9 @@ void Session::creatingDay() {
 }
 
 void Session::creatingDeal() {
+    if(this->joinedSetted == 1) {
+
+
     std::string name;
     std::string description;
     std::string label;
@@ -2243,9 +2271,18 @@ void Session::creatingDeal() {
     std::cout << "New deal has been created :)" << std::endl;
     std::cout << std::endl;
 
+    } else {
+
+        std::cout << "Please, open day and chose the one where you want to create deal" << std::endl;
+        std::cout << std::endl;
+
+    }
+
 }
 
 void Session::creatingImportant() {
+    if (this->joinedSetted == 1) {
+
     std::string tmp;
     std::cout << std::setw(13) << "Important: ";
     std::getline(std::cin, tmp, '\n');
@@ -2260,6 +2297,11 @@ void Session::creatingImportant() {
 
     std::cout << "New important has been created :)" << std::endl;
     std::cout << std::endl;
+
+    } else {
+        std::cout << "Please, open day and chose the one where you want to create important" << std::endl;
+        std::cout << std::endl;
+    }
 }
 
  void Session::addTask(Task task) {
@@ -2667,6 +2709,12 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         } else if (!arg2.compare("day")) {
 
             thisSession->creatingDay();
+            auto it = (thisSession->days_.end() - 1);
+            thisSession->setJoined(it);
+            //checking stolen deals
+            it->deals_ = thisSession->localDb->get_all<Deal>(where(is_equal(&Deal::date_, it->date_)));
+            it->importants_ = thisSession->localDb->get_all<Important>(where(is_equal(&Important::date_, it->date_)));
+
 
         } else if (!arg2.compare("deal")){
 
