@@ -32,12 +32,14 @@ std::vector<std::string> split(const std::string& input, char separator) {
 }
 
 void spaceFilter(std::string& input) {
-    std::string::iterator space = input.begin();
-    while(space != input.end()) {
-            space = std::adjacent_find(input.begin(), input.end());
-            if(space != input.end() && *space == ' ') {
-                input.erase(space);
-            }
+
+    for(int i = 0; i < input.length()-1; i++) {
+
+        if(input[i] == ' ' && input[i+1] == ' ') {
+            input.erase(i,1);
+            i--;
+        }
+
     }
 }
 
@@ -1420,8 +1422,27 @@ public:
         void addNote(Note);
         void addDay(Day);
 
+        void openTasks();
+        void openNotes();
+        void openDays();
+
         void showJoined();
         void showHelp();
+
+        void editDeal(const int&);
+        void editImportant(const int&);
+        void editItem();
+
+        void copyItem();
+        void pasteItem();
+        void moveItem();
+        void pasteMoveableItem();
+
+        void removeTask();
+        void removeNote();
+        void removeDay();
+        void removeDeal(const int&);
+        void removeImportant(const int&);
 
         void creatingTask();
         void creatingNote();
@@ -1442,15 +1463,6 @@ public:
 
         void incrementJoined();
         void decrementJoined();
-
-        void setJoinedLabel      (const std::string&);
-        void setJoinedName       (const std::string&);
-        void setJoinedDescription(const std::string&);
-        void setJoinedPriority   (const std::string&);
-
-        void setJoinedTime       (const std::string, const std::string);
-        void setJoinedComplited  (const bool&);
-        void setJoinedDate       (const std::string&);
 
     private: //visitors
 
@@ -1475,111 +1487,7 @@ struct JoinedShower {
 	void operator()(std::vector<Note>::iterator&);
 };
 
-struct JoinedLabelSetter {
 
-	JoinedLabelSetter(std::string);
-    std::string msg_;
-
-    void operator()(std::vector<Deal>::iterator&);
-    void operator()(std::vector<Note>::iterator&);
-    //not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Task>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedNameSetter {
-
-	JoinedNameSetter(std::string);
-    std::string msg_;
-
-	void operator()(std::vector<Deal>::iterator&);
-    void operator()(std::vector<Note>::iterator&);
-    //not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Task>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedDescriptionSetter {
-
-	JoinedDescriptionSetter(std::string);
-    std::string msg_;
-
-	void operator()(std::vector<Deal>::iterator&);
-    void operator()(std::vector<Task>::iterator&);
-    void operator()(std::vector<Note>::iterator&);
-    //not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedPrioritySetter {
-
-	JoinedPrioritySetter(std::string);
-    std::string msg_;
-
-	void operator()(std::vector<Deal>::iterator&);
-	//not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Task>::iterator& it){};
-    void operator()(std::vector<Note>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedTimeSetter {
-
-	JoinedTimeSetter(std::string, std::string);
-    std::string begins;
-    std::string ends;
-
-	void operator()(std::vector<Deal>::iterator&);
-	//not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Task>::iterator& it){};
-    void operator()(std::vector<Note>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedComplitedSetter {
-
-	JoinedComplitedSetter(bool);
-    bool msg_;
-
-	void operator()(std::vector<Task>::iterator&);
-	//not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Day>::iterator& it){};
-    void operator()(std::vector<Deal>::iterator& it){};
-    void operator()(std::vector<Note>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
-
-struct JoinedDateSetter {
-
-	JoinedDateSetter(std::string);
-    std::string msg_;
-
-	void operator()(std::vector<Day>::iterator&);
-	//not using
-    //variant wants overloaded operator() for each type
-    //so these are empty
-    void operator()(std::vector<Deal>::iterator& it){};
-    void operator()(std::vector<Task>::iterator& it){};
-    void operator()(std::vector<Note>::iterator& it){};
-    void operator()(std::vector<Important>::iterator& it){};
-};
 
 struct MoveablePaster {
 
@@ -1766,69 +1674,6 @@ void Session::JoinedEditor::operator()(std::vector<Note>::iterator& it) {
 void Session::JoinedEditor::operator()(std::vector<Important>::iterator& it) {
     it->edit();
     this->session->localDb->update(*it);
-}
-
-
-Session::JoinedLabelSetter::JoinedLabelSetter(std::string msg) {
-    this->msg_ = std::move(msg);
-}
-void Session::JoinedLabelSetter::operator()(std::vector<Deal>::iterator& it) {
-    it->setLabel(msg_);
-}
-void Session::JoinedLabelSetter::operator()(std::vector<Note>::iterator& it) {
-    it->setLabel(msg_);
-}
-
-Session::JoinedNameSetter::JoinedNameSetter(std::string msg) {
-    this->msg_ = std::move(msg);
-}
-void Session::JoinedNameSetter::operator()(std::vector<Deal>::iterator& it) {
-    it->setName(msg_);
-}
-void Session::JoinedNameSetter::operator()(std::vector<Note>::iterator& it) {
-    it->setName(msg_);
-}
-
-Session::JoinedDescriptionSetter::JoinedDescriptionSetter(std::string msg) {
-    this->msg_ = std::move(msg);
-}
-void Session::JoinedDescriptionSetter::operator()(std::vector<Deal>::iterator& it) {
-    it->setDescription(msg_);
-}
-void Session::JoinedDescriptionSetter::operator()(std::vector<Task>::iterator& it) {
-    it->setDescription(msg_);
-}
-void Session::JoinedDescriptionSetter::operator()(std::vector<Note>::iterator& it) {
-    it->setDescription(msg_);
-}
-
-Session::JoinedPrioritySetter::JoinedPrioritySetter(std::string msg) {
-    this->msg_ = std::move(msg);
-}
-void Session::JoinedPrioritySetter::operator()(std::vector<Deal>::iterator& it) {
-   	it->setPriority(msg_);
-}
-
-Session::JoinedTimeSetter::JoinedTimeSetter(std::string begins, std::string ends) {
-    this->begins = std::move(begins);
-    this->ends = std::move(ends);
-}
-void Session::JoinedTimeSetter::operator()(std::vector<Deal>::iterator& it) {
-    it->setTime(begins, ends);
-}
-
-Session::JoinedComplitedSetter::JoinedComplitedSetter(bool msg) {
-    this->msg_ = std::move(msg);
-}
-void Session::JoinedComplitedSetter::operator()(std::vector<Task>::iterator& it) {
-   	it->setIsCompleted(msg_);
-}
-
-Session::JoinedDateSetter::JoinedDateSetter(std::string msg) {
-	this->msg_ = std::move(msg);
-}
-void Session::JoinedDateSetter::operator()(std::vector<Day>::iterator& it) {
-   	it->setDate(msg_);
 }
 
 Session::CopyablePaster::CopyablePaster(Session& sess) {
@@ -2271,6 +2116,49 @@ void Session::creatingImportant() {
      this->days_.push_back(day);
  }
 
+ void Session::openTasks() {
+
+    if (!this->tasks_.empty()) {
+
+        auto it = this->tasks_.end() - 1;
+        this->setJoined(it);
+        this->joinedSetted = this->variantObserver::TASK_SETTED;
+        std::visit(Session::JoinedShower{}, this->joinedObject_);
+
+    } else {
+        std::cout << "There is no one task" << std::endl;
+    }
+}
+
+void Session::openNotes() {
+
+    if (!this->notes_.empty()) {
+
+        auto it = this->notes_.end() - 1;
+        this->setJoined(it);
+        this->joinedSetted = this->variantObserver::NOTE_SETTED;
+        std::visit(Session::JoinedShower{}, this->joinedObject_);
+
+    } else {
+        std::cout << "There is no one note" << std::endl;
+    }
+}
+
+void Session::openDays() {
+
+    if (!this->days_.empty()) {
+
+        auto it = this->days_.end() - 1;
+        this->setJoined(it);
+        this->joinedSetted = this->variantObserver::DAY_SETTED;;
+
+        std::visit(Session::JoinedShower{}, this->joinedObject_);
+
+    } else {
+        std::cout << "There is no one day" << std::endl;
+    }
+}
+
  void Session::showJoined() {
  	std::visit(JoinedShower{}, this->joinedObject_);
  }
@@ -2321,9 +2209,192 @@ void Session::creatingImportant() {
 
  	std::cout << std::endl;
  }
- //getters
 
+ void Session::editDeal(const int& arg3) {
 
+    if(this->joinedSetted == 1 &&  (arg3-1) > 0) {
+
+        auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
+        if ( (arg3-1) < (it->deals_.size()) )  {
+            it->deals_[arg3-1].edit();
+        } else {
+            std::cout << "There is no such deal" << std::endl;
+        }
+
+    } else {
+        std::cout << "Please, open days and chose day you need" << std::endl;
+    }
+}
+
+void Session::editImportant(const int& arg3) {
+    if( (this->joinedSetted == 1) && (arg3-1) > 0) {
+
+        auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
+        if ( (arg3-1) < (it->importants_.size()) )  {
+            it->importants_[arg3-1].edit();
+        } else {
+            std::cout << "There is no such important" << std::endl;
+        }
+
+    } else {
+        std::cout << "Please, open days and chose day you need" << std::endl;
+    }
+}
+
+void Session::editItem() {
+
+    if ( this->joinedSetted != 0 ) {
+
+        std::visit(Session::JoinedEditor{*this}, this->joinedObject_);
+
+    } else {
+        std::cout << "Please, open  days/tasks/notes and chose the item you want to edit" << std::endl;
+    }
+}
+
+void Session::copyItem() {
+
+    if ( this->joinedSetted != 0 ) {
+
+        std::visit(Session::CopyableSetter{*this}, this->joinedObject_);
+
+    } else {
+        std::cout << "Please, open  days/tasks/notes and chose the item you want to copy" << std::endl;
+    }
+}
+
+void Session::pasteItem() {
+
+    if ( (this->joinedSetted != 0) && (this->copyableSetted != 0) ) {
+
+        std::visit(Session::CopyablePaster{*this}, this->copyableObject_);
+
+    } else {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << "Please, chose item to copy and then chose item to paste" << std::endl;
+    }
+}
+
+void Session::moveItem() {
+
+    if ( this->joinedSetted != 0 ) {
+
+        std::visit(Session::MoveableSetter{*this}, this->joinedObject_);
+
+    } else {
+        std::cout << "Please, open  days/tasks/notes and chose the item you want to copy" << std::endl;
+    }
+}
+
+void Session::pasteMoveableItem() {
+
+    if ( (this->joinedSetted != 0)   &&
+         (this->moveableSetted != 0) &&
+         (this->joinedSetted == this->moveableSetted) ) {
+
+        std::visit(Session::MoveablePaster{*this}, this->moveableObject_);
+
+    } else {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << "Please, chose item to copy and then chose item to paste" << std::endl;
+    }
+}
+
+void Session::removeTask() {
+
+    if ( (this->joinedSetted == 3) &&
+         (!this->tasks_.empty()) ) {
+
+        auto it = std::get<std::vector<Task>::iterator>(this->joinedObject_);
+
+        this->localDb->remove<Task>(it->id_);
+        this->tasks_.erase(it);
+
+    } else {
+        std::cout << "Please, open tasks and chose task you need to remove" << std::endl;
+    }
+}
+
+void Session::removeNote() {
+
+    if ( (this->joinedSetted == 2) &&
+         (!this->notes_.empty()) ) {
+
+        auto it = std::get<std::vector<Note>::iterator>(this->joinedObject_);
+
+        this->localDb->remove<Note>(it->id_);
+        this->notes_.erase(it);
+
+    } else {
+        std::cout << "Please, open notes and chose note you need to remove" << std::endl;
+    }
+}
+
+void Session::removeDay() {
+
+    if ( (this->joinedSetted == 1) &&
+         (!this->days_.empty()) ) {
+
+        auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
+        this->localDb->remove<Day>(it->id_);
+        this->days_.erase(it);
+
+    } else {
+        std::cout << "Please, open days and chose day you need to remove" << std::endl;
+    }
+
+}
+
+void Session::removeDeal(const int& arg3) {
+
+    if ( (this->joinedSetted == 1) &&
+         (!this->days_.empty()) ) {
+
+        auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
+
+        if (!it->deals_.empty()) {
+
+            if (arg3 <= (it->deals_.size())) {
+
+                this->localDb->remove<Deal>(it->deals_[arg3-1].id_);
+                it->removeDeal(arg3);
+
+            } else {
+                std::cout << "There is no such deal" << std::endl;
+            }
+        } else {
+            std::cout << "There is no one deal" << std::endl;
+        }
+    } else {
+        std::cout << "Please open days and chose day from  what you want remove the deal" << std::endl;
+    }
+}
+
+void Session::removeImportant(const int& arg3) {
+
+    if ( (this->joinedSetted == 1) &&
+         (!this->days_.empty()) ) {
+
+        auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
+
+        if (!it->importants_.empty()){
+
+            if (arg3 <= (it->importants_.size())) {
+
+                this->localDb->remove<Important>(it->importants_[arg3-1].id_);
+                it->removeImportant(arg3);
+
+            } else {
+                std::cout << "There is no such important" << std::endl;
+            }
+        } else {
+            std::cout << "There is no one important" << std::endl;
+        }
+    } else {
+        std::cout << "Please open days and chose day from  what you want remove the important" << std::endl;
+    }
+
+}
 /*
 template<typename T>
 void Session::setJoined(std::vector<T>::iterator it) {
@@ -2348,11 +2419,36 @@ void Session::setJoined(std::vector<Important>::iterator it) {
 
 
 void Session::incrementJoined() {
-	std::visit(Session::JoinedIncrementAllower{*this}, this->joinedObject_);
+
+		if( (this->joinedSetted != 0) &&
+            (std::holds_alternative<std::vector<Day>::iterator>(this->joinedObject_) ||
+             std::holds_alternative<std::vector<Task>::iterator>(this->joinedObject_) ||
+             std::holds_alternative<std::vector<Note>::iterator>(this->joinedObject_)) ) {
+
+            std::visit(Session::JoinedIncrementAllower{*this}, this->joinedObject_);
+            std::visit(Session::JoinedShower{}, this->joinedObject_);
+
+        } else {
+            std::cout << "Please, open tasks or notes or deal" << std::endl;
+        }
+
 }
 
 void Session::decrementJoined() {
-	std::visit(Session::JoinedDecrementAllower{*this}, this->joinedObject_);
+
+        if( (this->joinedSetted != 0) &&
+            (std::holds_alternative<std::vector<Day>::iterator>(this->joinedObject_) ||
+            std::holds_alternative<std::vector<Task>::iterator>(this->joinedObject_) ||
+            std::holds_alternative<std::vector<Note>::iterator>(this->joinedObject_))
+            ) {
+
+            std::visit(Session::JoinedDecrementAllower{*this}, this->joinedObject_);
+            std::visit(Session::JoinedShower{}, this->joinedObject_);
+
+        } else {
+            std::cout << "Please, open tasks or notes or deal" << std::endl;
+        }
+
 }
 
 /*
@@ -2372,29 +2468,6 @@ void Session::setMovable() {
 
 void Session::setCopyable() {
     std::visit(CopyableSetter{*this}, this->joinedObject_);
-}
-
-
-void Session::setJoinedLabel(const std::string& msg) {
-	std::visit(JoinedLabelSetter{msg}, joinedObject_);
-}
-void Session::setJoinedName(const std::string& msg) {
-	std::visit(JoinedNameSetter{msg}, joinedObject_);
-}
-void Session::setJoinedDescription(const std::string& msg) {
-	std::visit(JoinedDescriptionSetter{msg}, joinedObject_);
-}
-void Session::setJoinedPriority(const std::string& msg) {
-	std::visit(JoinedPrioritySetter{msg}, joinedObject_);
-}
-void Session::setJoinedTime(const std::string begins, const std::string ends) {
-	std::visit(JoinedTimeSetter{begins, ends}, joinedObject_);
-}
-void Session::setJoinedComplited(const bool& complited) {
-    std::visit(JoinedComplitedSetter{complited}, joinedObject_);
-}
-void Session::setJoinedDate(const std::string& msg) {
-	std::visit(JoinedDateSetter{msg}, joinedObject_);
 }
 
 Accounts accountsDb = initAccountsDb();
@@ -2631,62 +2704,23 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
 
-        if( (thisSession->joinedSetted != 0) &&
-            (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_) ||
-            std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_) ||
-            std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_)) ) {
+        thisSession->incrementJoined();
 
-            std::visit(Session::JoinedIncrementAllower{*thisSession}, this->thisSession->joinedObject_);
-            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-
-        } else {
-            std::cout << "Please, open tasks or notes or deal" << std::endl;
-        }
     }
     else if (!arg1.compare("prev")) {
 
-        if( (thisSession->joinedSetted != 0) &&
-            (std::holds_alternative<std::vector<Day>::iterator>(thisSession->joinedObject_) ||
-            std::holds_alternative<std::vector<Task>::iterator>(thisSession->joinedObject_) ||
-            std::holds_alternative<std::vector<Note>::iterator>(thisSession->joinedObject_))
-            ) {
+        thisSession->decrementJoined();
 
-            std::visit(Session::JoinedDecrementAllower{*thisSession}, this->thisSession->joinedObject_);
-            std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-
-        } else {
-            std::cout << "Please, open tasks or notes or deal" << std::endl;
-        }
     }
     else if (!arg1.compare("edit") && !arg2.compare("deal")) {
 
-        if(thisSession->joinedSetted == 1 &&  (arg3-1) > 0) {
+        thisSession->editDeal(arg3);
 
-            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-            if ( (arg3-1) < (it->deals_.size()) )  {
-                it->deals_[arg3-1].edit();
-            } else {
-                std::cout << "There is no such deal" << std::endl;
-            }
-
-        } else {
-            std::cout << "Please, open days and chose day you need" << std::endl;
-        }
     }
     else if (!arg1.compare("edit") && !arg2.compare("important")) {
 
-        if( (thisSession->joinedSetted == 1) && (arg3-1) > 0) {
+        thisSession->editImportant(arg3);
 
-            auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-            if ( (arg3-1) < (it->importants_.size()) )  {
-                it->importants_[arg3-1].edit();
-            } else {
-                std::cout << "There is no such important" << std::endl;
-            }
-
-        } else {
-            std::cout << "Please, open days and chose day you need" << std::endl;
-        }
     }
     else if (!arg1.compare("create")) {
 
@@ -2717,139 +2751,49 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("edit")) {
 
-        if ( thisSession->joinedSetted != 0 ) {
-            std::visit(Session::JoinedEditor{*thisSession}, thisSession->joinedObject_);
-        } else {
-            std::cout << "Please, open  days/tasks/notes and chose the item you want to edit" << std::endl;
-        }
+        thisSession->editItem();
 
     }
     else if (!arg1.compare("copy")) {
 
-        if ( thisSession->joinedSetted != 0 ) {
-            std::visit(Session::CopyableSetter{*thisSession}, thisSession->joinedObject_);
-        } else {
-            std::cout << "Please, open  days/tasks/notes and chose the item you want to copy" << std::endl;
-        }
+        thisSession->copyItem();
     }
     else if (!arg1.compare("paste")) {
 
-        if ( (thisSession->joinedSetted != 0) && (thisSession->copyableSetted != 0) ) {
-            std::visit(Session::CopyablePaster{*thisSession}, thisSession->copyableObject_);
-        } else {
-            std::cout << "Something went wrong" << std::endl;
-            std::cout << "Please, chose item to copy and then chose item to paste" << std::endl;
-        }
+        thisSession->pasteItem();
 
     }
     else if (!arg1.compare("move")) {
 
-        if ( thisSession->joinedSetted != 0 ) {
-            std::visit(Session::MoveableSetter{*thisSession}, thisSession->joinedObject_);
-        } else {
-            std::cout << "Please, open  days/tasks/notes and chose the item you want to copy" << std::endl;
-        }
+        thisSession->moveItem();
+
     }
     else if (!arg1.compare("here")) {
 
-        if ( (thisSession->joinedSetted != 0)   &&
-             (thisSession->moveableSetted != 0) &&
-             (thisSession->joinedSetted == thisSession->moveableSetted) ) {
-
-            std::visit(Session::MoveablePaster{*thisSession}, thisSession->moveableObject_);
-
-        } else {
-            std::cout << "Something went wrong" << std::endl;
-            std::cout << "Please, chose item to copy and then chose item to paste" << std::endl;
-        }
+        thisSession->pasteMoveableItem();
 
     }
     else if (!arg1.compare("remove")) {
 
         if (!arg2.compare("task")) {
 
-            if ((thisSession->joinedSetted == 3) &&
-                 !thisSession->tasks_.empty()) {
-
-                auto it = std::get<std::vector<Task>::iterator>(thisSession->joinedObject_);
-
-                this->thisSession->localDb->remove<Task>(it->id_);
-                this->thisSession->tasks_.erase(it);
-
-            } else {
-                std::cout << "Please, open tasks and chose task you need to remove" << std::endl;
-            }
+            thisSession->removeTask();
 
         } else if (!arg2.compare("note")) {
 
-            if ((thisSession->joinedSetted == 2) &&
-                 !thisSession->notes_.empty()) {
-
-                auto it = std::get<std::vector<Note>::iterator>(thisSession->joinedObject_);
-
-                thisSession->localDb->remove<Note>(it->id_);
-                thisSession->notes_.erase(it);
-            } else {
-                std::cout << "Please, open notes and chose note you need to remove" << std::endl;
-            }
+            thisSession->removeNote();
 
         } else if (!arg2.compare("day")) {
 
-            if ((thisSession->joinedSetted == 1) &&
-                 !thisSession->days_.empty()) {
-
-                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-                thisSession->localDb->remove<Day>(it->id_);
-                thisSession->days_.erase(it);
-
-            } else {
-                std::cout << "Please, open days and chose day you need to remove" << std::endl;
-            }
+            thisSession->removeDay();
 
         } else if (!arg2.compare("deal")) {
 
-            if ((thisSession->joinedSetted == 1) &&
-                 !thisSession->days_.empty()) {
-
-                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-
-                if (!it->deals_.empty()) {
-
-                    if (arg3 <= (it->deals_.size())) {
-                        thisSession->localDb->remove<Deal>(it->deals_[arg3-1].id_);
-                        it->removeDeal(arg3);
-                    } else {
-                        std::cout << "There is no such deal" << std::endl;
-                        std::cout << std::endl;
-                    }
-                } else {
-                    std::cout << "There is no one deal" << std::endl;
-                }
-            } else {
-                std::cout << "Please open days and chose day from  what you want remove the deal" << std::endl;
-            }
+           thisSession->removeDeal(arg3);
 
         } else if (!arg2.compare("important")) {
-            if ((thisSession->joinedSetted == 1) &&
-                !thisSession->days_.empty()) {
 
-                auto it = std::get<std::vector<Day>::iterator>(thisSession->joinedObject_);
-
-                if (!it->importants_.empty()){
-
-                    if (arg3 <= (it->importants_.size())) {
-                        thisSession->localDb->remove<Important>(it->importants_[arg3-1].id_);
-                        it->removeImportant(arg3);
-                    } else {
-                        std::cout << "There is no such important" << std::endl;
-                        std::cout << std::endl;
-                    }
-                } else {
-                    std::cout << "There is no one important" << std::endl;
-                }
-            } else {
-                std::cout << "Please open days and chose day from  what you want remove the important" << std::endl;
-            }
+            thisSession->removeImportant(arg3);
 
         } else {
 
@@ -2862,42 +2806,15 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
         if (!arg2.compare("tasks")) {
 
-            if (!thisSession->tasks_.empty()) {
-
-                auto it = thisSession->tasks_.end() - 1;
-                thisSession->setJoined(it);
-                thisSession->joinedSetted = thisSession->variantObserver::TASK_SETTED;
-                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-
-            } else {
-                std::cout << "There is no one task" << std::endl;
-            }
+            thisSession->openTasks();
 
         } else if (!arg2.compare("notes")) {
 
-            if (!thisSession->notes_.empty()) {
-
-                auto it = thisSession->notes_.end() - 1;
-                thisSession->setJoined(it);
-                thisSession->joinedSetted = thisSession->variantObserver::NOTE_SETTED;
-                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-
-            } else {
-                std::cout << "There is no one note" << std::endl;
-            }
+            thisSession->openNotes();
 
         } else if (!arg2.compare("days")) {
 
-            if (!thisSession->days_.empty()) {
-
-                auto it = thisSession->days_.end() - 1;
-                thisSession->setJoined(it);
-                thisSession->joinedSetted = thisSession->variantObserver::DAY_SETTED;;
-
-                std::visit(Session::JoinedShower{}, this->thisSession->joinedObject_);
-            } else {
-                std::cout << "There is no one day" << std::endl;
-            }
+            thisSession->openDays();
 
         } else {
 
@@ -2982,8 +2899,8 @@ int main()
             std::string input;
 
             std::getline(std::cin, input, '\n');
-            //spaceFilter(input);
             std::cout << std::endl;
+            spaceFilter(input);
 
             std::vector<std::string> v = split(input, ' ');
             std::cin.clear();
@@ -3008,7 +2925,7 @@ int main()
             std::string input;
 
             std::getline(std::cin, input, '\n');
-            //spaceFilter(input);
+            spaceFilter(input);
 
             std::vector<std::string> v = split(input, ' ');
             std::cin.clear();
