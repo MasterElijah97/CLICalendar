@@ -1234,7 +1234,7 @@ void User::key_gen() {
 //--------------------------------------------------------------
 inline auto initAccountsDb() {
 
-    return make_storage(".accounts.sqlite",
+    return make_storage("accounts.sqlite",
                                 make_table("Accounts",
                                     make_column("id",
                                         &User::id_,
@@ -2055,7 +2055,7 @@ void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it
 Session::Session(User* user)
 {
     this->user = user;
-    std::string databaseName = "." + this->user->login_ + ".sqlite";                   //makes name .USER.sqlite (hidden in linux)
+    std::string databaseName = this->user->login_ + ".sqlite";
     this->localDb = std::make_shared<Storage>(initLocalDb(std::string(databaseName)));
     this->localDb->sync_schema();
     this->getDataFromLocalBase();
@@ -2293,9 +2293,9 @@ void Session::creatingImportant() {
  	std::cout << "past                                -allows to copy joined item (works in pair with command \"copy\""  << std::endl;
  	std::cout << "move                                -allows to move joined item (works in pair with command \"here\""  << std::endl;
  	std::cout << "here                                -allows to move joined item (works in pair with command \"move\""  << std::endl;
- 	std::cout << "-----------------------------------------------------------------------------------------------------" << std::endl;
- 	std::cout << "|            Commands 'paste' and 'here' pastes copyable/moveable item before joined item           |" << std::endl;
- 	std::cout << "-----------------------------------------------------------------------------------------------------" << std::endl;
+ 	std::cout << "------------------------------------------------------------------------------"                        << std::endl;
+ 	std::cout << "|Commands 'paste' and 'here' pastes copyable/moveable item before joined item|"                        << std::endl;
+ 	std::cout << "------------------------------------------------------------------------------"                        << std::endl;
  	std::cout << "remove task/note/day                -removes joined task/note/day"                                     << std::endl;
  	std::cout << "If day is opened: "                                                                                    << std::endl;
  	std::cout << "edit deal/important N               -allows to edit deal/important with number N"                      << std::endl;
@@ -2305,6 +2305,7 @@ void Session::creatingImportant() {
 
  	std::cout << "--Manipulating with accounts--"                                                                        << std::endl;
  	std::cout << "log out                   -allows to log out from  account"                                            << std::endl;
+ 	std::cout << "change password           -allows to change password"                                                  << std::endl;
 
  	std::cout << std::endl;
 
@@ -2316,7 +2317,7 @@ void Session::creatingImportant() {
  	std::cout << std::endl;
 
  	std::cout << "--Other--"                                                                                             << std::endl;
- 	std::cout << "exit                      -sync bases, disconnect from server and logout"                              << std::endl;
+ 	std::cout << "exit                      -sync bases, disconnect from server and log out"                             << std::endl;
 
  	std::cout << std::endl;
  }
@@ -2399,19 +2400,20 @@ void Session::setJoinedDate(const std::string& msg) {
 Accounts accountsDb = initAccountsDb();
 
 //Helper
-//Asks login and password, checks them
+//Asks login and password, checks them, change password
 struct AccessProvider {
     AccessProvider(User*);
     User* user;
     void addingNewUser();
     void logIn();
     void logOut();
+    void changePassword();
     void accessChecker(const std::string&, const std::string&);
 private:
-    void noechoInput(std::string&);
+    void noechoInput(std::string&, char*);
 };
 
-void AccessProvider::noechoInput(std::string& password) {
+void AccessProvider::noechoInput(std::string& password, char* msg = "Password: ") {
     //initializing c-style string
     const int MAX_PASSWORD_SIZE = 50;
     char str[MAX_PASSWORD_SIZE];
@@ -2421,7 +2423,7 @@ void AccessProvider::noechoInput(std::string& password) {
     //ncurses.h works here: getting inpit with noecho
     initscr();
     noecho();
-    printw("Password: ");
+    printw(msg);
     scanw("%s", str);
 
     //copy user's input in c++ string
@@ -2460,9 +2462,9 @@ void AccessProvider::addingNewUser() {
             this->user->login_ = login;
             this->user->hashedPass_ = md5(password);
 
-            auto insertedId = accountsDb.insert(*(this->user));
+            auto insertedId = ::accountsDb.insert(*(this->user));
             this->user->id_ = insertedId;
-            ::accountsDb.update(*user);
+            //::accountsDb.update(*user);
 
             std::cout << "New account has been created" << std::endl;
             std::cout << "Now you can log in with entered login and password" << std:: endl;
@@ -2488,8 +2490,8 @@ void AccessProvider::logIn() {
 
     hashedPassword = md5(password);
 
-    auto ExistingUser = accountsDb.get_all<User>(where(is_equal(&User::login_, login) &&
-                                                       is_equal(&User::hashedPass_, hashedPassword)));
+    auto ExistingUser = ::accountsDb.get_all<User>(where(is_equal(&User::login_, login) &&
+                                                         is_equal(&User::hashedPass_, hashedPassword)));
     if (!ExistingUser.empty()) {
         this->user->login_ = login;
         this->user->hashedPass_ = hashedPassword;
@@ -2509,6 +2511,51 @@ void AccessProvider::logOut() {
     this->user->login_.clear();
     this->user->hashedPass_.clear();
     this->user->isLoggedIn_ = false;
+    std::cout << "You've logged out" << std::endl;
+}
+
+void AccessProvider::changePassword() {
+
+    std::string oldPassword;
+    noechoInput(oldPassword, "\nPlease, enter old password: ");
+    std::string hashedOldPassword = md5(oldPassword);
+
+    auto userChecking = ::accountsDb.get_all<User>(where(is_equal(&User::login_, this->user->login_) &&
+                                                         is_equal(&User::hashedPass_, hashedOldPassword)));
+
+    if (!userChecking.empty()) {
+
+        std::string newPasswordFirst;
+        std::string newPasswordSecond;
+
+        noechoInput(newPasswordFirst, "\n\nPlease, enter new password: ");
+
+        noechoInput(newPasswordSecond, "\n\n\nPlease, enter new password again: ");
+
+        //method 'compare' returns 0 if strings are fully equal
+        if (!newPasswordFirst.compare(newPasswordSecond)) {
+
+            this->user->hashedPass_ = md5(newPasswordFirst);
+            ::accountsDb.remove<User>(this->user->id_);
+
+            this->user->id_ = -1;
+            auto insertedId = ::accountsDb.insert(*(this->user));
+            this->user->id_ = insertedId;
+
+            std::cout << "You've successfully change your password" << std::endl;
+            newPasswordFirst.clear();
+            newPasswordSecond.clear();
+            this->logOut();
+
+        } else {
+            std::cout << "You've entered different passwords" << std::endl;
+        }
+
+
+    } else {
+        std::cout << "You've entered wrong old password" << std::endl;
+    }
+    hashedOldPassword.clear();
 }
 
 //dialog between user and program
@@ -2860,9 +2907,13 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         }
     }
 
-    else if (!arg1.compare("log out")) {
+    else if (!arg1.compare("log")) {
 
-        this->accessProvider->logOut();
+        if (!arg2.compare("out")) {
+
+            this->accessProvider->logOut();
+
+        }
 
     }
     else if (!arg1.compare("connect")) {
@@ -2893,6 +2944,20 @@ void CommandChecker::commandMonitor(const std::string& arg1,
         thisSession->showHelp();
 
     }
+    else if (!arg1.compare("change")) {
+
+        if (!arg2.compare("password")) {
+
+            this->accessProvider->changePassword();
+
+        } else {
+
+            std::cout << "Wrong second argument: " << arg2 << std::endl;
+            std::cout << "Did you mean 'password'? " << std::endl;
+
+        }
+
+    }
     else {
         std::cout << "Wrong command. Please, check 'help'" << std::endl;
         std::cout << std::endl;
@@ -2917,7 +2982,7 @@ int main()
             std::string input;
 
             std::getline(std::cin, input, '\n');
-            spaceFilter(input);
+            //spaceFilter(input);
             std::cout << std::endl;
 
             std::vector<std::string> v = split(input, ' ');
@@ -2943,7 +3008,7 @@ int main()
             std::string input;
 
             std::getline(std::cin, input, '\n');
-            spaceFilter(input);
+            //spaceFilter(input);
 
             std::vector<std::string> v = split(input, ' ');
             std::cin.clear();
