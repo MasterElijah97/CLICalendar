@@ -1471,20 +1471,14 @@ struct JoinedEditor {
     JoinedEditor(Session&);
     Session* session;
 
-    void operator()(std::vector<Important>::iterator&);
-    void operator()(std::vector<Day>::iterator&);
-	void operator()(std::vector<Deal>::iterator&);
-	void operator()(std::vector<Task>::iterator&);
-	void operator()(std::vector<Note>::iterator&);
+    template<typename T>
+    void operator()(T&);
 };
 
 
 struct JoinedShower {
-    void operator()(std::vector<Important>::iterator&);
-    void operator()(std::vector<Day>::iterator&);
-	void operator()(std::vector<Deal>::iterator&);
-	void operator()(std::vector<Task>::iterator&);
-	void operator()(std::vector<Note>::iterator&);
+    template<typename T>
+    void operator()(T&);
 };
 
 
@@ -1619,26 +1613,21 @@ void Session::MoveableSetter::operator()(std::vector<Important>::iterator& it) {
 	this->session->moveableSetted = IMPORTANT_SETTED;
 }
 
-void Session::JoinedShower::operator()(std::vector<Deal>::iterator& it) {
-    it->show();
-}
-void Session::JoinedShower::operator()(std::vector<Day>::iterator& it) {
-    it->show();
-}
-void Session::JoinedShower::operator()(std::vector<Task>::iterator& it) {
-    it->show();
-}
-void Session::JoinedShower::operator()(std::vector<Note>::iterator& it) {
-    it->show();
-}
-void Session::JoinedShower::operator()(std::vector<Important>::iterator& it) {
-    it->show();
+template<typename T>
+void Session::JoinedShower::operator()(T& it) {
+	it->show();
 }
 
 Session::JoinedEditor::JoinedEditor(Session& sess) {
     this->session = &sess;
 }
-void Session::JoinedEditor::operator()(std::vector<Day>::iterator& it) {
+template<typename T>
+void Session::JoinedEditor::operator()(T& it) {
+    it->edit();
+    this->session->localDb->update(*it);
+}
+template<>
+void Session::JoinedEditor::operator()<std::vector<Day>::iterator>(std::vector<Day>::iterator& it) {
     it->edit();
 
     std::string newdate_ = it->date_;
@@ -1659,22 +1648,6 @@ void Session::JoinedEditor::operator()(std::vector<Day>::iterator& it) {
     this->session->localDb->update(*it);
 }
 
-void Session::JoinedEditor::operator()(std::vector<Deal>::iterator& it) {
-    it->edit();
-    this->session->localDb->update(*it);
-}
-void Session::JoinedEditor::operator()(std::vector<Task>::iterator& it) {
-    it->edit();
-    this->session->localDb->update(*it);
-}
-void Session::JoinedEditor::operator()(std::vector<Note>::iterator& it) {
-    it->edit();
-    this->session->localDb->update(*it);
-}
-void Session::JoinedEditor::operator()(std::vector<Important>::iterator& it) {
-    it->edit();
-    this->session->localDb->update(*it);
-}
 
 Session::CopyablePaster::CopyablePaster(Session& sess) {
     this->session = &sess;
