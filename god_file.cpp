@@ -1357,7 +1357,7 @@ struct CommandChecker; //#include <CommandChecker.h>
 
 class Session {
 public:
-        Session(User*);
+        Session(std::shared_ptr<User>);
         Session() = default;
         Session(const Session&) = default;
         Session(Session&&) = default;
@@ -1368,7 +1368,7 @@ public:
 
         friend CommandChecker;
 
-        User* user;
+        std::shared_ptr<User> user = nullptr;
 
         std::shared_ptr<Storage> localDb = nullptr;
 
@@ -1870,7 +1870,7 @@ void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it
     }
 }
 
-Session::Session(User* user)
+Session::Session(std::shared_ptr<User> user)
 {
     this->user = user;
     std::string databaseName = this->user->login_ + ".sqlite";
@@ -2448,8 +2448,8 @@ Accounts accountsDb = initAccountsDb();
 //Helper
 //Asks login and password, checks them, change password
 struct AccessProvider {
-    AccessProvider(User*);
-    User* user;
+    AccessProvider(std::shared_ptr<User>);
+    std::shared_ptr<User> user;
     void addingNewUser();
     void logIn();
     void logOut();
@@ -2488,7 +2488,7 @@ void AccessProvider::noechoInput(std::string& password, char* msg = "Password: "
     endwin();
 }
 
-AccessProvider::AccessProvider(User* user) {
+AccessProvider::AccessProvider(std::shared_ptr<User> user) {
     this->user = user;
 }
 
@@ -2650,16 +2650,18 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
 //Helper
 //dialog between user and program after user is logged in
 struct CommandChecker {
-    CommandChecker(Session*, AccessProvider*);
-    Session* thisSession;
-    AccessProvider* accessProvider;
+    CommandChecker(std::shared_ptr<Session>, std::shared_ptr<AccessProvider>);
+    std::shared_ptr<Session> thisSession;
+    std::shared_ptr<AccessProvider> accessProvider;
     void clearConsole();
     void commandMonitor(const std::string&,
                         const std::string&,
                         const int&);
 };
 
-CommandChecker::CommandChecker(Session* session, AccessProvider* accessProvider) {
+CommandChecker::CommandChecker(std::shared_ptr<Session> session,
+                               std::shared_ptr<AccessProvider> accessProvider) {
+
     this->thisSession = session;
     thisSession->localDb->sync_schema();
     this->accessProvider = accessProvider;
@@ -2857,8 +2859,9 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 int main()
 {
     accountsDb.sync_schema();
-    User user;
-    AccessProvider accessProvider(&user);
+    auto user = std::make_shared<User>();
+    //User user;
+    auto accessProvider = std::make_shared<AccessProvider>(user);
 
     std::cout << "Welcome to CLICalendar. Please, log in or add new user" << std::endl;
     std::cout << "Write 'help' to get list of commands" << std::endl;
@@ -2866,7 +2869,7 @@ int main()
 
     while(1) {
 
-        while (user.isLoggedIn() == false) {
+        while (user->isLoggedIn() == false) {
             std::cout << std::setw(13) << "Command: ";
 
             std::string input;
@@ -2878,20 +2881,20 @@ int main()
             std::vector<std::string> v = split(input, ' ');
             std::cin.clear();
             if ( v.size() == 1 ) {
-                accessProvider.accessChecker(v[0], std::string(""));
+                accessProvider->accessChecker(v[0], std::string(""));
             }
             else if ( v.size() == 2) {
-                accessProvider.accessChecker(v[0], v[1]);
+                accessProvider->accessChecker(v[0], v[1]);
             }
             input.clear();
         }
 
-        Session thisSession(&user);
-        thisSession.localDb->sync_schema();
+        auto thisSession = std::make_shared<Session>(user);
+        thisSession->localDb->sync_schema();
 
-        CommandChecker commandChecker(&thisSession, &accessProvider);
+        CommandChecker commandChecker(thisSession, accessProvider);
 
-        while(user.isLoggedIn() == true) {
+        while(user->isLoggedIn() == true) {
 
             std::cout << std::setw(13) << "Command: ";
 
