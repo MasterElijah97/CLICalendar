@@ -1470,6 +1470,7 @@ struct JoinedEditor {
 
     JoinedEditor(Session&);
     Session* session;
+    ~JoinedEditor();
 
     template<typename T>
     void operator()(T&);
@@ -1487,6 +1488,7 @@ struct MoveablePaster {
 
     MoveablePaster(Session&);
     Session* session;
+    ~MoveablePaster();
 
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1502,6 +1504,7 @@ struct CopyablePaster {
 
     CopyablePaster(Session&);
     Session* session;
+    ~CopyablePaster();
 
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1517,6 +1520,7 @@ struct JoinedIncrementAllower {
 
     JoinedIncrementAllower(Session&);
     Session* session;
+    ~JoinedIncrementAllower();
 
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1532,6 +1536,7 @@ struct JoinedDecrementAllower {
 
     JoinedDecrementAllower(Session&);
     Session* session;
+    ~JoinedDecrementAllower();
 
 	void operator()(std::vector<Day>::iterator&);
 	void operator()(std::vector<Task>::iterator&);
@@ -1544,6 +1549,7 @@ struct MoveableSetter {
 
 	MoveableSetter(Session&);
 	Session* session;
+	~MoveableSetter();
 
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Day>::iterator&);
@@ -1556,6 +1562,7 @@ struct CopyableSetter {
 
     CopyableSetter(Session&);
     Session* session;
+    ~CopyableSetter();
 
 	void operator()(std::vector<Deal>::iterator&);
 	void operator()(std::vector<Day>::iterator&);
@@ -1567,6 +1574,9 @@ struct CopyableSetter {
 
 Session::CopyableSetter::CopyableSetter(Session& sess) {
     this->session = &sess;
+}
+Session::CopyableSetter::~CopyableSetter() {
+    this->session = nullptr;
 }
 void Session::CopyableSetter::operator()(std::vector<Deal>::iterator& it) {
 	this->session->copyableObject_ = it;
@@ -1591,6 +1601,9 @@ void Session::CopyableSetter::operator()(std::vector<Important>::iterator& it) {
 
 Session::MoveableSetter::MoveableSetter(Session& sess) {
 	this->session = &sess;
+}
+Session::MoveableSetter::~MoveableSetter() {
+    this->session = nullptr;
 }
 void Session::MoveableSetter::operator()(std::vector<Deal>::iterator& it) {
 	this->session->moveableObject_ = it;
@@ -1620,6 +1633,9 @@ void Session::JoinedShower::operator()(T& it) {
 
 Session::JoinedEditor::JoinedEditor(Session& sess) {
     this->session = &sess;
+}
+Session::JoinedEditor::~JoinedEditor() {
+    this->session = nullptr;
 }
 template<typename T>
 void Session::JoinedEditor::operator()(T& it) {
@@ -1651,6 +1667,9 @@ void Session::JoinedEditor::operator()<std::vector<Day>::iterator>(std::vector<D
 
 Session::CopyablePaster::CopyablePaster(Session& sess) {
     this->session = &sess;
+}
+Session::CopyablePaster::~CopyablePaster() {
+    this->session = nullptr;
 }
 void Session::CopyablePaster::operator()(std::vector<Day>::iterator& copyable) {
 
@@ -1739,6 +1758,9 @@ void Session::CopyablePaster::operator()(std::vector<Note>::iterator& copyable) 
 
 Session::MoveablePaster::MoveablePaster(Session& sess) {
     this->session = &sess;
+}
+Session::MoveablePaster::~MoveablePaster() {
+    this->session = nullptr;
 }
 void Session::MoveablePaster::operator()(std::vector<Day>::iterator& copyable) {
 
@@ -1835,6 +1857,9 @@ void Session:: MoveablePaster::operator()(std::vector<Note>::iterator& copyable)
 Session::JoinedDecrementAllower::JoinedDecrementAllower(Session& sess) {
     this->session = &sess;
 }
+Session::JoinedDecrementAllower::~JoinedDecrementAllower() {
+    this->session = nullptr;
+}
 void Session::JoinedDecrementAllower::operator()(std::vector<Day>::iterator& it) {
     if ( (it) != (session->days_.begin()) ) {
         it--;
@@ -1853,6 +1878,9 @@ void Session::JoinedDecrementAllower::operator()(std::vector<Note>::iterator& it
 
 Session::JoinedIncrementAllower::JoinedIncrementAllower(Session& sess) {
     this->session = &sess;
+}
+Session::JoinedIncrementAllower::~JoinedIncrementAllower() {
+    this->session = nullptr;
 }
 void Session::JoinedIncrementAllower::operator()(std::vector<Day>::iterator& it) {
     if ( (it+1) != (session->days_.end()) ) {
