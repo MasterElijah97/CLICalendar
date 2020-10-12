@@ -8,6 +8,8 @@
 #include <iterator>
 #include <variant>
 #include <cstdlib>
+#include <boost/asio.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <ncurses.h>
 #include <exception>
 
@@ -2676,11 +2678,115 @@ void AccessProvider::accessChecker(const std::string& arg1, const std::string& a
 }
 
 //Helper
+//Used for connection with server, operations with it and handling problems with it
+using boost::asio::ip::tcp;
+class NetWorker : public boost::noncopyable {
+    public:
+        NetWorker() = delete;
+        NetWorker(std::shared_ptr<Session>);
+
+        void setIp(std::string);
+        void setPort(std::string);
+
+        void connect();
+        void disconnect();
+        void sync();
+
+        //This is not a net-session
+        //It is user's session in app
+        std::shared_ptr<Session> thisSession;
+
+        std::string ip_to_connect = "127.0.0.1";
+        std::string port_to_connect = "2001";
+
+        bool isConnected = false;
+
+        boost::asio::io_service io_service;
+        tcp::socket s;
+        tcp::resolver resolver;
+        boost::system::error_code ec;
+};
+
+NetWorker::NetWorker(std::shared_ptr<Session> session) : s(io_service), resolver(io_service) {
+    this->thisSession = session;
+}
+
+void NetWorker::setIp(std::string ip) {
+    this->ip_to_connect = ip;
+}
+
+void NetWorker::setPort(std::string port) {
+    this->port_to_connect = port;
+}
+
+void NetWorker::connect() {
+    try {
+        boost::asio::connect(this->s, this->resolver.resolve(ip_to_connect, port_to_connect));
+        std::cout << "Connection established" << std::endl;
+        this->isConnected = true;
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        std::cout << "Try:\n1.Check internet connection\n2.Check server" << std::endl;
+        this->isConnected = false;
+    }
+}
+
+void NetWorker::disconnect() {
+
+    if (isConnected) {
+
+        this->s.close(ec);
+        if (ec) {
+            std::cout << "Something went wrong with NetWorker" << std::endl;
+            ec.clear();
+        }
+
+        std::cout << "Connection closed" << std::endl;
+
+        this->isConnected = false;
+
+    } else {
+            std::cout << "There is no one connection established" << std::endl;
+    }
+}
+
+void NetWorker::sync() {
+    if (isConnected) {
+        std::string tmp;
+        auto Users = ::accountsDb.get_all<User>();
+        try {
+            tmp = "BeginUsers";
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
+            tmp.clear();
+
+            for (auto &usr : Users) {
+                tmp = usr.login_ + '`' + usr.hashedPass_;
+                boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
+                tmp.clear();
+            }
+
+            tmp = "EndUsers";
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
+            tmp.clear();
+
+        } catch(std::exception& ex) {
+            std::cout << "Something went wrong" << std::endl;
+            std::cout << ex.what() << std::endl;
+        }
+    }
+}
+//Helper
 //dialog between user and program after user is logged in
 struct CommandChecker {
-    CommandChecker(std::shared_ptr<Session>, std::shared_ptr<AccessProvider>);
+    CommandChecker(std::shared_ptr<Session>,
+                   std::shared_ptr<AccessProvider>,
+                   std::shared_ptr<NetWorker>);
+
     std::shared_ptr<Session> thisSession;
     std::shared_ptr<AccessProvider> accessProvider;
+    std::shared_ptr<NetWorker> netWorker;
+
     void clearConsole();
     void commandMonitor(const std::string&,
                         const std::string&,
@@ -2688,11 +2794,13 @@ struct CommandChecker {
 };
 
 CommandChecker::CommandChecker(std::shared_ptr<Session> session,
-                               std::shared_ptr<AccessProvider> accessProvider) {
+                               std::shared_ptr<AccessProvider> accessProvider,
+                               std::shared_ptr<NetWorker> netWorker) {
 
     this->thisSession = session;
     thisSession->localDb->sync_schema();
     this->accessProvider = accessProvider;
+    this->netWorker = netWorker;
 }
 
 void CommandChecker::clearConsole() {
@@ -2838,12 +2946,12 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("connect")) {
 
-        //thisSession.connectToServer(); //todo
+        this->netWorker->connect();
 
     }
     else if ((!arg1.compare("disconnect"))) {
 
-        //thisSession.disconnectFromServer(); //todo
+        this->netWorker->disconnect();
 
     }
     else if (!arg1.compare("sync")) {
@@ -2920,7 +3028,10 @@ int main()
         auto thisSession = std::make_shared<Session>(user);
         thisSession->localDb->sync_schema();
 
-        CommandChecker commandChecker(thisSession, accessProvider);
+        boost::asio::io_service io_service;
+        auto netWorker = std::make_shared<NetWorker>(thisSession);
+
+        CommandChecker commandChecker(thisSession, accessProvider,  netWorker);
 
         while(user->isLoggedIn() == true) {
 

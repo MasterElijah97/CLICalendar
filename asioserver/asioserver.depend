@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1602353394 source:/home/master/Desktop/asioserver/main.cpp
+	<cstdlib>
+	<iostream>
+	<memory>
+	<utility>
+	<boost/asio.hpp>
+
