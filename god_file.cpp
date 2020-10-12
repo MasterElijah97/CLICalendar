@@ -12,6 +12,8 @@
 #include <boost/core/noncopyable.hpp>
 #include <ncurses.h>
 #include <exception>
+#include <chrono>
+#include <thread>
 
 #include "include/sqlite_orm.h"
 #include "include/MD5.h"
@@ -1150,7 +1152,7 @@ std::string Day::concatenate() {
     }
 
     return (date_               +SEPARATOR+
-            std::to_string(id_) +SEPARATOR+
+            std::to_string(id_) +
             tmp);
 }
 
@@ -2690,8 +2692,24 @@ class NetWorker : public boost::noncopyable {
 
         void connect();
         void disconnect();
+
+        void send();
+        void receive();
+
         void sync();
 
+    private:
+
+        void sendUser();
+        void sendDeals();
+        void sendDays();
+        void sendTasks();
+        void sendNotes();
+
+        void receiveDeals();
+        void receiveDays();
+        void receiveTasks();
+        void receiveNotes();
         //This is not a net-session
         //It is user's session in app
         std::shared_ptr<Session> thisSession;
@@ -2751,29 +2769,238 @@ void NetWorker::disconnect() {
     }
 }
 
-void NetWorker::sync() {
-    if (isConnected) {
-        std::string tmp;
-        auto Users = ::accountsDb.get_all<User>();
-        try {
-            tmp = "BeginUsers";
-            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
-            tmp.clear();
+void NetWorker::sendUser() {
+    std::string tmp;
+    try {
 
-            for (auto &usr : Users) {
-                tmp = usr.login_ + '`' + usr.hashedPass_;
-                boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
-                tmp.clear();
-            }
+        tmp = "BeginUser";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
-            tmp = "EndUsers";
-            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
-            tmp.clear();
+        tmp = thisSession->user->login_ + '`' + thisSession->user->hashedPass_;
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
-        } catch(std::exception& ex) {
-            std::cout << "Something went wrong" << std::endl;
-            std::cout << ex.what() << std::endl;
+        tmp = "EndUser";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        this->isConnected = false;
+    }
+}
+void NetWorker::sendDeals() {
+    auto deals = thisSession->localDb->get_all<Deal>();
+    std::string tmp;
+    try {
+        tmp = "BeginDeals";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+        for (auto &deal : deals) {
+            tmp = deal.concatenate();
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
         }
+
+        tmp = "EndDeals";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        this->isConnected = false;
+    }
+
+}
+void NetWorker::sendDays() {
+    std::string tmp;
+    try {
+        tmp = "BeginDays";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+        for (auto &day : thisSession->days_) {
+            tmp = day.concatenate();
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndDays";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        this->isConnected = false;
+    }
+}
+void NetWorker::sendTasks() {
+    std::string tmp;
+    try {
+        tmp = "BeginTasks";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+        for (auto &task : thisSession->tasks_) {
+            tmp = task.concatenate();
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndTasks";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        this->isConnected = false;
+    }
+}
+void NetWorker::sendNotes() {
+    std::string tmp;
+    try {
+        tmp = "BeginNotes";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+        for (auto &note : thisSession->notes_) {
+            tmp = note.concatenate();
+            boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndNotes";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+        this->isConnected = false;
+    }
+}
+
+void NetWorker::send() {
+    if (isConnected) {
+    std::string tmp;
+    try {
+        tmp = "Begin";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+        this->sendUser();
+        this->sendTasks();
+        this->sendNotes();
+        this->sendDeals();
+        this->sendDays();
+
+        tmp = "End";
+        boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()), ec);
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+    }
+    } else {
+        std::cout << "You need to connect first" << std::endl;
+    }
+}
+void NetWorker::receiveDeals() {
+    std::string receiver;
+    std::vector<Deal> dealsFromServer;
+    while(!receiver.compare("EndDeals") != 0) {
+        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+        Deal deal;
+        deal.deconcatenate(receiver);
+        dealsFromServer.push_back(deal);
+    }
+    //update database
+    //drop table
+    //for each in dealsFromServer
+    //  thisSession->localDb->insert(deal);
+}
+void NetWorker::receiveDays() {
+    std::string receiver;
+    std::vector<Day> daysFromServer;
+    while(!receiver.compare("EndDays") != 0) {
+        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+        Day day;
+        day.deconcatenate(receiver);
+        daysFromServer.push_back(day);
+    }
+    //update database
+    //drop table
+    //for each in dealsFromServer
+    //  thisSession->localDb->insert(deal);
+}
+void NetWorker::receiveTasks() {
+    std::string receiver;
+    std::vector<Task> tasksFromServer;
+    while(!receiver.compare("EndTasks") != 0) {
+        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+        Task task;
+        task.deconcatenate(receiver);
+        tasksFromServer.push_back(task);
+    }
+    //update database
+    //drop table
+    //for each in dealsFromServer
+    //  thisSession->localDb->insert(deal);
+}
+void NetWorker::receiveNotes() {
+    std::string receiver;
+    std::vector<Note> notesFromServer;
+    while(!receiver.compare("EndNotes") != 0) {
+        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+        Note note;
+        note.deconcatenate(receiver);
+        notesFromServer.push_back(note);
+    }
+    //update database
+    //drop table
+    //for each in dealsFromServer
+    //  thisSession->localDb->insert(deal);
+}
+void NetWorker::receive() {
+    std::string receiver;
+    while(!receiver.compare("End")) {
+        try {
+            std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+            if (!receiver.compare("BeginDeals")) {
+                this->receiveDeals();
+            }
+            else if(!receiver.compare("BeginDays")) {
+                this->receiveDays();
+            }
+            else if(!receiver.compare("BeginTasks")) {
+                this->receiveTasks();
+            }
+            else if(!receiver.compare("BeginNotes")) {
+                this->receiveNotes();
+            }
+        } catch(std::exception& ex) {
+            std::cout << "Somethin went wrong on receive" << std::endl;
+        }
+    }
+}
+void NetWorker::sync() {
+    this->send();
+    std::string receiver;
+    std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
+    if (!receiver.compare("Begin")) {
+        this->receive();
     }
 }
 //Helper
@@ -2956,7 +3183,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("sync")) {
 
-        //thisSession.syncBases(); //todo
+        this->netWorker->sync();
 
     }
     else if (!arg1.compare("exit")) {
