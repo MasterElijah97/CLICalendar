@@ -14,6 +14,7 @@
 #include <exception>
 #include <chrono>
 #include <thread>
+#include <filesystem>
 
 #include "include/sqlite_orm.h"
 #include "include/MD5.h"
@@ -1374,6 +1375,7 @@ public:
 
         std::shared_ptr<User> user = nullptr;
 
+        std::string databaseName;
         std::shared_ptr<Storage> localDb = nullptr;
 
         std::vector<Task> tasks_;
@@ -1905,8 +1907,8 @@ void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it
 Session::Session(std::shared_ptr<User> user)
 {
     this->user = user;
-    std::string databaseName = this->user->login_ + ".sqlite";
-    this->localDb = std::make_shared<Storage>(initLocalDb(std::string(databaseName)));
+    this->databaseName = this->user->login_ + ".sqlite";
+    this->localDb = std::make_shared<Storage>(initLocalDb(std::string(this->databaseName)));
     this->localDb->sync_schema();
     this->getDataFromLocalBase();
 
@@ -2206,6 +2208,10 @@ void Session::openDays() {
  	std::cout << "connect                   -allows to connect to server"                                                << std::endl;
  	std::cout << "disconnect                -allows to disconnect from server"                                           << std::endl;
  	std::cout << "sync                      -synchronises local and server databases"                                    << std::endl;
+
+    std::cout << "HOW TO BACK UP YOUR DATABASE IF SOMETHING WENT WRONG AFTER 'sync' COMMAND"                                        << std::endl;
+ 	std::cout << "1. Go to 'backup' directory that will apear after first usage of 'sync' command and copy %yourlogin%.sqlite file" << std::endl;
+ 	std::cout << "2. Relace %yourlogin%.sqlite file with %yourlogin%.sqlite file from 'backup' directory"                           << std::endl;
 
  	std::cout << std::endl;
 
@@ -2996,6 +3002,9 @@ void NetWorker::receive() {
     }
 }
 void NetWorker::sync() {
+    std::filesystem::create_directory("backup");
+    std::string path = "backup/" + this->thisSession->databaseName;
+    std::filesystem::copy_file(this->thisSession->databaseName, path, std::filesystem::copy_options::overwrite_existing);
     this->send();
     std::string receiver;
     std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(receiver));
