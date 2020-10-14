@@ -1165,6 +1165,7 @@ void Day::deconcatenate(const std::string& msg) {
     //get importants
     for (int i = 2; i != v.size(); i++) {
         Important important(v[i]);
+        important.date_ = this->date_;
         this->importants_.push_back(important);
     }
 }
@@ -1910,11 +1911,12 @@ Session::Session(std::shared_ptr<User> user)
     this->databaseName = this->user->login_ + ".sqlite";
     this->localDb = std::make_shared<Storage>(initLocalDb(std::string(this->databaseName)));
     this->localDb->sync_schema();
-    this->getDataFromLocalBase();
 
 	tasks_.reserve(100);
     notes_.reserve(1000);
     days_.reserve(3000);
+
+    this->getDataFromLocalBase();
 }
 
 //public
@@ -2932,10 +2934,14 @@ void NetWorker::receiveDeals() {
         deal.deconcatenate(receiver);
         dealsFromServer.push_back(deal);
     }
-    //update database
-    //drop table
-    //for each in dealsFromServer
-    //  thisSession->localDb->insert(deal);
+
+    this->thisSession->localDb->remove_all<Deal>();
+
+    for (auto &item : dealsFromServer){
+        item.id_ = -1;
+        auto insertedId = this->thisSession->localDb->insert(item);
+        item.id_ = insertedId;
+    }
 }
 void NetWorker::receiveDays() {
     std::string receiver;
@@ -2946,10 +2952,20 @@ void NetWorker::receiveDays() {
         day.deconcatenate(receiver);
         daysFromServer.push_back(day);
     }
-    //update database
-    //drop table
-    //for each in dealsFromServer
-    //  thisSession->localDb->insert(deal);
+
+    this->thisSession->localDb->remove_all<Day>();
+
+    for (auto &item : daysFromServer){
+        item.id_ = -1;
+        auto insertedId = this->thisSession->localDb->insert(item);
+        item.id_ = insertedId;
+
+        for (auto &important : item.importants_) {
+            important.id_ = -1;
+            auto insertedId = this->thisSession->localDb->insert(important);
+            important.id_ = insertedId;
+        }
+    }
 }
 void NetWorker::receiveTasks() {
     std::string receiver;
@@ -2960,10 +2976,13 @@ void NetWorker::receiveTasks() {
         task.deconcatenate(receiver);
         tasksFromServer.push_back(task);
     }
-    //update database
-    //drop table
-    //for each in dealsFromServer
-    //  thisSession->localDb->insert(deal);
+    this->thisSession->localDb->remove_all<Task>();
+
+    for (auto &item : tasksFromServer){
+        item.id_ = -1;
+        auto insertedId = this->thisSession->localDb->insert(item);
+        item.id_ = insertedId;
+    }
 }
 void NetWorker::receiveNotes() {
     std::string receiver;
@@ -2974,10 +2993,13 @@ void NetWorker::receiveNotes() {
         note.deconcatenate(receiver);
         notesFromServer.push_back(note);
     }
-    //update database
-    //drop table
-    //for each in dealsFromServer
-    //  thisSession->localDb->insert(deal);
+    this->thisSession->localDb->remove_all<Note>();
+
+    for (auto &item : notesFromServer){
+        item.id_ = -1;
+        auto insertedId = this->thisSession->localDb->insert(item);
+        item.id_ = insertedId;
+    }
 }
 void NetWorker::receive() {
     std::string receiver;
