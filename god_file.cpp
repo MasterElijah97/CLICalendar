@@ -2785,7 +2785,7 @@ void NetWorker::sendUser() {
         boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
         std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
-        tmp = thisSession->user->login_ + '`' + thisSession->user->hashedPass_;
+        tmp = thisSession->user->login_; /* + '`' + thisSession->user->hashedPass_; */
         boost::asio::write(this->s, boost::asio::buffer(tmp, tmp.length()));
         std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
@@ -3019,7 +3019,7 @@ void NetWorker::receive() {
                 this->receiveNotes();
             }
         } catch(std::exception& ex) {
-            std::cout << "Somethin went wrong on receive" << std::endl;
+            std::cout << "Something went wrong on receive" << std::endl;
         }
     }
 }
