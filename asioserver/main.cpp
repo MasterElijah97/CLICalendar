@@ -1280,8 +1280,10 @@ public:
 
     std::vector<Task> tasks_;
     std::vector<Note> notes_;
-    std::vector<Deals> deals_;
+    std::vector<Deal> deals_;
     std::vector<Day> days_;
+
+    void makeBackup();
 
     void getDataFromLocalBase();
 
@@ -1424,7 +1426,7 @@ void session::receiveNotes() {
             while(!(!data_.compare("EndNotes"))) {
                 Note note;
                 note.deconcatenate(data_);
-                this->notes_.push_back(task);
+                this->notes_.push_back(note);
             }
           }
         });
@@ -1440,7 +1442,7 @@ void session::receiveDeals() {
             while(!(!data_.compare("EndDeals"))) {
                 Deal deal;
                 deal.deconcatenate(data_);
-                this->deals_.push_back(task);
+                this->deals_.push_back(deal);
             }
           }
         });
@@ -1456,23 +1458,122 @@ void session::receiveDays() {
             while(!(!data_.compare("EndDays"))) {
                 Day day;
                 day.deconcatenate(data_);
-                this->deals_.push_back(day);
+                this->days_.push_back(day);
             }
           }
         });
 }
 
-void session::processDeals() {
-
-}
 void session::processDays() {
+	std::sort(days_.begin(), days_.end(), [](Day& a, Day& b) {
+		if(a.date_.compare(b.date_) > 0) {
+    		return true;
+		}
+		else {
+			return false;
+		}
+	});
+	auto it = days_.begin();
+	while (1) {
+		if (it == days_.end()) {
+			break;
+		}
 
+		it = std::adjacent_find(days_.begin(), days_.end(), [](Day& a, Day&b) {
+			if (a.date_.compare(b.date_)) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		days_.erase(it);
+	}
 }
+
+void session::processDeals() {
+	std::sort(deals_.begin(), deals_.end(), [](Deal& a, Deal& b) {
+		if(a.date_.compare(b.date_) > 0) {
+    		return true;
+		}
+		else {
+			return false;
+		}
+	});
+	auto it = deals_.begin();
+	while (1) {
+		if (it == deals_.end()) {
+			break;
+		}
+
+		it = std::adjacent_find(deals_.begin(), deals_.end(), [](Deal& a, Deal&b) {
+			if (a.date_.compare(b.date_)         &&
+				a.name_.compare(b.name_)         &&
+				a.priority_.compare(b.priority_) &&
+				a.description_.compare(b.description_)) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		deals_.erase(it);
+	}
+}
+
 void session::processTasks() {
+	std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
+		if(a.description_.compare(b.description_) > 0) {
+    		return true;
+		}
+		else {
+			return false;
+		}
+	});
+	auto it = tasks_.begin();
+	while (1) {
+		if (it == tasks_.end()) {
+			break;
+		}
 
+		it = std::adjacent_find(tasks_.begin(), tasks_.end(), [](Task& a, Task&b) {
+			if (a.description_.compare(b.description_)) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		tasks_.erase(it);
+	}
 }
-void session::processNotes() {
 
+void session::processNotes() {
+	std::sort(notes_.begin(), notes_.end(), [](Note& a, Note& b) {
+		if(a.name_.compare(b.name_) > 0) {
+    		return true;
+		}
+		else {
+			return false;
+		}
+	});
+	auto it = notes_.begin();
+	while (1) {
+		if (it == notes_.end()) {
+			break;
+		}
+
+		it = std::adjacent_find(notes_.begin(), notes_.end(), [](Note& a, Note&b) {
+			if (a.name_.compare(b.name_) &&
+				a.label_.compare(b.label_)) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		notes_.erase(it);
+	}
 }
 
 void session::process() {
@@ -1483,16 +1584,180 @@ void session::process() {
 }
 
 void session::sendDeals() {
+    std::string tmp;
+    try {
+        tmp = "BeginDeals";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Deals" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
+        for (auto &deal : deals_) {
+            tmp = deal.concatenate();
+            boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+            [this](boost::system::error_code ec, std::size_t /*length*/)
+            {
+                if (ec)
+                {
+                    std::cout << "Something went wrong while sending Deals" << std::endl;
+                }
+            });
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndDeals";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Deals" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+    }
 }
 void session::sendDays() {
+std::string tmp;
+    try {
+        tmp = "BeginDays";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Days" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
+        for (auto &day : days_) {
+            tmp = day.concatenate();
+            boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+            [this](boost::system::error_code ec, std::size_t /*length*/)
+            {
+                if (ec)
+                {
+                    std::cout << "Something went wrong while sending Days" << std::endl;
+                }
+            });
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndDays";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Days" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+    }
 }
 void session::sendTasks() {
+std::string tmp;
+    try {
+        tmp = "BeginTasks";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Tasks" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
+        for (auto &task : tasks_) {
+            tmp = task.concatenate();
+            boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+            [this](boost::system::error_code ec, std::size_t /*length*/)
+            {
+                if (ec)
+                {
+                    std::cout << "Something went wrong while sending Tasks" << std::endl;
+                }
+            });
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndTasks";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Tasks" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+    }
 }
 void session::sendNotes() {
+std::string tmp;
+    try {
+        tmp = "BeginNotes";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Notes" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
 
+        for (auto &note : notes_) {
+            tmp = note.concatenate();
+            boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+            [this](boost::system::error_code ec, std::size_t /*length*/)
+            {
+                if (ec)
+                {
+                    std::cout << "Something went wrong while sending Notes" << std::endl;
+                }
+            });
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+        }
+
+        tmp = "EndNotes";
+        boost::asio::async_write(socket_, boost::asio::buffer(tmp, tmp.length()),
+        [this](boost::system::error_code ec, std::size_t /*length*/)
+        {
+          if (ec)
+          {
+            std::cout << "Something went wrong while sending Notes" << std::endl;
+          }
+        });
+        std::this_thread::sleep_for(std::chrono::nanoseconds(10));
+
+
+    } catch(std::exception& ex) {
+        std::cout << "Something went wrong" << std::endl;
+        std::cout << ex.what() << std::endl;
+    }
 }
 void session::send() {
     this->sendDeals();

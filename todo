@@ -1,6 +1,5 @@
 todo
 1. Go threw the code and refactor again:
-	--function in commandchecker
-	--template in visitors
 	--cipher data
-2. Write net code
+	--delete boilerplates
+	--add checks for client-server logic
