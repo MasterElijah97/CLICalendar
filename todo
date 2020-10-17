@@ -5,4 +5,5 @@ todo
 	--refactor duplicate code sections
 	--add checks for client-server logic
 	--cipher data
+	--.gitignore
 
