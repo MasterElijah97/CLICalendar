@@ -16,6 +16,7 @@
 					<Add directory="src" />
 					<Add directory="./" />
 					<Add directory="/home/master/CLICalendar/CLICalendarServer/src" />
+					<Add directory="src/" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -28,6 +29,7 @@
 					<Add directory="src" />
 					<Add directory="./" />
 					<Add directory="/home/master/CLICalendar/CLICalendarServer/src" />
+					<Add directory="src/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -57,6 +59,10 @@
 		<Unit filename="src/SEPARATOR.h" />
 		<Unit filename="src/Task.cpp" />
 		<Unit filename="src/Task.h" />
+		<Unit filename="src/server.cpp" />
+		<Unit filename="src/server.h" />
+		<Unit filename="src/session.cpp" />
+		<Unit filename="src/session.h" />
 		<Unit filename="src/split.cpp" />
 		<Unit filename="src/split.h" />
 		<Extensions />

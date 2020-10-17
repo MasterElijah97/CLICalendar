@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="src/" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="src/" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -40,6 +42,33 @@
 		<Unit filename="include/sqlite3.h" />
 		<Unit filename="include/sqlite_orm.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/AccessProvider.cpp" />
+		<Unit filename="src/AccessProvider.h" />
+		<Unit filename="src/AccountsDbManager.cpp" />
+		<Unit filename="src/AccountsDbManager.h" />
+		<Unit filename="src/CommandChecker.cpp" />
+		<Unit filename="src/CommandChecker.h" />
+		<Unit filename="src/Day.cpp" />
+		<Unit filename="src/Day.h" />
+		<Unit filename="src/Deal.cpp" />
+		<Unit filename="src/Deal.h" />
+		<Unit filename="src/Important.cpp" />
+		<Unit filename="src/Important.h" />
+		<Unit filename="src/NetWorker.cpp" />
+		<Unit filename="src/NetWorker.h" />
+		<Unit filename="src/Note.cpp" />
+		<Unit filename="src/Note.h" />
+		<Unit filename="src/SEPARATOR.h" />
+		<Unit filename="src/Session.cpp" />
+		<Unit filename="src/Session.h" />
+		<Unit filename="src/Task.cpp" />
+		<Unit filename="src/Task.h" />
+		<Unit filename="src/User.cpp" />
+		<Unit filename="src/User.h" />
+		<Unit filename="src/spaceFilter.cpp" />
+		<Unit filename="src/spaceFilter.h" />
+		<Unit filename="src/split.cpp" />
+		<Unit filename="src/split.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

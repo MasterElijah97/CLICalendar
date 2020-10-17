@@ -1,6 +1,8 @@
 todo
 1. Go threw the code and refactor again:
-	--cipher data
-	--delete boilerplates
+	--fix includes
+	--creake CMakeLists.txt
+	--refactor duplicate code sections
 	--add checks for client-server logic
-2. Partilize god_file into separate translation units
+	--cipher data
+

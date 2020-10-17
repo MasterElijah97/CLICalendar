@@ -58,11 +58,390 @@
 	<unicode/utf16.h>
 	<math.h>
 
-1602945562 source:/home/master/CLICalendar/CLICalendarClient/include/MD5.cpp
+1601400309 source:/home/master/CLICalendar/CLICalendarClient/include/MD5.cpp
 	"MD5.h"
 
 1601394913 /home/master/CLICalendar/CLICalendarClient/include/MD5.h
 	<iostream>
 	<cstring>
 	<cstdio>
+
+1602961640 source:/home/master/CLICalendar/CLICalendarClient/main.cpp
+	<string>
+	<vector>
+	<utility>
+	<memory>
+	<iostream>
+	<iomanip>
+	<algorithm>
+	<iterator>
+	<variant>
+	<cstdlib>
+	<boost/asio.hpp>
+	<boost/core/noncopyable.hpp>
+	<ncurses.h>
+	<exception>
+	<chrono>
+	<thread>
+	<filesystem>
+	"include/sqlite_orm.h"
+	"include/MD5.h"
+	"src/SEPARATOR.h"
+	"src/split.h"
+	"src/spaceFilter.h"
+	"src/Task.h"
+	"src/Note.h"
+	"src/Deal.h"
+	"src/Important.h"
+	"src/Day.h"
+	"src/User.h"
+	"src/Session.h"
+	"src/AccountsDbManager.h"
+	"src/AccessProvider.h"
+	"src/NetWorker.h"
+	"src/CommandChecker.h"
+
+1601484221 /home/master/CLICalendar/CLICalendarClient/include/sqlite_orm.h
+	<ciso646>
+	<system_error>
+	<string>
+	"sqlite3.h"
+	<stdexcept>
+	<sstream>
+	<map>
+	<string>
+	<regex>
+	<memory>
+	<vector>
+	<cctype>
+	<tuple>
+	<type_traits>
+	<type_traits>
+	<string>
+	<memory>
+	<vector>
+	<optional>
+	<string>
+	<tuple>
+	<sstream>
+	<type_traits>
+	<ostream>
+	<type_traits>
+	<memory>
+	<optional>
+	<memory>
+	<string>
+	<sstream>
+	<type_traits>
+	<tuple>
+	<string>
+	<memory>
+	<type_traits>
+	<string>
+	<sstream>
+	<vector>
+	<cstddef>
+	<memory>
+	<optional>
+	<string>
+	<type_traits>
+	<vector>
+	<tuple>
+	<type_traits>
+	<sstream>
+	<string>
+	<string>
+	<tuple>
+	<type_traits>
+	<memory>
+	<vector>
+	<type_traits>
+	<string>
+	<utility>
+	<tuple>
+	<type_traits>
+	<string>
+	"sqlite3.h"
+	"sqlite3.h"
+	<type_traits>
+	<string>
+	<codecvt>
+	<vector>
+	<cstddef>
+	<utility>
+	"sqlite3.h"
+	<type_traits>
+	<cstdlib>
+	<string>
+	<codecvt>
+	<vector>
+	<cstring>
+	<algorithm>
+	<iterator>
+	<tuple>
+	<string>
+	<memory>
+	<array>
+	<algorithm>
+	<locale>
+	<ostream>
+	<tuple>
+	<string>
+	<utility>
+	<string>
+	<type_traits>
+	<tuple>
+	<functional>
+	<type_traits>
+	<tuple>
+	<string>
+	<type_traits>
+	<vector>
+	<tuple>
+	<algorithm>
+	<string>
+	"sqlite3.h"
+	<cstddef>
+	<system_error>
+	<sstream>
+	<cstdlib>
+	<type_traits>
+	<utility>
+	<vector>
+	<algorithm>
+	<type_traits>
+	<memory>
+	<string>
+	"sqlite3.h"
+	<type_traits>
+	<cstddef>
+	<iterator>
+	<functional>
+	<sstream>
+	<map>
+	<vector>
+	<tuple>
+	<utility>
+	<set>
+	<algorithm>
+	<optional>
+	<memory>
+	<string>
+	<utility>
+	"sqlite3.h"
+	<system_error>
+	<tuple>
+	<memory>
+	"sqlite3.h"
+	<type_traits>
+	<utility>
+	<cstddef>
+	<iterator>
+	<system_error>
+	<ios>
+	<vector>
+	<functional>
+	"sqlite3.h"
+	<iterator>
+	<string>
+	<type_traits>
+	<utility>
+	"sqlite3.h"
+	<string>
+	<system_error>
+	<functional>
+	"sqlite3.h"
+	<string>
+	<sstream>
+	<utility>
+	<system_error>
+	<vector>
+	<memory>
+	<map>
+	<type_traits>
+	<algorithm>
+	<string>
+	"sqlite3.h"
+	<functional>
+	<memory>
+	"sqlite3.h"
+	<map>
+	<functional>
+	<memory>
+	<functional>
+	"sqlite3.h"
+	<string>
+	<memory>
+	<type_traits>
+	<functional>
+	<tuple>
+	<utility>
+	<functional>
+	<type_traits>
+	<sstream>
+	<string>
+
+1601394974 /home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+	<stdarg.h>
+
+1602945888 /home/master/CLICalendar/CLICalendarClient/src/SEPARATOR.h
+
+1602946756 /home/master/CLICalendar/CLICalendarClient/src/split.h
+	<vector>
+	<string>
+	<sstream>
+
+1602958333 /home/master/CLICalendar/CLICalendarClient/src/spaceFilter.h
+	<string>
+
+1602948064 source:/home/master/CLICalendar/CLICalendarClient/src/Day.cpp
+	"Day.h"
+
+1602948044 /home/master/CLICalendar/CLICalendarClient/src/Day.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+	<Deal.h>
+	<Important.h>
+
+1602945888 /home/master/CLICalendar/CLICalendarClient/src//SEPARATOR.h
+
+1602946756 /home/master/CLICalendar/CLICalendarClient/src//split.h
+	<vector>
+	<string>
+	<sstream>
+
+1602946525 /home/master/CLICalendar/CLICalendarClient/src//Deal.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602947206 /home/master/CLICalendar/CLICalendarClient/src//Important.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602946513 source:/home/master/CLICalendar/CLICalendarClient/src/Deal.cpp
+	"Deal.h"
+
+1602946525 /home/master/CLICalendar/CLICalendarClient/src/Deal.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602947227 source:/home/master/CLICalendar/CLICalendarClient/src/Important.cpp
+	"Important.h"
+
+1602947206 /home/master/CLICalendar/CLICalendarClient/src/Important.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602947829 source:/home/master/CLICalendar/CLICalendarClient/src/Note.cpp
+	"Note.h"
+
+1602947866 /home/master/CLICalendar/CLICalendarClient/src/Note.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602958283 source:/home/master/CLICalendar/CLICalendarClient/src/spaceFilter.cpp
+	"spaceFilter.h"
+
+1602946582 source:/home/master/CLICalendar/CLICalendarClient/src/split.cpp
+	<split.h>
+
+1602947678 source:/home/master/CLICalendar/CLICalendarClient/src/Task.cpp
+	"Task.h"
+
+1602947673 /home/master/CLICalendar/CLICalendarClient/src/Task.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602959190 source:/home/master/CLICalendar/CLICalendarClient/src/User.cpp
+	"User.h"
+
+1602959199 /home/master/CLICalendar/CLICalendarClient/src/User.h
+	<string>
+	"../include/MD5.h"
+
+1602960214 source:/home/master/CLICalendar/CLICalendarClient/src/Session.cpp
+	"Session.h"
+
+1602962188 /home/master/CLICalendar/CLICalendarClient/src/Session.h
+	<string>
+	<memory>
+	<vector>
+	<iterator>
+	<variant>
+	"../include/sqlite_orm.h"
+	"User.h"
+	"Task.h"
+	"Note.h"
+	"Deal.h"
+	"Important.h"
+	"Day.h"
+
+1602962756 source:/home/master/CLICalendar/CLICalendarClient/src/AccessProvider.cpp
+	"AccessProvider.h"
+
+1602963284 /home/master/CLICalendar/CLICalendarClient/src/AccessProvider.h
+	<string>
+	<memory>
+	"../include/MD5.h"
+	"Session.h"
+	"AccountsDbManager.h"
+	<ncurses.h>
+
+1602960842 source:/home/master/CLICalendar/CLICalendarClient/src/AccountsDbManager.cpp
+	"AccountsDbManager.h"
+
+1602961042 /home/master/CLICalendar/CLICalendarClient/src/AccountsDbManager.h
+	<memory>
+	"Session.h"
+
+1602962444 /home/master/CLICalendar/CLICalendarClient/src/NetWorker.h
+	<string>
+	<memory>
+	<exception>
+	<filesystem>
+	<boost/asio.hpp>
+	<boost/noncopyable.hpp>
+	"Session.h"
+
+1602961370 source:/home/master/CLICalendar/CLICalendarClient/src/NetWorker.cpp
+	"NetWorker.h"
+
+1602963023 /home/master/CLICalendar/CLICalendarClient/src/CommandChecker.h
+	<memory>
+	<string>
+	"Session.h"
+	"AccessProvider.h"
+	"NetWorker.h"
+	<ncurses.h>
+
+1602961626 source:/home/master/CLICalendar/CLICalendarClient/src/CommandChecker.cpp
+	"CommandChecker.h"
 
