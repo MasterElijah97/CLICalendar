@@ -1486,8 +1486,11 @@ void session::processDays() {
 				return false;
 			}
 		});
-
-		days_.erase(it);
+		if (it->version_ < (it+1)->version_) {
+            days_.erase(it);
+        } else {
+            days_.erase(it+1);
+        }
 	}
 }
 
@@ -1516,8 +1519,11 @@ void session::processDeals() {
 				return false;
 			}
 		});
-
-		deals_.erase(it);
+		if (it->version_ < (it+1)->version_) {
+            deals_.erase(it);
+        } else {
+            deals_.erase(it+1);
+        }
 	}
 }
 
@@ -1543,8 +1549,11 @@ void session::processTasks() {
 				return false;
 			}
 		});
-
-		tasks_.erase(it);
+        if (it->version_ < (it+1)->version_) {
+            tasks_.erase(it);
+        } else {
+            tasks_.erase(it+1);
+        }
 	}
 }
 
@@ -1571,8 +1580,11 @@ void session::processNotes() {
 				return false;
 			}
 		});
-
-		notes_.erase(it);
+        if (it->version_ < (it+1)->version_) {
+            notes_.erase(it);
+        } else {
+            notes_.erase(it+1);
+        }
 	}
 }
 
