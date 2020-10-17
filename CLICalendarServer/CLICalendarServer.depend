@@ -66,24 +66,10 @@
 	<unicode/utf16.h>
 	<math.h>
 
-1602956124 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
-	<string>
-	<vector>
-	<utility>
-	<memory>
-	<iostream>
-	<iomanip>
-	<algorithm>
-	<iterator>
-	<variant>
-	<cstdlib>
-	<boost/asio.hpp>
-	<boost/core/noncopyable.hpp>
-	<ncurses.h>
+1602957265 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
 	<exception>
-	<chrono>
-	<thread>
-	<filesystem>
+	<boost/asio.hpp>
+	<iostream>
 	"include/sqlite_orm.h"
 	"src/SEPARATOR.h"
 	"src/split.h"
@@ -93,6 +79,7 @@
 	"src/Note.h"
 	"src/Day.h"
 	"src/session.h"
+	"src/server.h"
 
 1601484221 /home/master/CLICalendar/CLICalendarServer/include/sqlite_orm.h
 	<ciso646>
