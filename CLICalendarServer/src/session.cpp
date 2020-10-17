@@ -165,10 +165,6 @@ void session::processDays() {
 	});
 	auto it = days_.begin();
 	while (1) {
-		if (it == days_.end()) {
-			break;
-		}
-
 		it = std::adjacent_find(days_.begin(), days_.end(), [](Day& a, Day&b) {
 			if (a.date_.compare(b.date_)) {
 				return true;
@@ -176,11 +172,16 @@ void session::processDays() {
 				return false;
 			}
 		});
-		if (it->version_ < (it+1)->version_) {
-            days_.erase(it);
-        } else {
-            days_.erase(it+1);
-        }
+
+		if (it == days_.end()) {
+			break;
+		} else {
+            if (it->version_ < (it+1)->version_) {
+                days_.erase(it);
+            } else {
+                days_.erase(it+1);
+            }
+		}
 	}
 }
 
@@ -195,10 +196,6 @@ void session::processDeals() {
 	});
 	auto it = deals_.begin();
 	while (1) {
-		if (it == deals_.end()) {
-			break;
-		}
-
 		it = std::adjacent_find(deals_.begin(), deals_.end(), [](Deal& a, Deal&b) {
 			if (a.date_.compare(b.date_)         &&
 				a.name_.compare(b.name_)         &&
@@ -209,11 +206,15 @@ void session::processDeals() {
 				return false;
 			}
 		});
-		if (it->version_ < (it+1)->version_) {
-            deals_.erase(it);
-        } else {
-            deals_.erase(it+1);
-        }
+		if (it == deals_.end()) {
+			break;
+		} else {
+            if (it->version_ < (it+1)->version_) {
+                deals_.erase(it);
+            } else {
+                deals_.erase(it+1);
+            }
+		}
 	}
 }
 
@@ -228,10 +229,6 @@ void session::processTasks() {
 	});
 	auto it = tasks_.begin();
 	while (1) {
-		if (it == tasks_.end()) {
-			break;
-		}
-
 		it = std::adjacent_find(tasks_.begin(), tasks_.end(), [](Task& a, Task&b) {
 			if (a.description_.compare(b.description_)) {
 				return true;
@@ -239,11 +236,15 @@ void session::processTasks() {
 				return false;
 			}
 		});
-        if (it->version_ < (it+1)->version_) {
-            tasks_.erase(it);
-        } else {
-            tasks_.erase(it+1);
-        }
+        if (it == tasks_.end()) {
+			break;
+		} else {
+            if (it->version_ < (it+1)->version_) {
+                tasks_.erase(it);
+            } else {
+                tasks_.erase(it+1);
+            }
+		}
 	}
 }
 
@@ -258,10 +259,6 @@ void session::processNotes() {
 	});
 	auto it = notes_.begin();
 	while (1) {
-		if (it == notes_.end()) {
-			break;
-		}
-
 		it = std::adjacent_find(notes_.begin(), notes_.end(), [](Note& a, Note&b) {
 			if (a.name_.compare(b.name_) &&
 				a.label_.compare(b.label_)) {
@@ -270,11 +267,15 @@ void session::processNotes() {
 				return false;
 			}
 		});
-        if (it->version_ < (it+1)->version_) {
-            notes_.erase(it);
-        } else {
-            notes_.erase(it+1);
-        }
+        if (it == notes_.end()) {
+			break;
+		} else {
+            if (it->version_ < (it+1)->version_) {
+                notes_.erase(it);
+            } else {
+                notes_.erase(it+1);
+            }
+		}
 	}
 }
 
