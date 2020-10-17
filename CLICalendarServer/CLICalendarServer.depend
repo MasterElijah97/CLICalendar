@@ -66,7 +66,7 @@
 	<unicode/utf16.h>
 	<math.h>
 
-1602946184 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
+1602947393 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
 	<string>
 	<vector>
 	<utility>
@@ -88,6 +88,8 @@
 	"src/SEPARATOR.h"
 	"src/split.h"
 	"src/Deal.h"
+	"src/Important.h"
+	"src/Task.h"
 
 1601484221 /home/master/CLICalendar/CLICalendarServer/include/sqlite_orm.h
 	<ciso646>
@@ -291,5 +293,38 @@
 	"Deal.h"
 
 1602946582 source:/home/master/CLICalendar/CLICalendarServer/src/split.cpp
+	<split.h>
+
+1602947227 source:/home/master/CLICalendar/CLICalendarServer/src/Important.cpp
+	"Important.h"
+
+1602947206 /home/master/CLICalendar/CLICalendarServer/src/Important.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602947673 /home/master/CLICalendar/CLICalendarServer/src/Task.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+
+1602947678 source:/home/master/CLICalendar/CLICalendarServer/src/Task.cpp
+	"Task.h"
+
+1602947829 source:/home/master/CLICalendar/CLICalendarServer/src/Note.cpp
+	"Note.h"
+
+1602947866 /home/master/CLICalendar/CLICalendarServer/src/Note.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
 	<split.h>
 
