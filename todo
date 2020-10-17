@@ -3,3 +3,4 @@ todo
 	--cipher data
 	--delete boilerplates
 	--add checks for client-server logic
+2. Partilize god_file into separate translation units
