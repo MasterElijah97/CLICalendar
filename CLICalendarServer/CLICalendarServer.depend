@@ -66,7 +66,7 @@
 	<unicode/utf16.h>
 	<math.h>
 
-1602947393 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
+1602956124 source:/home/master/CLICalendar/CLICalendarServer/main.cpp
 	<string>
 	<vector>
 	<utility>
@@ -90,6 +90,9 @@
 	"src/Deal.h"
 	"src/Important.h"
 	"src/Task.h"
+	"src/Note.h"
+	"src/Day.h"
+	"src/session.h"
 
 1601484221 /home/master/CLICalendar/CLICalendarServer/include/sqlite_orm.h
 	<ciso646>
@@ -327,4 +330,38 @@
 	<vector>
 	<SEPARATOR.h>
 	<split.h>
+
+1602948064 source:/home/master/CLICalendar/CLICalendarServer/src/Day.cpp
+	"Day.h"
+
+1602948044 /home/master/CLICalendar/CLICalendarServer/src/Day.h
+	<string>
+	<iostream>
+	<iomanip>
+	<vector>
+	<SEPARATOR.h>
+	<split.h>
+	<Deal.h>
+	<Important.h>
+
+1602956329 /home/master/CLICalendar/CLICalendarServer/src/session.h
+	<filesystem>
+	<boost/enable_shared_from_this.hpp>
+	<boost/shared_ptr.hpp>
+	<boost/asio.hpp>
+	"../include/sqlite_orm.h"
+	"Task.h"
+	"Note.h"
+	"Important.h"
+	"Deal.h"
+	"Day.h"
+
+1602956877 source:/home/master/CLICalendar/CLICalendarServer/src/session.cpp
+	"session.h"
+
+1602957087 source:/home/master/CLICalendar/CLICalendarServer/src/server.cpp
+	"server.h"
+
+1602957066 /home/master/CLICalendar/CLICalendarServer/src/server.h
+	"session.h"
 

@@ -15,6 +15,7 @@
 					<Add option="-g" />
 					<Add directory="src" />
 					<Add directory="./" />
+					<Add directory="/home/master/CLICalendar/CLICalendarServer/src" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -26,6 +27,7 @@
 					<Add option="-O2" />
 					<Add directory="src" />
 					<Add directory="./" />
+					<Add directory="/home/master/CLICalendar/CLICalendarServer/src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -36,8 +38,6 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Task.cpp" />
-		<Unit filename="Task.h" />
 		<Unit filename="include/MD5.cpp" />
 		<Unit filename="include/MD5.h" />
 		<Unit filename="include/sqlite3.c">
@@ -46,11 +46,17 @@
 		<Unit filename="include/sqlite3.h" />
 		<Unit filename="include/sqlite_orm.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Day.cpp" />
+		<Unit filename="src/Day.h" />
 		<Unit filename="src/Deal.cpp" />
 		<Unit filename="src/Deal.h" />
 		<Unit filename="src/Important.cpp" />
 		<Unit filename="src/Important.h" />
+		<Unit filename="src/Note.cpp" />
+		<Unit filename="src/Note.h" />
 		<Unit filename="src/SEPARATOR.h" />
+		<Unit filename="src/Task.cpp" />
+		<Unit filename="src/Task.h" />
 		<Unit filename="src/split.cpp" />
 		<Unit filename="src/split.h" />
 		<Extensions />
