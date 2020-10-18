@@ -6,10 +6,10 @@
 #include <iomanip>
 #include <vector>
 
-#include <SEPARATOR.h>
-#include <split.h>
-#include <Deal.h>
-#include <Important.h>
+#include "SEPARATOR.h"
+#include "split.h"
+#include "Deal.h"
+#include "Important.h"
 
 class Day {
     public:
