@@ -1,0 +1,3 @@
+/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles/rebuild_cache.dir
+/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles/edit_cache.dir
+/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles/CLICalendarClient.dir
