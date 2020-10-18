@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <vector>
 
-#include <SEPARATOR.h>
-#include <split.h>
+#include "SEPARATOR.h"
+#include "split.h"
 
 
 class Note {
