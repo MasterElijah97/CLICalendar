@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/master/CLICalendar/CLICalendarClient/include/MD5.h
+iostream
+-
+cstring
+-
+cstdio
+-
+
+/home/master/CLICalendar/CLICalendarClient/src/User.cpp
+User.h
+/home/master/CLICalendar/CLICalendarClient/src/User.h
+
+/home/master/CLICalendar/CLICalendarClient/src/User.h
+string
+-
+../include/MD5.h
+/home/master/CLICalendar/CLICalendarClient/include/MD5.h
+

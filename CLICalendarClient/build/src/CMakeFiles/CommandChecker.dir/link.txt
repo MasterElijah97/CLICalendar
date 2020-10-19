@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCommandChecker.a  CMakeFiles/CommandChecker.dir/CommandChecker.cpp.o
+/usr/bin/ranlib libCommandChecker.a
