@@ -1,0 +1,2 @@
+/usr/bin/ar qc libAccessProvider.a  CMakeFiles/AccessProvider.dir/AccessProvider.cpp.o
+/usr/bin/ranlib libAccessProvider.a
