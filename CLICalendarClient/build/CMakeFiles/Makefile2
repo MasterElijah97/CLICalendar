@@ -78,7 +78,6 @@ clean: include/clean
 # Recursive "all" directory target.
 include/all: include/CMakeFiles/sqlite_orm.dir/all
 include/all: include/CMakeFiles/MD5.dir/all
-include/all: include/CMakeFiles/sqlite3.dir/all
 
 .PHONY : include/all
 
@@ -90,7 +89,6 @@ include/preinstall:
 # Recursive "clean" directory target.
 include/clean: include/CMakeFiles/sqlite_orm.dir/clean
 include/clean: include/CMakeFiles/MD5.dir/clean
-include/clean: include/CMakeFiles/sqlite3.dir/clean
 
 .PHONY : include/clean
 
@@ -142,23 +140,22 @@ src/clean: src/CMakeFiles/AccessProvider.dir/clean
 # Target rules for target CMakeFiles/Client.dir
 
 # All Build rule for target.
+CMakeFiles/Client.dir/all: src/CMakeFiles/Important.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/CommandChecker.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/AccountsDbManager.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/AccessProvider.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/spaceFilter.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/Note.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/User.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/Deal.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/SEPARATOR.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Day.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/split.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Task.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Session.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/NetWorker.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/spaceFilter.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/Note.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/AccountsDbManager.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/AccessProvider.dir/all
 CMakeFiles/Client.dir/all: include/CMakeFiles/sqlite_orm.dir/all
 CMakeFiles/Client.dir/all: include/CMakeFiles/MD5.dir/all
-CMakeFiles/Client.dir/all: include/CMakeFiles/sqlite3.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/User.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/Deal.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/SEPARATOR.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/Important.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/CommandChecker.dir/all
 	$(MAKE) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/depend
 	$(MAKE) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=5,6 "Built target Client"
@@ -166,7 +163,7 @@ CMakeFiles/Client.dir/all: src/CMakeFiles/CommandChecker.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 34
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 32
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Client.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 0
 .PHONY : CMakeFiles/Client.dir/rule
@@ -266,7 +263,9 @@ src/CMakeFiles/Task.dir/clean:
 # Target rules for target src/CMakeFiles/Session.dir
 
 # All Build rule for target.
-src/CMakeFiles/Session.dir/all:
+src/CMakeFiles/Session.dir/all: src/CMakeFiles/Important.dir/all
+src/CMakeFiles/Session.dir/all: src/CMakeFiles/Deal.dir/all
+src/CMakeFiles/Session.dir/all: src/CMakeFiles/Day.dir/all
 	$(MAKE) -f src/CMakeFiles/Session.dir/build.make src/CMakeFiles/Session.dir/depend
 	$(MAKE) -f src/CMakeFiles/Session.dir/build.make src/CMakeFiles/Session.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=22,23 "Built target Session"
@@ -274,7 +273,7 @@ src/CMakeFiles/Session.dir/all:
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/Session.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/Session.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/Session.dir/rule
@@ -374,7 +373,7 @@ src/CMakeFiles/Note.dir/clean:
 # Target rules for target src/CMakeFiles/User.dir
 
 # All Build rule for target.
-src/CMakeFiles/User.dir/all:
+src/CMakeFiles/User.dir/all: include/CMakeFiles/MD5.dir/all
 	$(MAKE) -f src/CMakeFiles/User.dir/build.make src/CMakeFiles/User.dir/depend
 	$(MAKE) -f src/CMakeFiles/User.dir/build.make src/CMakeFiles/User.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=26,27 "Built target User"
@@ -382,7 +381,7 @@ src/CMakeFiles/User.dir/all:
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/User.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/User.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/User.dir/rule
@@ -566,7 +565,7 @@ src/CMakeFiles/AccessProvider.dir/clean:
 include/CMakeFiles/sqlite_orm.dir/all:
 	$(MAKE) -f include/CMakeFiles/sqlite_orm.dir/build.make include/CMakeFiles/sqlite_orm.dir/depend
 	$(MAKE) -f include/CMakeFiles/sqlite_orm.dir/build.make include/CMakeFiles/sqlite_orm.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=34 "Built target sqlite_orm"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=32 "Built target sqlite_orm"
 .PHONY : include/CMakeFiles/sqlite_orm.dir/all
 
 # Build rule for subdir invocation for target.
@@ -612,33 +611,6 @@ MD5: include/CMakeFiles/MD5.dir/rule
 include/CMakeFiles/MD5.dir/clean:
 	$(MAKE) -f include/CMakeFiles/MD5.dir/build.make include/CMakeFiles/MD5.dir/clean
 .PHONY : include/CMakeFiles/MD5.dir/clean
-
-#=============================================================================
-# Target rules for target include/CMakeFiles/sqlite3.dir
-
-# All Build rule for target.
-include/CMakeFiles/sqlite3.dir/all:
-	$(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/depend
-	$(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=32,33 "Built target sqlite3"
-.PHONY : include/CMakeFiles/sqlite3.dir/all
-
-# Build rule for subdir invocation for target.
-include/CMakeFiles/sqlite3.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/sqlite3.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/master/CLICalendar/CLICalendarClient/build/CMakeFiles 0
-.PHONY : include/CMakeFiles/sqlite3.dir/rule
-
-# Convenience name for target.
-sqlite3: include/CMakeFiles/sqlite3.dir/rule
-
-.PHONY : sqlite3
-
-# clean rule for target.
-include/CMakeFiles/sqlite3.dir/clean:
-	$(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/clean
-.PHONY : include/CMakeFiles/sqlite3.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

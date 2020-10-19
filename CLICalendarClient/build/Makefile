@@ -331,19 +331,6 @@ MD5/fast:
 	$(MAKE) -f include/CMakeFiles/MD5.dir/build.make include/CMakeFiles/MD5.dir/build
 .PHONY : MD5/fast
 
-#=============================================================================
-# Target rules for targets named sqlite3
-
-# Build rule for target.
-sqlite3: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sqlite3
-.PHONY : sqlite3
-
-# fast build rule for target.
-sqlite3/fast:
-	$(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/build
-.PHONY : sqlite3/fast
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -396,7 +383,6 @@ help:
 	@echo "... AccessProvider"
 	@echo "... sqlite_orm"
 	@echo "... MD5"
-	@echo "... sqlite3"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

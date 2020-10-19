@@ -21,4 +21,3 @@
 /home/master/CLICalendar/CLICalendarClient/build/include/CMakeFiles/edit_cache.dir
 /home/master/CLICalendar/CLICalendarClient/build/include/CMakeFiles/sqlite_orm.dir
 /home/master/CLICalendar/CLICalendarClient/build/include/CMakeFiles/MD5.dir
-/home/master/CLICalendar/CLICalendarClient/build/include/CMakeFiles/sqlite3.dir

@@ -140,21 +140,6 @@ MD5/fast:
 	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/MD5.dir/build.make include/CMakeFiles/MD5.dir/build
 .PHONY : MD5/fast
 
-# Convenience name for target.
-include/CMakeFiles/sqlite3.dir/rule:
-	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/sqlite3.dir/rule
-.PHONY : include/CMakeFiles/sqlite3.dir/rule
-
-# Convenience name for target.
-sqlite3: include/CMakeFiles/sqlite3.dir/rule
-
-.PHONY : sqlite3
-
-# fast build rule for target.
-sqlite3/fast:
-	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/build
-.PHONY : sqlite3/fast
-
 MD5.o: MD5.cpp.o
 
 .PHONY : MD5.o
@@ -182,33 +167,6 @@ MD5.cpp.s:
 	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/MD5.dir/build.make include/CMakeFiles/MD5.dir/MD5.cpp.s
 .PHONY : MD5.cpp.s
 
-sqlite3.o: sqlite3.c.o
-
-.PHONY : sqlite3.o
-
-# target to build an object file
-sqlite3.c.o:
-	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/sqlite3.c.o
-.PHONY : sqlite3.c.o
-
-sqlite3.i: sqlite3.c.i
-
-.PHONY : sqlite3.i
-
-# target to preprocess a source file
-sqlite3.c.i:
-	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/sqlite3.c.i
-.PHONY : sqlite3.c.i
-
-sqlite3.s: sqlite3.c.s
-
-.PHONY : sqlite3.s
-
-# target to generate assembly for a file
-sqlite3.c.s:
-	cd /home/master/CLICalendar/CLICalendarClient/build && $(MAKE) -f include/CMakeFiles/sqlite3.dir/build.make include/CMakeFiles/sqlite3.dir/sqlite3.c.s
-.PHONY : sqlite3.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -219,13 +177,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... sqlite_orm"
 	@echo "... MD5"
-	@echo "... sqlite3"
 	@echo "... MD5.o"
 	@echo "... MD5.i"
 	@echo "... MD5.s"
-	@echo "... sqlite3.o"
-	@echo "... sqlite3.i"
-	@echo "... sqlite3.s"
 .PHONY : help
 
 

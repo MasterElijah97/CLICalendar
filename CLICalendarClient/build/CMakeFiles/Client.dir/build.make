@@ -79,9 +79,7 @@ Client_EXTERNAL_OBJECTS =
 
 Client: CMakeFiles/Client.dir/main.cpp.o
 Client: CMakeFiles/Client.dir/build.make
-Client: /usr/lib/x86_64-linux-gnu/libcurses.so
-Client: /usr/lib/x86_64-linux-gnu/libform.so
-Client: include/libsqlite3.a
+Client: /usr/lib/x86_64-linux-gnu/libsqlite3.so
 Client: include/libsqlite_orm.a
 Client: include/libMD5.a
 Client: src/libSEPARATOR.a
@@ -98,6 +96,10 @@ Client: src/libAccountsDbManager.a
 Client: src/libAccessProvider.a
 Client: src/libNetWorker.a
 Client: src/libCommandChecker.a
+Client: include/libMD5.a
+Client: src/libDeal.a
+Client: src/libImportant.a
+Client: src/libDay.a
 Client: CMakeFiles/Client.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Client.dir/link.txt --verbose=$(VERBOSE)

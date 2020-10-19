@@ -50,12 +50,14 @@ add_library(User
 			User.cpp)
 
 target_include_directories(User PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_link_libraries(User PUBLIC MD5)
 
 add_library(Session
 			Session.h
 			Session.cpp)
 
 target_include_directories(Session PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_link_libraries(Session PUBLIC Day Deal Important)
 
 add_library(AccountsDbManager
 			AccountsDbManager.h
@@ -63,9 +65,11 @@ add_library(AccountsDbManager
 
 target_include_directories(AccountsDbManager PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
+include_directories(${CURSES_INCLUDE_DIR})
 add_library(AccessProvider
 			AccessProvider.h
 			AccessProvider.cpp)
+target_link_libraries(AccessProvider ncurses)
 
 target_include_directories(AccessProvider PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
@@ -80,4 +84,3 @@ add_library(CommandChecker
 			CommandChecker.cpp)
 
 target_include_directories(CommandChecker PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
-

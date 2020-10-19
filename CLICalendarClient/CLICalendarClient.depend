@@ -101,11 +101,11 @@
 	"src/NetWorker.h"
 	"src/CommandChecker.h"
 
-1601484221 /home/master/CLICalendar/CLICalendarClient/include/sqlite_orm.h
+1603149819 /home/master/CLICalendar/CLICalendarClient/include/sqlite_orm.h
 	<ciso646>
 	<system_error>
 	<string>
-	"sqlite3.h"
+	<sqlite3.h>
 	<stdexcept>
 	<sstream>
 	<map>
@@ -161,15 +161,15 @@
 	<tuple>
 	<type_traits>
 	<string>
-	"sqlite3.h"
-	"sqlite3.h"
+	<sqlite3.h>
+	<sqlite3.h>
 	<type_traits>
 	<string>
 	<codecvt>
 	<vector>
 	<cstddef>
 	<utility>
-	"sqlite3.h"
+	<sqlite3.h>
 	<type_traits>
 	<cstdlib>
 	<string>
@@ -200,7 +200,7 @@
 	<tuple>
 	<algorithm>
 	<string>
-	"sqlite3.h"
+	<sqlite3.h>
 	<cstddef>
 	<system_error>
 	<sstream>
@@ -212,7 +212,7 @@
 	<type_traits>
 	<memory>
 	<string>
-	"sqlite3.h"
+	<sqlite3.h>
 	<type_traits>
 	<cstddef>
 	<iterator>
@@ -228,11 +228,11 @@
 	<memory>
 	<string>
 	<utility>
-	"sqlite3.h"
+	<sqlite3.h>
 	<system_error>
 	<tuple>
 	<memory>
-	"sqlite3.h"
+	<sqlite3.h>
 	<type_traits>
 	<utility>
 	<cstddef>
@@ -241,16 +241,16 @@
 	<ios>
 	<vector>
 	<functional>
-	"sqlite3.h"
+	<sqlite3.h>
 	<iterator>
 	<string>
 	<type_traits>
 	<utility>
-	"sqlite3.h"
+	<sqlite3.h>
 	<string>
 	<system_error>
 	<functional>
-	"sqlite3.h"
+	<sqlite3.h>
 	<string>
 	<sstream>
 	<utility>
@@ -261,15 +261,15 @@
 	<type_traits>
 	<algorithm>
 	<string>
-	"sqlite3.h"
+	<sqlite3.h>
 	<functional>
 	<memory>
-	"sqlite3.h"
+	<sqlite3.h>
 	<map>
 	<functional>
 	<memory>
 	<functional>
-	"sqlite3.h"
+	<sqlite3.h>
 	<string>
 	<memory>
 	<type_traits>
@@ -366,8 +366,8 @@
 1602958283 source:/home/master/CLICalendar/CLICalendarClient/src/spaceFilter.cpp
 	"spaceFilter.h"
 
-1602946582 source:/home/master/CLICalendar/CLICalendarClient/src/split.cpp
-	<split.h>
+1603071057 source:/home/master/CLICalendar/CLICalendarClient/src/split.cpp
+	"split.h"
 
 1602947678 source:/home/master/CLICalendar/CLICalendarClient/src/Task.cpp
 	"Task.h"
@@ -422,7 +422,7 @@
 	<memory>
 	"Session.h"
 
-1602962444 /home/master/CLICalendar/CLICalendarClient/src/NetWorker.h
+1603071987 /home/master/CLICalendar/CLICalendarClient/src/NetWorker.h
 	<string>
 	<memory>
 	<exception>

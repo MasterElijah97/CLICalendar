@@ -14,10 +14,6 @@ cstring
 cstdio
 -
 
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
-stdarg.h
--
-
 /home/master/CLICalendar/CLICalendarClient/include/sqlite_orm.h
 ciso646
 -
@@ -26,7 +22,7 @@ system_error
 string
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 stdexcept
 -
 sstream
@@ -138,9 +134,9 @@ type_traits
 string
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 type_traits
 -
 string
@@ -154,7 +150,7 @@ cstddef
 utility
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 type_traits
 -
 cstdlib
@@ -216,7 +212,7 @@ algorithm
 string
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 cstddef
 -
 system_error
@@ -240,7 +236,7 @@ memory
 string
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 type_traits
 -
 cstddef
@@ -272,7 +268,7 @@ string
 utility
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 system_error
 -
 tuple
@@ -280,7 +276,7 @@ tuple
 memory
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 type_traits
 -
 utility
@@ -298,7 +294,7 @@ vector
 functional
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 iterator
 -
 string
@@ -308,7 +304,7 @@ type_traits
 utility
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 string
 -
 system_error
@@ -316,7 +312,7 @@ system_error
 functional
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 string
 -
 sstream
@@ -338,13 +334,13 @@ algorithm
 string
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 functional
 -
 memory
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 map
 -
 functional
@@ -354,7 +350,7 @@ memory
 functional
 -
 sqlite3.h
-/home/master/CLICalendar/CLICalendarClient/include/sqlite3.h
+-
 string
 -
 memory

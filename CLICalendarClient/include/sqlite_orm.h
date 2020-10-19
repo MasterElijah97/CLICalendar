@@ -26,7 +26,7 @@ __pragma(push_macro("min"))
 
 #include <system_error>  // std::error_code, std::system_error
 #include <string>  //  std::string
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <stdexcept>
 #include <sstream>  //  std::ostringstream
 
@@ -4454,7 +4454,7 @@ namespace sqlite_orm {
 }
 #pragma once
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 
 namespace sqlite_orm {
 
@@ -4496,7 +4496,7 @@ namespace sqlite_orm {
 }
 #pragma once
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <type_traits>  //  std::enable_if_t, std::is_arithmetic, std::is_same, std::true_type, std::false_type
 #include <string>  //  std::string, std::wstring
 #ifndef SQLITE_ORM_OMITS_CODECVT
@@ -4728,7 +4728,7 @@ namespace sqlite_orm {
 }
 #pragma once
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <type_traits>  //  std::enable_if_t, std::is_arithmetic, std::is_same, std::enable_if
 #include <cstdlib>  //  atof, atoi, atoll
 #include <string>  //  std::string, std::wstring
@@ -5980,7 +5980,7 @@ namespace sqlite_orm {
 #pragma once
 
 #include <string>  //  std::string
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <cstddef>  //  std::nullptr_t
 #include <system_error>  //  std::system_error, std::error_code
 #include <sstream>  //  std::stringstream
@@ -6531,7 +6531,7 @@ namespace sqlite_orm {
 
 #include <memory>  //  std::unique/shared_ptr, std::make_unique/shared
 #include <string>  //  std::string
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <type_traits>  //  std::remove_reference, std::is_base_of, std::decay, std::false_type, std::true_type
 #include <cstddef>  //  std::ptrdiff_t
 #include <iterator>  //  std::input_iterator_tag, std::iterator_traits, std::distance
@@ -6599,7 +6599,7 @@ namespace sqlite_orm {
 #include <memory>  //  std::shared_ptr
 #include <string>  //  std::string
 #include <utility>  //  std::forward, std::move
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <system_error>  //  std::system_error
 #include <tuple>  //  std::tuple, std::make_tuple
 
@@ -6612,7 +6612,7 @@ namespace sqlite_orm {
 // #include "iterator.h"
 
 #include <memory>  //  std::shared_ptr, std::unique_ptr, std::make_shared
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <type_traits>  //  std::decay
 #include <utility>  //  std::move
 #include <cstddef>  //  std::ptrdiff_t
@@ -6769,7 +6769,7 @@ namespace sqlite_orm {
 
 // #include "prepared_statement.h"
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <iterator>  //  std::iterator_traits
 #include <string>  //  std::string
 #include <type_traits>  //  std::true_type, std::false_type
@@ -6777,7 +6777,7 @@ namespace sqlite_orm {
 
 // #include "connection_holder.h"
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <string>  //  std::string
 #include <system_error>  //  std::system_error
 
@@ -7744,7 +7744,7 @@ namespace sqlite_orm {
 // #include "storage_base.h"
 
 #include <functional>  //  std::function, std::bind
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <string>  //  std::string
 #include <sstream>  //  std::stringstream
 #include <utility>  //  std::move
@@ -7758,7 +7758,7 @@ namespace sqlite_orm {
 // #include "pragma.h"
 
 #include <string>  //  std::string
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <functional>  //  std::function
 #include <memory>  // std::shared_ptr
 
@@ -7890,7 +7890,7 @@ namespace sqlite_orm {
 
 // #include "limit_accesor.h"
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <map>  //  std::map
 #include <functional>  //  std::function
 #include <memory>  //  std::shared_ptr
@@ -8108,7 +8108,7 @@ namespace sqlite_orm {
 
 // #include "backup.h"
 
-#include "sqlite3.h"
+#include <sqlite3.h>
 #include <string>  //  std::string
 #include <memory>
 
