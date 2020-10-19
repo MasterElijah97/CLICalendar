@@ -35,7 +35,6 @@ if(SQLite3_FOUND)
 endif()
 target_link_libraries(Client PUBLIC ncurses
 					${SQLite3_LIBRARIES}
-										sqlite3
 										sqlite_orm
 										MD5
 
