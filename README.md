@@ -18,6 +18,7 @@ Also this app uses
 * sqlite3
 * libboost1.71-dev
 * libncurses5-dev
+* cmake
 
 You can use apt package manager (example for Ubuntu):
 ```bash
@@ -25,6 +26,7 @@ sudo apt update
 sudo apt install sqlite3
 sudo apt install libboost1.71-dev
 sudo apt install libncurses5-dev
+sudo apt install cmake
 ```
 2. Then create directory named "build" at CLICalendarClient (or CLICalendarServer)
 Cient and Server are built separately
@@ -32,5 +34,6 @@ Cient and Server are built separately
 ```bash
 cmake .. && make
 ```
+Or you can use another build system compatible with cmake (see cmake documentation)
 
 
