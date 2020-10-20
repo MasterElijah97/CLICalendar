@@ -1,2 +1,0 @@
-/usr/bin/ar qc libAccountsDbManager.a  CMakeFiles/AccountsDbManager.dir/AccountsDbManager.cpp.o
-/usr/bin/ranlib libAccountsDbManager.a
