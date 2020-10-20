@@ -1,10 +1,12 @@
 /CLICalendarClient/bin/*
+/CLICalendarClient/obj/*
 /CLICalendarClient/build/*
 /CLICalendarClient/CLICalendarClient.cbp
 /CLICalendarClient/CLICalendarClient.depend
 /CLICalendarClient/CLICalendarClient.layout
 
 /CLICalendarServer/bin/*
+/CLICalendarServer/obj/*
 /CLICalendarServer/build/*
 /CLICalendarServer/CLICalendarServer.cbp
 /CLICalendarServer/CLICalendarServer.depend
