@@ -1,2 +1,11 @@
-/bin
-/obj
+/CLICalendarClient/bin/*
+/CLICalendarClient/build/*
+/CLICalendarClient/CLICalendarClient.cbp
+/CLICalendarClient/CLICalendarClient.depend
+/CLICalendarClient/CLICalendarClient.layout
+
+/CLICalendarServer/bin/*
+/CLICalendarServer/build/*
+/CLICalendarServer/CLICalendarServer.cbp
+/CLICalendarServer/CLICalendarServer.depend
+/CLICalendarServer/CLICalendarServer.layout
