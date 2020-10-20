@@ -140,22 +140,22 @@ src/clean: src/CMakeFiles/AccessProvider.dir/clean
 # Target rules for target CMakeFiles/Client.dir
 
 # All Build rule for target.
-CMakeFiles/Client.dir/all: src/CMakeFiles/Important.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/CommandChecker.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/AccountsDbManager.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/AccessProvider.dir/all
+CMakeFiles/Client.dir/all: include/CMakeFiles/sqlite_orm.dir/all
+CMakeFiles/Client.dir/all: include/CMakeFiles/MD5.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/NetWorker.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/spaceFilter.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Note.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/User.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Deal.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/SEPARATOR.dir/all
+CMakeFiles/Client.dir/all: src/CMakeFiles/Important.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Day.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/split.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Task.dir/all
 CMakeFiles/Client.dir/all: src/CMakeFiles/Session.dir/all
-CMakeFiles/Client.dir/all: src/CMakeFiles/NetWorker.dir/all
-CMakeFiles/Client.dir/all: include/CMakeFiles/sqlite_orm.dir/all
-CMakeFiles/Client.dir/all: include/CMakeFiles/MD5.dir/all
 	$(MAKE) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/depend
 	$(MAKE) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/master/CLICalendar/CLICalendarClient/build/CMakeFiles --progress-num=5,6 "Built target Client"
@@ -263,8 +263,8 @@ src/CMakeFiles/Task.dir/clean:
 # Target rules for target src/CMakeFiles/Session.dir
 
 # All Build rule for target.
-src/CMakeFiles/Session.dir/all: src/CMakeFiles/Important.dir/all
 src/CMakeFiles/Session.dir/all: src/CMakeFiles/Deal.dir/all
+src/CMakeFiles/Session.dir/all: src/CMakeFiles/Important.dir/all
 src/CMakeFiles/Session.dir/all: src/CMakeFiles/Day.dir/all
 	$(MAKE) -f src/CMakeFiles/Session.dir/build.make src/CMakeFiles/Session.dir/depend
 	$(MAKE) -f src/CMakeFiles/Session.dir/build.make src/CMakeFiles/Session.dir/build

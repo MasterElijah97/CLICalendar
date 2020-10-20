@@ -1,0 +1,2 @@
+/usr/bin/ar qc libNote.a  CMakeFiles/Note.dir/Note.cpp.o
+/usr/bin/ranlib libNote.a
