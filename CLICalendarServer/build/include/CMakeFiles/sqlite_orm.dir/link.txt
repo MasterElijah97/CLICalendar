@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsqlite_orm.a  
+/usr/bin/ranlib libsqlite_orm.a

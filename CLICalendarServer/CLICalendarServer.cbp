@@ -42,10 +42,6 @@
 		</Compiler>
 		<Unit filename="include/MD5.cpp" />
 		<Unit filename="include/MD5.h" />
-		<Unit filename="include/sqlite3.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="include/sqlite3.h" />
 		<Unit filename="include/sqlite_orm.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Day.cpp" />

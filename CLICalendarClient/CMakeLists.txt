@@ -15,19 +15,11 @@ endif()
 
 add_compile_options("-Wall" "-std=c++17")
 add_link_options("-pthread" "-lboost_system" "-lboost_thread" "-ldl" "-lsqlite3" "-lncurses")
-#add_link_options("-lboost_system" "-lboost_thread" "-lpthread" "-ldl" "-lncurses")
 
 add_subdirectory(src)
 add_subdirectory(include)
 
 add_executable(Client main.cpp)
-#add_compile_options(Client "-Wall" "-fexceptions" "-std=c++17")
-#add_link_options(Client "-lboost_system" "-lboost_thread" "-lpthread" "-ldl" "-lncurses")
-
-find_package(Curses REQUIRED)
-if(Curses_FOUND) 
-	target_include_directories(Client INTERFACE ${Curses_INCLUDE_DIRS})
-endif()
 
 find_package(SQLite3)
 if(SQLite3_FOUND)

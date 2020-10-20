@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/master/CLICalendar/CLICalendarServer/src/split.cpp
+split.h
+/home/master/CLICalendar/CLICalendarServer/src/split.h
+
+/home/master/CLICalendar/CLICalendarServer/src/split.h
+vector
+-
+string
+-
+sstream
+-
+
