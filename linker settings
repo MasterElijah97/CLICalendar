@@ -1,4 +1,0 @@
-linker settings
--lpthread
--ldl
--lncurses
