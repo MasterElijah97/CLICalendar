@@ -1,2 +1,0 @@
-/usr/bin/ar qc libspaceFilter.a  CMakeFiles/spaceFilter.dir/spaceFilter.cpp.o
-/usr/bin/ranlib libspaceFilter.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libImportant.a  CMakeFiles/Important.dir/Important.cpp.o
-/usr/bin/ranlib libImportant.a

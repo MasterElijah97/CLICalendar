@@ -1,2 +1,0 @@
-/usr/bin/ar qc libDeal.a  CMakeFiles/Deal.dir/Deal.cpp.o
-/usr/bin/ranlib libDeal.a
