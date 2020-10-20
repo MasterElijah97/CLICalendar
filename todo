@@ -1,9 +1,7 @@
 todo
 1. Go threw the code and refactor again:
 	--fix includes
-	--creake CMakeLists.txt
 	--refactor duplicate code sections
 	--add checks for client-server logic
 	--cipher data
-	--.gitignore
 
