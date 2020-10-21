@@ -48,6 +48,10 @@ void session::processData() {
                 this->localDb = std::make_shared<Storage>(initLocalDb(std::string(this->databaseName)));
                 this->localDb->sync_schema();
                 this->makeBackup();
+                this->deals_ = this->localDb->get_all<Deal>();
+                this->days_  = this->localDb->get_all<Day> ();
+                this->tasks_ = this->localDb->get_all<Task>();
+                this->notes_ = this->localDb->get_all<Note>();
             }
             else if (!data_.compare("BeginTasks")) {
                 this->receiveTasks();
@@ -183,6 +187,15 @@ void session::processDays() {
             }
 		}
 	}
+
+    std::sort(days_.begin(), days_.end(), [](Day& a, Day& b) {
+        if(a.id_ > b.id_) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
 }
 
 void session::processDeals() {
@@ -216,6 +229,15 @@ void session::processDeals() {
             }
 		}
 	}
+
+    std::sort(deals_.begin(), deals_.end(), [](Deal& a, Deal& b) {
+        if(a.id_ > b.id_) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
 }
 
 void session::processTasks() {
@@ -246,6 +268,15 @@ void session::processTasks() {
             }
 		}
 	}
+
+    std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
+        if(a.id_ > b.id) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
 }
 
 void session::processNotes() {
@@ -277,6 +308,15 @@ void session::processNotes() {
             }
 		}
 	}
+
+    std::sort(notes_.begin(), notes_.end(), [](Note& a, Note& b) {
+        if(a.id_ > b.id_) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
 }
 
 void session::process() {
