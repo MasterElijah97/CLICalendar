@@ -270,7 +270,7 @@ void session::processTasks() {
 	}
 
     std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
-        if(a.id_ > b.id) {
+        if(a.id_ > b.id_) {
             return true;
         }
         else {
