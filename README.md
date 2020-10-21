@@ -16,8 +16,8 @@ Also this app uses
 ## How to install
 1. First of all you need to install these packages:
 * sqlite3
-* libboost1.71-dev
-* libncurses5-dev
+* libboost1.71-dev (or newer)
+* libncurses5-dev (or newer)
 * cmake
 
 You can use apt package manager (example for Ubuntu):
@@ -28,8 +28,7 @@ sudo apt install libboost1.71-dev
 sudo apt install libncurses5-dev
 sudo apt install cmake
 ```
-2. Then create directory named "build" at CLICalendarClient (or CLICalendarServer)
-Cient and Server are built separately
+2. Then create directory named "build" at CLICalendarClient (or CLICalendarServer). Cient and Server are built separately
 3. Run
 ```bash
 cmake .. && make
