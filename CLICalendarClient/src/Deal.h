@@ -56,7 +56,7 @@ class Deal {
         //needed to communicate with server
         //json on minimal
         std::string concatenate();
-        void deconcatenate(std::string&);
+        void deconcatenate(std::string);
 
         //members
         std::string date_;        //need to associating with Day  in databases

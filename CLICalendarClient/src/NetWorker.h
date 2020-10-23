@@ -5,6 +5,7 @@
 #include <memory>
 #include <exception>
 #include <filesystem>
+#include <cstring>
 #include <boost/asio.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -27,6 +28,8 @@ class NetWorker : public boost::noncopyable {
 
         void sync();
 
+        void clearData();
+
     private:
 
         void sendUser();
@@ -47,6 +50,8 @@ class NetWorker : public boost::noncopyable {
         std::string port_to_connect = "2001";
 
         bool isConnected = false;
+        enum { max_length = 1024 };
+        char data_[max_length];
 
         boost::asio::io_service io_service;
         tcp::socket s;
