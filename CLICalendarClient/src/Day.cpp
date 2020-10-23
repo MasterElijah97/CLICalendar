@@ -216,7 +216,7 @@ std::string Day::concatenate() {
             tmp);
 }
 
-void Day::deconcatenate(const std::string& msg) {
+void Day::deconcatenate(std::string msg) {
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_ = v[0];
     id_   = std::stoi(v[1]);

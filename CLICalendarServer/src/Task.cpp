@@ -143,7 +143,7 @@ std::string Task::concatenate() {
            description_;
 }
 
-void Task::deconcatenate(const std::string& msg) {
+void Task::deconcatenate(std::string msg) {
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     id_          = std::stoi(v[0]);
     version_     = std::stoi(v[1]);

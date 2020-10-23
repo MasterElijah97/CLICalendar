@@ -1,7 +1,11 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include <iostream>
 #include <filesystem>
+#include <cstring>
+#include <chrono>
+#include <thread>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/asio.hpp>
@@ -134,6 +138,8 @@ class session : public std::enable_shared_from_this<session> {
         std::vector<Deal> deals_;
         std::vector<Day> days_;
 
+        void clearData();
+
         void makeBackup();
 
         void getDataFromLocalBase();
@@ -164,7 +170,7 @@ class session : public std::enable_shared_from_this<session> {
         tcp::socket socket_;
 
         enum { max_length = 1024 };
-        std::string data_;
+        char data_[max_length];
 
         void do_read();
         void do_write(std::size_t);

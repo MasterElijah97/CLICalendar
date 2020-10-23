@@ -53,7 +53,7 @@ class Note {
         //needed to communicate with server
         //json on minimal
         std::string concatenate();
-        void deconcatenate(const std::string&);
+        void deconcatenate(std::string);
 
         //members
         std::string label_;

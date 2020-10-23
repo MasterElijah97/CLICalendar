@@ -207,7 +207,7 @@ std::string Deal::concatenate() {
            description_;
 }
 
-void Deal::deconcatenate(std::string& msg) {
+void Deal::deconcatenate(std::string msg) {
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     begin_       = v[0];
     end_         = v[1];

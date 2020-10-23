@@ -168,7 +168,7 @@ std::string Note::concatenate() {
            description_;
 }
 
-void Note::deconcatenate(const std::string& msg) {
+void Note::deconcatenate(std::string msg) {
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     label_       = v[0];
     name_        = v[1];
