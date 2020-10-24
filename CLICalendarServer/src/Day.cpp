@@ -63,28 +63,31 @@ Day& Day::operator=(Day&& other) {
     return *this;
 }
 
+void Day::updateVersion() {
+    this->version_++;
+}
 
-void Day::setDate(std::string date) {
+void Day::setDate(const std::string& date) {
     this->date_ = date;
     this->updateVersion();
 }
 
-void Day::addDeal(Deal deal) {
+void Day::addDeal(const Deal& deal) {
     this->deals_.push_back(deal);
     (this->deals_.end()-1)->setDate(this->date_);
 }
 
-void Day::addImportant(Important important) {
+void Day::addImportant(const Important& important) {
     this->importants_.push_back(important);
 }
 
-void Day::removeDeal(int pos) {
+void Day::removeDeal(std::size_t& pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
     this->deals_.erase(it);
 }
 
-void Day::editDeal(int pos) {
+void Day::editDeal(std::size_t& pos) {
     pos--;
     auto it = this->deals_.begin() + pos;
 
@@ -121,13 +124,13 @@ void Day::editDeal(int pos) {
     it->updateVersion();
 }
 
-void Day::removeImportant(int pos) {
+void Day::removeImportant(std::size_t& pos) {
 	pos--;
     auto it = this->importants_.begin() + pos;
     this->importants_.erase(it);
 }
 
-void Day::editImportant(int pos) {
+void Day::editImportant(std::size_t& pos) {
     pos--;
     auto it = this->importants_.begin() + pos;
     std::cout << "Editing important..." << std::endl;
@@ -161,7 +164,7 @@ void Day::showImportants() {
 
 void Day::show() {
     std::cout << std::setw(13) << "Date: ";
-    std::cout<< date_ << std::endl;
+    std::cout << date_ << std::endl;
     this->showDeals();
     this->showImportants();
 }
@@ -191,7 +194,7 @@ void Day::edit() {
 
     std::cout << std::setw(13) << "Importants: " << std::endl;
 
-    if(!(importants_.empty())){
+    if(!importants_.empty()){
         for (auto it = importants_.begin(); it != importants_.end(); ++it) {
             it->edit();
         }

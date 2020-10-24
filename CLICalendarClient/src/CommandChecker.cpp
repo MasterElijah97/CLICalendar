@@ -19,7 +19,6 @@ void CommandChecker::commandMonitor(const std::string& arg1,
                                     const std::string& arg2,
                                     const std::size_t& arg3) {
 
-    //method compare returns 0 if string are fully equal
     if (!arg1.compare("next")) {
 
         thisSession->incrementJoined();
@@ -168,8 +167,6 @@ void CommandChecker::commandMonitor(const std::string& arg1,
     }
     else if (!arg1.compare("exit")) {
 
-        //thisSession.syncBases(); // todo
-        //thisSession.disconnectFromServer(); //todo
         accessProvider->logOut();
         exit(0);
 

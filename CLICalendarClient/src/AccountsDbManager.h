@@ -4,6 +4,8 @@
 #include <memory>
 #include "Session.h"
 
+//Class-helper
+//Wraps database with accounts
 class AccountsDbManager {
     public:
         AccountsDbManager();

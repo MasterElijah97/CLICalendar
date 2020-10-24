@@ -4,7 +4,7 @@ void AccessProvider::noechoInput(std::string& password, const char* msg = "Passw
     //initializing c-style string
     const int MAX_PASSWORD_SIZE = 50;
     char str[MAX_PASSWORD_SIZE];
-    for (int i = 0; i != 25; i++) {
+    for (int i = 0; i != MAX_PASSWORD_SIZE; i++) {
         str[i] = '`';
     }
     //ncurses.h works here: getting inpit with noecho
@@ -35,16 +35,18 @@ AccessProvider::AccessProvider(std::shared_ptr<User> user, std::shared_ptr<Accou
 }
 
 void AccessProvider::addingNewUser() {
+
     std::string login;
     std::string password;
+
     std::cout << "Please, enter new login" << std::endl;
     std::getline(std::cin, login, '\n');
 
         std::vector<User> isUserExists = this->accountsDbManager->accountsDb->get_all<User>(where(is_equal(&User::login_, login)));
 
         if (isUserExists.empty()) {
-            std::cout << "Please, enter new password" << std::endl;
 
+            std::cout << "Please, enter new password" << std::endl;
             noechoInput(password);
 
             this->user->login_ = login;
@@ -52,11 +54,11 @@ void AccessProvider::addingNewUser() {
 
             auto insertedId = this->accountsDbManager->accountsDb->insert(*(this->user));
             this->user->id_ = insertedId;
-            //::accountsDb.update(*user);
 
             std::cout << "New account has been created" << std::endl;
             std::cout << "Now you can log in with entered login and password" << std:: endl;
             std::cout << std::endl;
+
         } else {
             std::cout << "Sorry, this login is already exists. Please, try again." << std::endl;
             std::cout << std::endl;
@@ -72,6 +74,7 @@ void AccessProvider::logIn() {
     std::cout << "Login: ";
     std::getline(std::cin, login, '\n');
     std::cout << std::endl;
+
     noechoInput(password);
     std::cout << "Password: " << std::endl;
     std::cout << std::endl;
@@ -117,10 +120,8 @@ void AccessProvider::changePassword() {
         std::string newPasswordSecond;
 
         noechoInput(newPasswordFirst, "\n\nPlease, enter new password: ");
-
         noechoInput(newPasswordSecond, "\n\n\nPlease, enter new password again: ");
 
-        //method 'compare' returns 0 if strings are fully equal
         if (!newPasswordFirst.compare(newPasswordSecond)) {
 
             this->user->hashedPass_ = md5(newPasswordFirst);
