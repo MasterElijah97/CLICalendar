@@ -213,8 +213,8 @@ public:
         void showJoined();
         void showHelp();
 
-        void editDeal(const std::size_t&);
-        void editImportant(const std::size_t&);
+        void editDeal(std::size_t);
+        void editImportant(std::size_t);
         void editItem();
 
         void copyItem();
@@ -225,8 +225,8 @@ public:
         void removeTask();
         void removeNote();
         void removeDay();
-        void removeDeal(const std::size_t&);
-        void removeImportant(const std::size_t&);
+        void removeDeal(std::size_t);
+        void removeImportant(std::size_t);
 
         void creatingTask();
         void creatingNote();

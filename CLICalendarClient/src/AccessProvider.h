@@ -1,15 +1,16 @@
 #ifndef ACCESSPROVIDER_H
 #define ACCESSPROVIDER_H
 
+#define NCURSES_NOMACROS
+#include <ncurses.h>
 #include <string>
 #include <memory>
 
 #include "../include/MD5.h"
 #include "Session.h"
 #include "AccountsDbManager.h"
-#define NCURSES_NOMACROS
-#include <ncurses.h>
-//Helper
+
+//Class-helper
 //Asks login and password, checks them, change password
 struct AccessProvider {
     AccessProvider(std::shared_ptr<User>, std::shared_ptr<AccountsDbManager>);

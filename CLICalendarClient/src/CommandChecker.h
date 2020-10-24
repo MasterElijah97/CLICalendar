@@ -1,16 +1,17 @@
 #ifndef COMMANDCHECKER_H
 #define COMMANDCHECKER_H
 
+#define NCURSES_NOMACROS
+#include <ncurses.h>
 #include <memory>
 #include <string>
-
 
 #include "Session.h"
 #include "AccessProvider.h"
 #include "NetWorker.h"
 
-#include <ncurses.h>
-
+//Class-helper
+//Handle user's input
 struct CommandChecker {
     CommandChecker(std::shared_ptr<Session>,
                    std::shared_ptr<AccessProvider>,

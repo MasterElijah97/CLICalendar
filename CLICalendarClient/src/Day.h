@@ -17,9 +17,7 @@ class Day {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion() {
-            this->version_++;
-        }
+        void updateVersion();
 
         Day();
         Day(std::string);
@@ -35,16 +33,16 @@ class Day {
         ~Day() = default;
 
         //setters
-        void setDate(std::string);
-        void addDeal(Deal);
-        void addImportant(Important);
+        void setDate(const std::string&);
+        void addDeal(const Deal&);
+        void addImportant(const Important&);
 
         //user's interface
-        void removeDeal(int);
-        void editDeal(int);
+        void removeDeal(std::size_t&);
+        void editDeal(std::size_t&);
 
-        void removeImportant(int);
-        void editImportant(int);
+        void removeImportant(std::size_t&);
+        void editImportant(std::size_t&);
 
         void showDeals();
         void showImportants();
