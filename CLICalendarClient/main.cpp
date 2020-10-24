@@ -98,7 +98,7 @@ int main()
                 commandChecker.commandMonitor(v[0], v[1], -1);
             }
             else if ( v.size() == 3) {
-                    int arg3 = -1;
+                    std::size_t arg3 = -1;
                 try {
                     arg3 = std::stoi(v[2]);
                 } catch(...) {

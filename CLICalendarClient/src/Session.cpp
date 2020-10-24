@@ -644,7 +644,7 @@ void Session::openDays() {
  	std::cout << std::endl;
  }
 
- void Session::editDeal(const int& arg3) {
+ void Session::editDeal(const std::size_t& arg3) {
 
     if(this->joinedSetted == 1 &&  (arg3-1) > 0) {
 
@@ -660,7 +660,7 @@ void Session::openDays() {
     }
 }
 
-void Session::editImportant(const int& arg3) {
+void Session::editImportant(const std::size_t& arg3) {
     if( (this->joinedSetted == 1) && (arg3-1) > 0) {
 
         auto it = std::get<std::vector<Day>::iterator>(this->joinedObject_);
@@ -779,7 +779,7 @@ void Session::removeDay() {
 
 }
 
-void Session::removeDeal(const int& arg3) {
+void Session::removeDeal(const std::size_t& arg3) {
 
     if ( (this->joinedSetted == 1) &&
          (!this->days_.empty()) ) {
@@ -804,7 +804,7 @@ void Session::removeDeal(const int& arg3) {
     }
 }
 
-void Session::removeImportant(const int& arg3) {
+void Session::removeImportant(const std::size_t& arg3) {
 
     if ( (this->joinedSetted == 1) &&
          (!this->days_.empty()) ) {

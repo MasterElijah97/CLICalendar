@@ -47,19 +47,21 @@ void NetWorker::disconnect() {
 void NetWorker::sendUser() {
     try {
         this->clearData();
+
         std::strncpy(data_, "bu", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+
 
         this->clearData();
-        std::strncpy(data_, thisSession->user->login_.c_str(), 1024);
+
+        std::strncpy(data_, thisSession->user->login_.c_str(), max_length);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+
 
         this->clearData();
+        
         std::strncpy(data_, "eu", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
 
     } catch(std::exception& ex) {
@@ -73,23 +75,22 @@ void NetWorker::sendDeals() {
     std::string tmp;
     try {
         this->clearData();
+
         std::strncpy(data_, "bde", 4);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+
 
         for (auto &deal : deals) {
             this->clearData();
-            std::strncpy(data_, deal.concatenate().c_str(), 1024);
-            //data_ = deal.concatenate().c_str();
+
+            std::strncpy(data_, deal.concatenate().c_str(), max_length);
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-            std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
         }
 
         this->clearData();
+
         std::strncpy(data_, "ede", 4);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-
 
     } catch(std::exception& ex) {
         std::cout << "Something went wrong" << std::endl;
@@ -101,22 +102,21 @@ void NetWorker::sendDeals() {
 void NetWorker::sendDays() {
     try {
         this->clearData();
+
         std::strncpy(data_, "bda", 4);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
         for (auto &day : thisSession->days_) {
             this->clearData();
-            std::strncpy(data_, day.concatenate().c_str(), 1024);
+
+            std::strncpy(data_, day.concatenate().c_str(), max_length);
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-            std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
         }
 
         this->clearData();
+
         std::strncpy(data_, "eda", 4);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-
 
     } catch(std::exception& ex) {
         std::cout << "Something went wrong" << std::endl;
@@ -127,23 +127,21 @@ void NetWorker::sendDays() {
 void NetWorker::sendTasks() {
     try {
         this->clearData();
+
         std::strncpy(data_, "bt", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
         for (auto &task : thisSession->tasks_) {
             this->clearData();
-            std::strncpy(data_, task.concatenate().c_str(), 1024);
-            //data_ = task.concatenate().c_str();
+
+            std::strncpy(data_, task.concatenate().c_str(), max_length);
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-            std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
         }
 
         this->clearData();
+
         std::strncpy(data_, "et", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-
 
     } catch(std::exception& ex) {
         std::cout << "Something went wrong" << std::endl;
@@ -154,23 +152,22 @@ void NetWorker::sendTasks() {
 void NetWorker::sendNotes() {
     try {
         this->clearData();
+
         std::strncpy(data_, "bn", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
         for (auto &note : thisSession->notes_) {
             this->clearData();
+
             std::strncpy(data_, note.concatenate().c_str(), max_length);
-            //data_ = note.concatenate().c_str();
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-            std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+
         }
 
         this->clearData();
+
         std::strncpy(data_, "en", 3);
         boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-
 
     } catch(std::exception& ex) {
         std::cout << "Something went wrong" << std::endl;
@@ -181,34 +178,34 @@ void NetWorker::sendNotes() {
 
 void NetWorker::send() {
     if (isConnected) {
-    try {
-        this->clearData();
-        std::strncpy(data_, "ba", 3);
-        //data_[0] = 'b';
-        //data_[1] = 'a';
-        boost::asio::write(this->s, boost::asio::buffer(data_, max_length), ec);
-        std::cout << "Aaaaaand it's gone" << std::endl;
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        try {
+            this->clearData();
 
-        this->sendUser();
-        std::cout << "Aaaaaand it's gone2" << std::endl;
-        this->sendTasks();
-        std::cout << "Aaaaaand it's gone3" << std::endl;
-        this->sendNotes();
-        std::cout << "Aaaaaand it's gone4" << std::endl;
-        this->sendDeals();
-        std::cout << "Aaaaaand it's gone5" << std::endl;
-        this->sendDays();
-        std::cout << "Aaaaaand it's gone6" << std::endl;
-        this->clearData();
-        std::strncpy(data_, "ea", 3);
-        boost::asio::write(this->s, boost::asio::buffer(data_, max_length), ec);
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+            std::strncpy(data_, "ba", 3);
+            boost::asio::write(this->s, boost::asio::buffer(data_, max_length), ec);
 
-    } catch(std::exception& ex) {
-        std::cout << "Something went wrong" << std::endl;
-        std::cout << ex.what() << std::endl;
-    }
+            this->sendUser();
+            if (!this->thisSession->tasks_.empty()) {
+                this->sendTasks();
+            }
+            if (!this->thisSession->tasks_.empty()) {
+                this->sendNotes();
+            }
+            if (!this->thisSession->tasks_.empty()) {
+                this->sendDeals();
+            }
+            if (!this->thisSession->tasks_.empty()) {
+                this->sendDays();
+            }
+            this->clearData();
+
+            std::strncpy(data_, "ea", 3);
+            boost::asio::write(this->s, boost::asio::buffer(data_, max_length), ec);
+
+        } catch(std::exception& ex) {
+            std::cout << "Something went wrong" << std::endl;
+            std::cout << ex.what() << std::endl;
+        }
     } else {
         std::cout << "You need to connect first" << std::endl;
     }
@@ -221,7 +218,7 @@ void NetWorker::receiveDeals() {
 
         boost::asio::read(this->s, boost::asio::buffer(data_));
 
-        if (std::string(data_).find("ede") != std::string::npos) {
+        if (strcmp(data_, "ede") == 0) {
             break;
         }
 
@@ -260,7 +257,7 @@ void NetWorker::receiveDays() {
 
         boost::asio::read(this->s, boost::asio::buffer(data_));
 
-        if (std::string(data_).find("eda") != std::string::npos) {
+        if (strcmp(data_, "eda") == 0) {
             break;
         }
 
@@ -302,7 +299,7 @@ void NetWorker::receiveTasks() {
 
         boost::asio::read(this->s, boost::asio::buffer(data_));
 
-        if (std::string(data_).find("et") != std::string::npos) {
+        if (strcmp(data_, "et") == 0) {
             break;
         }
 
@@ -337,7 +334,7 @@ void NetWorker::receiveNotes() {
 
         boost::asio::read(this->s, boost::asio::buffer(data_));
 
-        if (std::string(data_).find("en") != std::string::npos) {
+        if (strcmp(data_, "en") == 0) {
             break;
         }
 
@@ -365,15 +362,12 @@ void NetWorker::receiveNotes() {
     this->thisSession->notes_ = this->thisSession->localDb->get_all<Note>(); 
 }
 void NetWorker::receive() {
-    std::cout << "In receive" << std::endl;
     this->clearData();
-    //while(strcmp(data_, "ea") != 0) {
     while(1) {
-        if (std::string(data_).find("ea") != std::string::npos) {
-            break;
-        }
         try {
-            std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_));
+
+            boost::asio::read(this->s, boost::asio::buffer(data_));
+
             if (strcmp(data_, "bde") == 0) {
                 this->receiveDeals();
             }
@@ -386,10 +380,13 @@ void NetWorker::receive() {
             else if(strcmp(data_, "bn") == 0) {
                 this->receiveNotes();
             }
-            else {
-                std::cout << "Nothing matches" << std::endl;
-                std::cout << data_ << std::endl;
+            else if (strcmp(data_, "ea") == 0) {
+                break;
             }
+            else {
+                std::cout << "Nothing matches: " << data_ << std::endl;
+            }
+
         } catch(std::exception& ex) {
             std::cout << "Something went wrong on receive" << std::endl;
             std::cout << ex.what() << std::endl;
@@ -397,16 +394,15 @@ void NetWorker::receive() {
     }
 }
 void NetWorker::sync() {
-    std::filesystem::create_directory("backup");
-    std::string path = "backup/" + this->thisSession->databaseName;
-    std::filesystem::copy_file(this->thisSession->databaseName, path, std::filesystem::copy_options::overwrite_existing);
+    this->makeBackup();
     this->send();
     this->clearData();
-    std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_, max_length));
-    std::cout << "Before receive" << std::endl;
-    std::cout << data_ << std::endl;
-    if (data_[0] == 'b' && data_[1] == 'a') {
+
+    boost::asio::read(this->s, boost::asio::buffer(data_, max_length));
+    if (strcmp(data_, "ba") == 0) {
         this->receive();
+    } else {
+        std::cout << "Wrong protocol" << std::endl;
     }
 }
 
@@ -414,4 +410,12 @@ void NetWorker::clearData() {
     for (int i = 0; i < this->max_length; i++) {
         this->data_[i] = 0;
     }
+}
+
+void NetWorker::makeBackup() {
+    std::filesystem::create_directory("backup");
+    std::string path = "backup/" + this->thisSession->databaseName;
+    std::filesystem::copy_file(this->thisSession->databaseName, 
+                                path, 
+                                std::filesystem::copy_options::overwrite_existing);    
 }

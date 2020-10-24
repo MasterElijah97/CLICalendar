@@ -173,7 +173,6 @@ class session : public std::enable_shared_from_this<session> {
         char data_[max_length];
 
         void do_read();
-        void do_write(std::size_t);
 };
 
 #endif // SESSION_H

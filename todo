@@ -2,7 +2,5 @@ todo
 1. Go threw the code and refactor again:
 	--fix includes
 	--refactor duplicate code sections
-	--add checks for client-server logic
-	--continue server part
 	--cipher data
 

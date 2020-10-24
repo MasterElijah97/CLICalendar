@@ -23,7 +23,7 @@ struct CommandChecker {
     void clearConsole();
     void commandMonitor(const std::string&,
                         const std::string&,
-                        const int&);
+                        const std::size_t&);
 };
 
 #endif // COMMANDCHECKER_H
