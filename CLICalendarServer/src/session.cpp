@@ -150,34 +150,34 @@ void session::receiveDays() {
 }
 
 void session::processDays() {
-	std::sort(days_.begin(), days_.end(), [](Day& a, Day& b) {
-		if(a.date_.compare(b.date_) > 0) {
-    		return true;
-		}
-		else {
-			return false;
-		}
-	});
-	auto it = days_.begin();
-	while (1) {
-		it = std::adjacent_find(days_.begin(), days_.end(), [](Day& a, Day&b) {
-			if (a.date_.compare(b.date_)) {
-				return true;
-			} else {
-				return false;
-			}
-		});
+    std::sort(days_.begin(), days_.end(), [](Day& a, Day& b) {
+        if(a.date_.compare(b.date_) > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+    auto it = days_.begin();
+    while (1) {
+        it = std::adjacent_find(days_.begin(), days_.end(), [](Day& a, Day&b) {
+            if (a.date_.compare(b.date_)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
-		if (it == days_.end()) {
-			break;
-		} else {
+        if (it == days_.end()) {
+            break;
+        } else {
             if (it->version_ < (it+1)->version_) {
                 days_.erase(it);
             } else {
                 days_.erase(it+1);
             }
-		}
-	}
+        }
+    }
 
     std::sort(days_.begin(), days_.end(), [](Day& a, Day& b) {
         if(a.id_ > b.id_) {
@@ -190,36 +190,36 @@ void session::processDays() {
 }
 
 void session::processDeals() {
-	std::sort(deals_.begin(), deals_.end(), [](Deal& a, Deal& b) {
-		if(a.date_.compare(b.date_) > 0) {
-    		return true;
-		}
-		else {
-			return false;
-		}
-	});
-	auto it = deals_.begin();
-	while (1) {
-		it = std::adjacent_find(deals_.begin(), deals_.end(), [](Deal& a, Deal&b) {
-			if (a.date_.compare(b.date_)         &&
-				a.name_.compare(b.name_)         &&
-				a.priority_.compare(b.priority_) &&
-				a.description_.compare(b.description_)) {
-				return true;
-			} else {
-				return false;
-			}
-		});
-		if (it == deals_.end()) {
-			break;
-		} else {
+    std::sort(deals_.begin(), deals_.end(), [](Deal& a, Deal& b) {
+        if(a.date_.compare(b.date_) > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+    auto it = deals_.begin();
+    while (1) {
+        it = std::adjacent_find(deals_.begin(), deals_.end(), [](Deal& a, Deal&b) {
+            if (a.date_.compare(b.date_)         &&
+                a.name_.compare(b.name_)         &&
+                a.priority_.compare(b.priority_) &&
+                a.description_.compare(b.description_)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        if (it == deals_.end()) {
+            break;
+        } else {
             if (it->version_ < (it+1)->version_) {
                 deals_.erase(it);
             } else {
                 deals_.erase(it+1);
             }
-		}
-	}
+        }
+    }
 
     std::sort(deals_.begin(), deals_.end(), [](Deal& a, Deal& b) {
         if(a.id_ > b.id_) {
@@ -232,33 +232,33 @@ void session::processDeals() {
 }
 
 void session::processTasks() {
-	std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
-		if(a.description_.compare(b.description_) > 0) {
-    		return true;
-		}
-		else {
-			return false;
-		}
-	});
-	auto it = tasks_.begin();
-	while (1) {
-		it = std::adjacent_find(tasks_.begin(), tasks_.end(), [](Task& a, Task&b) {
-			if (a.description_.compare(b.description_)) {
-				return true;
-			} else {
-				return false;
-			}
-		});
+    std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
+        if(a.description_.compare(b.description_) > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+    auto it = tasks_.begin();
+    while (1) {
+        it = std::adjacent_find(tasks_.begin(), tasks_.end(), [](Task& a, Task&b) {
+            if (a.description_.compare(b.description_)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
         if (it == tasks_.end()) {
-			break;
-		} else {
+            break;
+        } else {
             if (it->version_ < (it+1)->version_) {
                 tasks_.erase(it);
             } else {
                 tasks_.erase(it+1);
             }
-		}
-	}
+        }
+    }
 
     std::sort(tasks_.begin(), tasks_.end(), [](Task& a, Task& b) {
         if(a.id_ > b.id_) {
@@ -271,34 +271,34 @@ void session::processTasks() {
 }
 
 void session::processNotes() {
-	std::sort(notes_.begin(), notes_.end(), [](Note& a, Note& b) {
-		if(a.name_.compare(b.name_) > 0) {
-    		return true;
-		}
-		else {
-			return false;
-		}
-	});
-	auto it = notes_.begin();
-	while (1) {
-		it = std::adjacent_find(notes_.begin(), notes_.end(), [](Note& a, Note&b) {
-			if (a.name_.compare(b.name_) &&
-				a.label_.compare(b.label_)) {
-				return true;
-			} else {
-				return false;
-			}
-		});
+    std::sort(notes_.begin(), notes_.end(), [](Note& a, Note& b) {
+        if(a.name_.compare(b.name_) > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+    auto it = notes_.begin();
+    while (1) {
+        it = std::adjacent_find(notes_.begin(), notes_.end(), [](Note& a, Note&b) {
+            if (a.name_.compare(b.name_) &&
+                a.label_.compare(b.label_)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
         if (it == notes_.end()) {
-			break;
-		} else {
+            break;
+        } else {
             if (it->version_ < (it+1)->version_) {
                 notes_.erase(it);
             } else {
                 notes_.erase(it+1);
             }
-		}
-	}
+        }
+    }
 
     std::sort(notes_.begin(), notes_.end(), [](Note& a, Note& b) {
         if(a.id_ > b.id_) {
@@ -312,15 +312,15 @@ void session::processNotes() {
 
 void session::process() {
     std::cout << "In process" << std::endl;
-    std::this_thread::sleep_for(std::chrono::microseconds(3000));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     this->processDeals();
-    std::this_thread::sleep_for(std::chrono::microseconds(3000));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     this->processDays();
-    std::this_thread::sleep_for(std::chrono::microseconds(3000));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     this->processTasks();
-    std::this_thread::sleep_for(std::chrono::microseconds(3000));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     this->processNotes();
-    std::this_thread::sleep_for(std::chrono::microseconds(3000));
+    std::this_thread::sleep_for(std::chrono::nanoseconds(10));
     std::cout << "End process" << std::endl;
 }
 
@@ -330,7 +330,7 @@ void session::sendDeals() {
         this->clearData();
         std::strncpy(data_, "bde", 4);
         boost::asio::write(socket_, boost::asio::buffer(data_, max_length));
-        std::this_thread::sleep_for(std::chrono::microseconds(3000));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(3000));
 
         for (auto &deal : deals_) {
             this->clearData();
@@ -421,7 +421,7 @@ void session::sendNotes() {
             std::cout << data_ << std::endl;
             //data_ = note.concatenate().c_str();
             boost::asio::write(socket_, boost::asio::buffer(data_));
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+            std::this_thread::sleep_for(std::chrono::nanoseconds(5));
         }
 
         this->clearData();
