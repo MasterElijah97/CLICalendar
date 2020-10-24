@@ -32,6 +32,7 @@ class NetWorker : public boost::noncopyable {
 
     private:
 
+        void makeBackup();
         void sendUser();
         void sendDeals();
         void sendDays();

@@ -235,11 +235,11 @@ void MD5::encode(uChar output[], const uInt input[], uInt length) {
 
 // F, G， H，I are the basic MD5 functions
 inline uInt F(uInt x, uInt y, uInt z) {
-    return x & y | ~x & z;
+    return (x & y) | (~x & z);
 }
 
 inline uInt G(uInt x, uInt y, uInt z) {
-    return x & z | y & ~z;
+    return (x & z) | (y & ~z);
 }
 
 inline uInt H(uInt x, uInt y, uInt z) {

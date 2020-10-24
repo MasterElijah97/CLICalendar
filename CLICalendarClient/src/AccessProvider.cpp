@@ -1,6 +1,6 @@
 #include "AccessProvider.h"
 
-void AccessProvider::noechoInput(std::string& password, char* msg = "Password: ") {
+void AccessProvider::noechoInput(std::string& password, const char* msg = "Password: ") {
     //initializing c-style string
     const int MAX_PASSWORD_SIZE = 50;
     char str[MAX_PASSWORD_SIZE];

@@ -21,7 +21,7 @@ struct AccessProvider {
     void changePassword();
     void accessChecker(const std::string&, const std::string&);
 private:
-    void noechoInput(std::string&, char*);
+    void noechoInput(std::string&, const char*);
 };
 
 
