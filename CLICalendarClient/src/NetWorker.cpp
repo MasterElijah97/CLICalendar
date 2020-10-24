@@ -160,7 +160,7 @@ void NetWorker::sendNotes() {
 
         for (auto &note : thisSession->notes_) {
             this->clearData();
-            std::strncpy(data_, note.concatenate().c_str(), 1024);
+            std::strncpy(data_, note.concatenate().c_str(), max_length);
             //data_ = note.concatenate().c_str();
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
             std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
@@ -214,100 +214,152 @@ void NetWorker::send() {
     }
 }
 void NetWorker::receiveDeals() {
-    std::cout << "receive deals " << std::endl;
     this->clearData();
-    std::vector<Deal> dealsFromServer(1000);
-    while(data_[0] != 'e' && data_[1] != 'd' && data_[2] != 'e') {
-        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_, max_length));
-        Deal deal;
-        deal.deconcatenate(data_);
-        dealsFromServer.push_back(deal);
-    }
-
     this->thisSession->localDb->remove_all<Deal>();
 
-    for (auto &item : dealsFromServer){
-        item.id_ = -1;
-        auto insertedId = this->thisSession->localDb->insert(item);
-        item.id_ = insertedId;
+    while(1) {
+
+        boost::asio::read(this->s, boost::asio::buffer(data_));
+
+        if (std::string(data_).find("ede") != std::string::npos) {
+            break;
+        }
+
+        Deal deal;
+
+        try {
+            deal.deconcatenate(data_);
+        } 
+        catch (std::exception& ex) { 
+            std::cout << "Wrong data: " << ex.what() << std::endl;
+        }
+
+        try {
+            deal.id_ = -1;
+            auto insertedId = this->thisSession->localDb->insert(deal);
+            deal.id_ = insertedId;
+            std::cout << insertedId << std::endl;
+        } catch (std::exception& ex) { 
+            std::cout << "Something went wrong with database" << ex.what() << std::endl; 
+        }
+        
+        this->clearData();
+    }
+    //could be optimized by finding day by date_
+    for (auto &day : this->thisSession->days_) {
+        day.deals_ = this->thisSession->localDb->get_all<Deal>(where(is_equal(&Deal::date_, day.date_))); 
     }
 }
+
 void NetWorker::receiveDays() {
-    std::cout << "receive days " << std::endl;
     this->clearData();
-    std::vector<Day> daysFromServer(1000);
-    while(data_[0] != 'e' && data_[1] != 'd' && data_[2] != 'a') {
-        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_, max_length));
-        Day day;
-        day.deconcatenate(data_);
-        daysFromServer.push_back(day);
-    }
-
     this->thisSession->localDb->remove_all<Day>();
+    this->thisSession->localDb->remove_all<Important>();
 
-    for (auto &item : daysFromServer){
-        item.id_ = -1;
-        auto insertedId = this->thisSession->localDb->insert(item);
-        item.id_ = insertedId;
+    while(1) {
 
-        for (auto &important : item.importants_) {
-            important.id_ = -1;
-            auto insertedId = this->thisSession->localDb->insert(important);
-            important.id_ = insertedId;
+        boost::asio::read(this->s, boost::asio::buffer(data_));
+
+        if (std::string(data_).find("eda") != std::string::npos) {
+            break;
         }
+
+        Day day;
+
+        try {
+            day.deconcatenate(data_);
+        } 
+        catch (std::exception& ex) { 
+            std::cout << "Wrong data: " << ex.what() << std::endl;
+        }
+
+        try {
+            day.id_ = -1;
+            auto insertedId = this->thisSession->localDb->insert(day);
+            day.id_ = insertedId;
+            std::cout << insertedId << std::endl;
+
+            for (auto &important : day.importants_) {
+                important.id_ = -1;
+                auto insertedId = this->thisSession->localDb->insert(important);
+                important.id_ = insertedId;
+            }
+
+        } catch (std::exception& ex) { 
+            std::cout << "Something went wrong with database" << ex.what() << std::endl; 
+        }
+
+        this->clearData();
     }
+
+    this->thisSession->days_ = this->thisSession->localDb->get_all<Day>(); 
 }
 void NetWorker::receiveTasks() {
-    std::cout << "receive tasks " << std::endl;
     this->clearData();
-    std::vector<Task> tasksFromServer(1000);
-    while(data_[0] != 'e' && data_[1] != 't') {
-        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_));
-        Task task;
-        task.deconcatenate(data_);
-        tasksFromServer.push_back(task);
-    }
     this->thisSession->localDb->remove_all<Task>();
 
-    for (auto &item : tasksFromServer){
-        item.id_ = -1;
-        auto insertedId = this->thisSession->localDb->insert(item);
-        item.id_ = insertedId;
+    while(1) {
+
+        boost::asio::read(this->s, boost::asio::buffer(data_));
+
+        if (std::string(data_).find("et") != std::string::npos) {
+            break;
+        }
+
+        Task task;
+
+        try {
+            task.deconcatenate(data_);
+        } 
+        catch (std::exception& ex) { 
+            std::cout << "Wrong data: " << ex.what() << std::endl;
+        }
+
+        try {
+            task.id_ = -1;
+            auto insertedId = this->thisSession->localDb->insert(task);
+            task.id_ = insertedId;
+            std::cout << insertedId << std::endl;
+        } catch (std::exception& ex) { 
+            std::cout << "Something went wrong with database" << ex.what() << std::endl; 
+        }
+        
+        this->clearData();
     }
+
+    this->thisSession->tasks_ = this->thisSession->localDb->get_all<Task>(); 
 }
 void NetWorker::receiveNotes() {
-    std::cout << "receive notes " << std::endl;
     this->clearData();
-    std::vector<Note> notesFromServer;
+    this->thisSession->localDb->remove_all<Note>();
 
-    //while(strcmp(data_, "en") != 0) {
-    while(std::string(data_).find("en") == std::string::npos) {
-        std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_));
+    while(1) {
+
+        boost::asio::read(this->s, boost::asio::buffer(data_));
+
         if (std::string(data_).find("en") != std::string::npos) {
             break;
         }
+
         Note note;
-        //
-        std::cout << reply_length << std::endl;
-        std::cout << data_ << std::endl;
-        //
-        try {
-        note.deconcatenate(data_);
-        }  catch (...) { std::cout << "Smth wrong on dec" << std::endl; }
 
         try {
-        notesFromServer.push_back(note);
-        } catch(...) { std::cout << "Smth wrong on push back" << std::endl; }
-        std::cout << "End of while" << std::endl;
-    }
-    std::cout << "Before db" << std::endl;
-    this->thisSession->localDb->remove_all<Note>();
+            note.deconcatenate(data_);
+        } 
+        catch (std::exception& ex) { 
+            std::cout << "Wrong data: " << ex.what() << std::endl;
+        }
 
-    for (auto &item : notesFromServer){
-        item.id_ = -1;
-        auto insertedId = this->thisSession->localDb->insert(item);
-        item.id_ = insertedId;
-        std::cout << insertedId << std::endl;
+        try {
+            note.id_ = -1;
+            auto insertedId = this->thisSession->localDb->insert(note);
+            note.id_ = insertedId;
+            std::cout << insertedId << std::endl;
+        } catch (std::exception& ex) { 
+            std::cout << "Something went wrong with database" << ex.what() << std::endl; 
+        }
+
+        this->clearData();
     }
 
     this->thisSession->notes_ = this->thisSession->localDb->get_all<Note>(); 
@@ -315,7 +367,11 @@ void NetWorker::receiveNotes() {
 void NetWorker::receive() {
     std::cout << "In receive" << std::endl;
     this->clearData();
-    while(strcmp(data_, "ea") != 0) {
+    //while(strcmp(data_, "ea") != 0) {
+    while(1) {
+        if (std::string(data_).find("ea") != std::string::npos) {
+            break;
+        }
         try {
             std::size_t reply_length = boost::asio::read(this->s, boost::asio::buffer(data_));
             if (strcmp(data_, "bde") == 0) {
@@ -332,6 +388,7 @@ void NetWorker::receive() {
             }
             else {
                 std::cout << "Nothing matches" << std::endl;
+                std::cout << data_ << std::endl;
             }
         } catch(std::exception& ex) {
             std::cout << "Something went wrong on receive" << std::endl;
