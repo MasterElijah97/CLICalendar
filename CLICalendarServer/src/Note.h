@@ -16,10 +16,7 @@ class Note {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion() {
-            this->version_++;
-        }
-
+        void updateVersion();
         Note();
         Note(std::string,
              std::string,

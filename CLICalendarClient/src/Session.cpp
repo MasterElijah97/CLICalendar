@@ -328,7 +328,7 @@ void Session::JoinedIncrementAllower::operator()(std::vector<Note>::iterator& it
 
 Session::Session(std::shared_ptr<User> user)
 {
-    this->user = user;
+    this->user = std::move(user);
     this->databaseName = this->user->login_ + ".sqlite";
     this->localDb = std::make_shared<Storage>(initLocalDb(std::string(this->databaseName)));
     this->localDb->sync_schema();
@@ -535,15 +535,15 @@ void Session::creatingImportant() {
 }
 
  void Session::addTask(Task task) {
-     this->tasks_.push_back(task);
+     this->tasks_.emplace_back(std::move(task));
  }
 
  void Session::addNote(Note note) {
-     this->notes_.push_back(note);
+     this->notes_.emplace_back(std::move(note));
  }
 
  void Session::addDay(Day day) {
-     this->days_.push_back(day);
+     this->days_.emplace_back(std::move(day));
  }
 
  void Session::openTasks() {
@@ -829,13 +829,13 @@ void Session::removeImportant(std::size_t arg3) {
     }
 
 }
-/*
+
 template<typename T>
-void Session::setJoined(std::vector<T>::iterator it) {
-	joinedObject_ = it;
+void Session::setJoined(T it) {
+	joinedObject_ = std::move(it);
 }
-*/
-void Session::setJoined(std::vector<Day>::iterator it) {
+
+/*void Session::setJoined(std::vector<Day>::iterator it) {
    this->joinedObject_ = std::move(it);
 }
 void Session::setJoined(std::vector<Deal>::iterator it) {
@@ -849,7 +849,7 @@ void Session::setJoined(std::vector<Note>::iterator it) {
 }
 void Session::setJoined(std::vector<Important>::iterator it) {
    this->joinedObject_ = std::move(it);
-}
+}*/
 
 
 void Session::incrementJoined() {

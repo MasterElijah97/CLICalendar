@@ -6,6 +6,10 @@ bool operator==(const Task& left, const Task& right) {
            (left.version_     == right.version_);
 }
 
+void Task::updateVersion() {
+    this->version_++;
+}
+
 Task::Task() {
     this->isCompleted_ = false;
     this->description_ = "New Task";
@@ -68,21 +72,21 @@ Task& Task::operator=(Task&& right) {
     return *this;
 }
 
-void Task::setIsCompleted(const bool isCompleted) {
-    this->isCompleted_ = isCompleted;
+void Task::setIsCompleted(bool isCompleted) {
+    this->isCompleted_ = std::move(isCompleted);
     this->updateVersion();
 }
 
-void Task::setDescription(const std::string description) {
-    this->description_ = description;
+void Task::setDescription(std::string description) {
+    this->description_ = std::move(description);
     this->updateVersion();
 }
 
-void Task::setAllFields(const std::string description = "New Task",
-                        const bool isCompleted = false) {
+void Task::setAllFields(std::string description = "New Task",
+                        bool isCompleted = false) {
 
-    this->isCompleted_ = isCompleted;
-    this->description_ = description;
+    this->isCompleted_ = std::move(isCompleted);
+    this->description_ = std::move(description);
     this->updateVersion();
 }
 

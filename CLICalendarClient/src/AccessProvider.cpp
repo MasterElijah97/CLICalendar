@@ -23,15 +23,15 @@ void AccessProvider::noechoInput(std::string& password, const char* msg = "Passw
         }
     }
 
-    password = pass;
+    password = std::move(pass);
     //clear ncurses screen and close ncurses
     clear();
     endwin();
 }
 
 AccessProvider::AccessProvider(std::shared_ptr<User> user, std::shared_ptr<AccountsDbManager> accountsDbManager) {
-    this->user = user;
-    this->accountsDbManager = accountsDbManager;
+    this->user = std::move(user);
+    this->accountsDbManager = std::move(accountsDbManager);
 }
 
 void AccessProvider::addingNewUser() {
@@ -49,7 +49,7 @@ void AccessProvider::addingNewUser() {
             std::cout << "Please, enter new password" << std::endl;
             noechoInput(password);
 
-            this->user->login_ = login;
+            this->user->login_ = std::move(login);
             this->user->hashedPass_ = md5(password);
 
             auto insertedId = this->accountsDbManager->accountsDb->insert(*(this->user));
@@ -84,8 +84,8 @@ void AccessProvider::logIn() {
     auto ExistingUser = this->accountsDbManager->accountsDb->get_all<User>(where(is_equal(&User::login_, login) &&
                                                                                  is_equal(&User::hashedPass_, hashedPassword)));
     if (!ExistingUser.empty()) {
-        this->user->login_ = login;
-        this->user->hashedPass_ = hashedPassword;
+        this->user->login_ = std::move(login);
+        this->user->hashedPass_ = std::move(hashedPassword);
         std::cout << "You've succesfully logged in" << std::endl;
         std::cout << std::endl;
         this->user->isLoggedIn_ = true;

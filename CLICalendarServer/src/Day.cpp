@@ -208,6 +208,10 @@ void Day::edit() {
 
 std::string Day::concatenate() {
 
+    if (this->importants_.empty()) {
+        std::cout << date_ +SEPARATOR+ std::to_string(id_) << std::endl;
+        return (date_ +SEPARATOR+ std::to_string(id_));
+    }
     //preprocessing important
     std::string tmp = importants_.begin()->important_;
     for (auto it = importants_.begin(); it != importants_.end(); ++it) {
@@ -220,14 +224,17 @@ std::string Day::concatenate() {
 }
 
 void Day::deconcatenate(std::string msg) {
+    std::cout << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_ = v[0];
     id_   = std::stoi(v[1]);
 
     //get importants
-    for (std::size_t i = 2; i != v.size(); i++) {
+    if (v.size() > 2){
+        for (std::size_t i = 2; i != v.size(); i++) {
         Important important(v[i]);
         important.date_ = this->date_;
         this->importants_.push_back(important);
+    }
     }
 }

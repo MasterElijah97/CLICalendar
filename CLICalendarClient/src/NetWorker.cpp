@@ -1,15 +1,15 @@
 #include "NetWorker.h"
 
 NetWorker::NetWorker(std::shared_ptr<Session> session) : s(io_service), resolver(io_service) {
-    this->thisSession = session;
+    this->thisSession = std::move(session);
 }
 
 void NetWorker::setIp(std::string ip) {
-    this->ip_to_connect = ip;
+    this->ip_to_connect = std::move(ip);
 }
 
 void NetWorker::setPort(std::string port) {
-    this->port_to_connect = port;
+    this->port_to_connect = std::move(port);
 }
 
 void NetWorker::connect() {
@@ -72,6 +72,8 @@ void NetWorker::sendUser() {
 }
 void NetWorker::sendDeals() {
     auto deals = thisSession->localDb->get_all<Deal>();
+    if(!deals.empty()) {
+
     std::string tmp;
     try {
         this->clearData();
@@ -97,7 +99,7 @@ void NetWorker::sendDeals() {
         std::cout << ex.what() << std::endl;
         this->isConnected = false;
     }
-
+    }
 }
 void NetWorker::sendDays() {
     try {
@@ -108,7 +110,6 @@ void NetWorker::sendDays() {
 
         for (auto &day : thisSession->days_) {
             this->clearData();
-
             std::strncpy(data_, day.concatenate().c_str(), max_length);
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
         }
@@ -188,13 +189,13 @@ void NetWorker::send() {
             if (!this->thisSession->tasks_.empty()) {
                 this->sendTasks();
             }
-            if (!this->thisSession->tasks_.empty()) {
+            if (!this->thisSession->notes_.empty()) {
                 this->sendNotes();
             }
-            if (!this->thisSession->tasks_.empty()) {
-                this->sendDeals();
-            }
-            if (!this->thisSession->tasks_.empty()) {
+
+            this->sendDeals();
+
+            if (!this->thisSession->days_.empty()) {
                 this->sendDays();
             }
             this->clearData();
