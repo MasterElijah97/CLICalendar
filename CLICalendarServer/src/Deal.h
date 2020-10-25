@@ -15,7 +15,6 @@ class Deal {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion();
 
         Deal();
 
@@ -37,20 +36,7 @@ class Deal {
 
         //destructor
         ~Deal() = default;
-
-        //setters
-        void setName(std::string);
-        void setDescription(std::string);
-        void setLabel(std::string);
-        void setPriority(std::string);
-        void setTime(std::string, std::string);
-        void setDate(std::string);
-
-
-        //user's interface
-        void edit();
-        void show();
-
+        
         //needed to communicate with server
         //json on minimal
         std::string concatenate();

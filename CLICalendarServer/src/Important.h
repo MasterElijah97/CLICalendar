@@ -15,7 +15,6 @@ class Important {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion();
 
         Important();
         Important(std::string);
@@ -29,14 +28,6 @@ class Important {
 
         //destructor
         ~Important() = default;
-
-        //setters
-        void setImportant(std::string);
-        void setDate(std::string);
-
-        //user's interface
-        void edit();
-        void show();
 
         //members
         std::string important_;
