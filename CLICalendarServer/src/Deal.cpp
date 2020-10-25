@@ -82,36 +82,38 @@ Deal& Deal::operator=(Deal&& other) {
     return *this;
 }
 
-//setters
+void Deal::updateVersion() {
+    this->version_++;
+}
 
 void Deal::setName(std::string name) {
-    this->name_ = name;
+    this->name_ = std::move(name);
     this->updateVersion();
 }
 
 void Deal::setDescription(std::string description) {
-    this->description_ = description;
+    this->description_ = std::move(description);
     this->updateVersion();
 }
 
 void Deal::setLabel(std::string label) {
-    this->label_ = label;
+    this->label_ = std::move(label);
     this->updateVersion();
 }
 
 void Deal::setPriority(std::string priority) {
-    this->priority_ = priority;
+    this->priority_ = std::move(priority);
     this->updateVersion();
 }
 
 void Deal::setTime(std::string begins, std::string ends) {
-    this->begin_ = begins;
-    this->end_ = ends;
+    this->begin_ = std::move(begins);
+    this->end_ = std::move(ends);
     this->updateVersion();
 }
 
 void Deal::setDate(std::string date) {
-    this->date_ = date;
+    this->date_ = std::move(date);
     this->updateVersion();
 }
 

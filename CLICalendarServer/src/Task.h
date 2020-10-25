@@ -15,9 +15,7 @@ class Task {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion() {
-            this->version_++;
-        }
+        void updateVersion();
 
         Task();
         Task(std::string);
@@ -36,10 +34,10 @@ class Task {
         static std::size_t getNumberOfTasks();
 
         //setters
-        void setIsCompleted(const bool);
-        void setDescription(const std::string);
-        void setAllFields(const std::string,
-                          const bool);
+        void setIsCompleted(bool);
+        void setDescription(std::string);
+        void setAllFields(std::string,
+                          bool);
 
         //user's interface
         void edit();

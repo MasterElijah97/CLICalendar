@@ -4,6 +4,10 @@ bool operator==(const Important& left, const Important& right) {
     return left.important_ == right.important_;
 }
 
+void Important::updateVersion() {
+    this->version_++;
+}
+
 Important::Important() {
     this->id_      = -1;
     this->version_ = 1;
@@ -70,9 +74,9 @@ void Important::edit() {
 }
 
 void Important::setImportant(std::string msg) {
-	this->important_ = msg;
+	this->important_ = std::move(msg);
 }
 void Important::setDate(std::string date) {
-    this->date_ = date;
+    this->date_ = std::move(date);
 }
 

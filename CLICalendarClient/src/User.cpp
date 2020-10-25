@@ -6,8 +6,8 @@ User::User() {
 }
 
 User::User(std::string login, std::string hashedPass) {
-    this->login_      = login;
-    this->hashedPass_ = hashedPass;
+    this->login_      = std::move(login);
+    this->hashedPass_ = std::move(hashedPass);
     this->id_         = -1;
 }
 

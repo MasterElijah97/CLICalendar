@@ -7,6 +7,10 @@ bool operator==(const Note& left, const Note& right) {
            (left.version_     == right.version_);
 }
 
+void Note::updateVersion() {
+    this->version_++;
+}
+
 Note::Note() {
     this->label_       = "Buffer";
     this->name_        = "New Task";
@@ -86,17 +90,17 @@ std::size_t Note::getNumberOfNotes() {
 }
 
 void Note::setLabel(std::string label) {
-    this->label_ = label;
+    this->label_ = std::move(label);
     this->updateVersion();
 }
 
 void Note::setName(std::string name) {
-    this->name_ = name;
+    this->name_ = std::move(name);
     this->updateVersion();
 }
 
 void Note::setDescription(std::string description) {
-    this->description_ = description;
+    this->description_ = std::move(description);
     this->updateVersion();
 }
 
@@ -104,9 +108,9 @@ void Note::setAllFields(std::string name,
                         std::string description = "New Note",
                         std::string label       = "Buffer") {
 
-    this->name_        = name;
-    this->description_ = description;
-    this->label_       = label;
+    this->name_        = std::move(name);
+    this->description_ = std::move(description);
+    this->label_       = std::move(label);
     this->updateVersion();
 }
 

@@ -119,6 +119,7 @@ void session::receiveDeals() {
                 deal.deconcatenate(data_);
                 this->deals_.push_back(deal);
                 this->clearData();
+                read(this->socket_, boost::asio::buffer(data_));
             }
 
             this->clearData();
@@ -132,6 +133,7 @@ void session::receiveDays() {
                 day.deconcatenate(data_);
                 this->days_.push_back(day);
                 this->clearData();
+                read(this->socket_, boost::asio::buffer(data_));
             }
 
             this->clearData();
@@ -175,6 +177,19 @@ void session::processDays() {
             return false;
         }
     });
+
+    this->localDb->remove_all<Day>();
+    for (auto &day : days_) {
+        day.id_ = -1;
+        auto insertedId = this->localDb->insert(day);
+        day.id_ = insertedId;
+
+        for (auto &important : day.importants_) {
+            important.id_ = -1;
+            auto insertedId = this->localDb->insert(important);
+            important.id_ = insertedId;
+        }
+    }
 }
 
 void session::processDeals() {
@@ -217,6 +232,13 @@ void session::processDeals() {
             return false;
         }
     });
+
+    this->localDb->remove_all<Deal>();
+    for (auto &deal : deals_) {
+        deal.id_ = -1;
+        auto insertedId = this->localDb->insert(deal);
+        deal.id_ = insertedId;
+    }
 }
 
 void session::processTasks() {
@@ -256,6 +278,13 @@ void session::processTasks() {
             return false;
         }
     });
+
+    this->localDb->remove_all<Task>();
+    for (auto &task : tasks_) {
+        task.id_ = -1;
+        auto insertedId = this->localDb->insert(task);
+        task.id_ = insertedId;
+    }
 }
 
 void session::processNotes() {
@@ -297,6 +326,13 @@ void session::processNotes() {
             return false;
         }
     });
+
+    this->localDb->remove_all<Note>();
+    for (auto &note : notes_) {
+        note.id_ = -1;
+        auto insertedId = this->localDb->insert(note);
+        note.id_ = insertedId;
+    }
 }
 
 void session::process() {
@@ -310,6 +346,7 @@ void session::process() {
 
 void session::sendDeals() {
     if(!deals_.empty()) {
+        std::cout << "Sending deals" << std::endl;
         try {
             this->clearData();
 
@@ -335,6 +372,7 @@ void session::sendDeals() {
 }
 void session::sendDays() {
     if(!days_.empty()) {
+        std::cout << "Sending days" << std::endl;
         try {
             this->clearData();
 
@@ -359,6 +397,7 @@ void session::sendDays() {
 }
 void session::sendTasks() {
     if(!tasks_.empty()) {
+        std::cout << "Sending tasks" << std::endl;
         try {
             this->clearData();
 
@@ -385,6 +424,7 @@ void session::sendTasks() {
 }
 void session::sendNotes() {
     if(!notes_.empty()) {
+        std::cout << "Sending notes" << std::endl;
         try {
             this->clearData();
 
@@ -410,6 +450,9 @@ void session::sendNotes() {
     }
 }
 void session::send() {
+
+    this->clearData(); 
+
     std::strncpy(data_, "ba", 3);
     boost::asio::write(socket_, boost::asio::buffer(data_));
    

@@ -4,10 +4,10 @@ CommandChecker::CommandChecker(std::shared_ptr<Session> session,
                                std::shared_ptr<AccessProvider> accessProvider,
                                std::shared_ptr<NetWorker> netWorker) {
 
-    this->thisSession = session;
+    this->thisSession = std::move(session);
     thisSession->localDb->sync_schema();
-    this->accessProvider = accessProvider;
-    this->netWorker = netWorker;
+    this->accessProvider = std::move(accessProvider);
+    this->netWorker = std::move(netWorker);
 }
 
 void CommandChecker::clearConsole() {
