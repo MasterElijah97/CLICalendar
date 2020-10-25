@@ -15,7 +15,6 @@ class Task {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion();
 
         Task();
         Task(std::string);
@@ -30,19 +29,6 @@ class Task {
         //destructor
         ~Task();
 
-        //getters
-        static std::size_t getNumberOfTasks();
-
-        //setters
-        void setIsCompleted(bool);
-        void setDescription(std::string);
-        void setAllFields(std::string,
-                          bool);
-
-        //user's interface
-        void edit();
-        void show();
-
         //needed to communicate with server
         //json on minimal
         std::string concatenate();
@@ -51,9 +37,6 @@ class Task {
         //members
         bool isCompleted_;
         std::string description_;
-
-    private:
-        static std::size_t numberOfTasks;
 };
 
 bool operator==(const Task&, const Task&);

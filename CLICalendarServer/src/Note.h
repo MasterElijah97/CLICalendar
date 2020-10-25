@@ -16,7 +16,7 @@ class Note {
         int id_;
         //version is for comparison between same deals in local and server databases
         int version_;
-        void updateVersion();
+
         Note();
         Note(std::string,
              std::string,
@@ -32,21 +32,6 @@ class Note {
         //destructor
         ~Note();
 
-        //getters
-        static std::size_t getNumberOfNotes();
-
-        //setters
-        void setLabel      (std::string);
-        void setName       (std::string);
-        void setDescription(std::string);
-        void setAllFields  (std::string,
-                            std::string,
-                            std::string);
-
-        //user's interface
-        void show();
-        void edit();
-
         //needed to communicate with server
         //json on minimal
         std::string concatenate();
@@ -56,9 +41,6 @@ class Note {
         std::string label_;
         std::string name_;
         std::string description_;
-
-    private:
-        static std::size_t numberOfNotes;
 };
 
 bool operator==(const Note&, const Note&);

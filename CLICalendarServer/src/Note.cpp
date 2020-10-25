@@ -7,10 +7,6 @@ bool operator==(const Note& left, const Note& right) {
            (left.version_     == right.version_);
 }
 
-void Note::updateVersion() {
-    this->version_++;
-}
-
 Note::Note() {
     this->label_       = "Buffer";
     this->name_        = "New Task";
@@ -18,7 +14,7 @@ Note::Note() {
     this->id_          = -1;
     this->version_     = 1;
 
-    numberOfNotes++;
+
 
 }
 
@@ -32,7 +28,7 @@ Note::Note(std::string name,
     this->id_          = -1;
     this->version_     = 1;
 
-    numberOfNotes++;
+
 }
 
 
@@ -53,7 +49,7 @@ Note::Note(Note&& right) {
 }
 
 Note::~Note() {
-    numberOfNotes--;
+
 }
 
 Note& Note::operator=(const Note& other) {
@@ -85,85 +81,6 @@ Note& Note::operator=(Note&& right) {
     return *this;
 }
 
-std::size_t Note::getNumberOfNotes() {
-    return Note::numberOfNotes;
-}
-
-void Note::setLabel(std::string label) {
-    this->label_ = std::move(label);
-    this->updateVersion();
-}
-
-void Note::setName(std::string name) {
-    this->name_ = std::move(name);
-    this->updateVersion();
-}
-
-void Note::setDescription(std::string description) {
-    this->description_ = std::move(description);
-    this->updateVersion();
-}
-
-void Note::setAllFields(std::string name,
-                        std::string description = "New Note",
-                        std::string label       = "Buffer") {
-
-    this->name_        = std::move(name);
-    this->description_ = std::move(description);
-    this->label_       = std::move(label);
-    this->updateVersion();
-}
-
-void Note::show() {
-    std::cout << std::setw(13) << "Label: ";
-    std::cout << "#" << label_ << std::endl;
-
-    std::cout << std::setw(13) << "Name: ";
-    std::cout << name_ << std::endl;
-
-    std::cout << std::setw(13) << "Description: ";
-    std::cout << description_ << std::endl;
-
-    std::cout << std::setw(13) << "id_: ";
-    std::cout << id_ << std::endl;
-}
-
-void Note::edit() {
-    std::cout << "Please, enter new information or click enter to remain old data: " << std::endl;
-    std::cout << std::endl;
-
-    this->show();
-
-    std::string input;
-
-    std::cout << std::setw(13) << "Label: ";
-    std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
-        this->label_ = input;
-        input.clear();
-    }
-
-    std::cout << std::setw(13) << "Name: ";
-    std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
-        this->name_ = input;
-        input.clear();
-    }
-
-    std::cout << std::setw(13) << "Description: ";
-    std::getline(std::cin, input, '\n');
-    if (!input.empty()) {
-        this->description_ = input;
-        input.clear();
-    }
-
-    std::cout << std::endl;
-
-    std::cout << std::endl;
-    this->updateVersion();
-}
-
-
 std::string Note::concatenate() {
     return label_                    +SEPARATOR+
            name_                     +SEPARATOR+
@@ -180,5 +97,3 @@ void Note::deconcatenate(std::string msg) {
     id_          = std::stoi(v[3]);
     description_ = v[4];
 }
-
-std::size_t Note::numberOfNotes = 0;
