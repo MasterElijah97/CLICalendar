@@ -38,7 +38,7 @@ Or you can use another build system compatible with cmake (see cmake documentati
 
 ## How to use
 1. Open executable file
-2. Write 'help'. It will shoq list of supported commands
+2. Write 'help'. It will show the list of supported commands
 3. If you want to use synchronization give this app rights to create directories and copy files
 
 ## Description of the items you can use
