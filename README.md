@@ -1,3 +1,4 @@
+<pre>
 # CLICalendar
 * Simple client-server CLI Calendar with Tasks, Notes, Days (Deals and Importants as a part of Days) using SQLite3, MD5 and Boost.Asio
 * Work in progress...
@@ -10,8 +11,9 @@ Path "include" contains libraries of these authors and organizations
 
 Also this app uses
 
-* lncurses                   https://invisible-island.net/ncurses/
-* boost libraries            https://https://www.boost.org/
+* lncurses                     https://invisible-island.net/ncurses/
+* boost libraries              https://https://www.boost.org/
+* sqlite3 (used by sqlite_orm) https://www.sqlite.org/index.html
 
 ## How to install
 1. First of all you need to install these packages:
@@ -34,5 +36,5 @@ sudo apt install cmake
 cmake .. && make
 ```
 Or you can use another build system compatible with cmake (see cmake documentation)
-
+</pre>
 
