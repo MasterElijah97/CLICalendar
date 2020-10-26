@@ -15,6 +15,7 @@ Also this app uses
 * sqlite3 (used by sqlite_orm) https://www.sqlite.org/index.html
 
 ## How to install
+NOTE: both server and client path include item classes (Important, Deal, Day, Task, Note) but they are different - server path contains cutted versions (without some methods)
 1. First of all you need to install these packages:
 * sqlite3
 * libboost1.71-dev (or newer)
