@@ -6,7 +6,7 @@
 Path "include" contains libraries of these authors and organizations
 
 * sqlite_orm implementation: https://github.com/fnc12/sqlite_orm
-* MD5<pre>        </pre>implementation: https://github.com/JackieTseng/md5
+* MD5        implementation: https://github.com/JackieTseng/md5
 
 Also this app uses
 
