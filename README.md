@@ -1,4 +1,3 @@
-<pre>
 # CLICalendar
 * Simple client-server CLI Calendar with Tasks, Notes, Days (Deals and Importants as a part of Days) using SQLite3, MD5 and Boost.Asio
 * Work in progress...
@@ -7,7 +6,7 @@
 Path "include" contains libraries of these authors and organizations
 
 * sqlite_orm implementation: https://github.com/fnc12/sqlite_orm
-* MD5        implementation: https://github.com/JackieTseng/md5
+* MD5<pre>        </pre>implementation: https://github.com/JackieTseng/md5
 
 Also this app uses
 
@@ -36,5 +35,3 @@ sudo apt install cmake
 cmake .. && make
 ```
 Or you can use another build system compatible with cmake (see cmake documentation)
-</pre>
-
