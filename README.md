@@ -35,3 +35,25 @@ sudo apt install cmake
 cmake .. && make
 ```
 Or you can use another build system compatible with cmake (see cmake documentation)
+
+## How to use
+1. Open executable file
+2. Write 'help'. It will shoq list of supported commands
+3. If you want to use synchronization give this app rights to create directories and copy files
+
+## Description of the items you can use
+
+### 1. Day
+Consists of date, list of deals and list of importants
+#### 1.1 Deal
+Consists of name, description, label, priority and time frame
+#### 1.2 Important
+Consists of just string (you can use it to summarize deals in short form)
+
+### 2. Task
+Consists of description and boolean flag (Completed \ Uncompleted)
+
+### 3. Note
+Consists of name, description and label
+
+	
