@@ -18,15 +18,15 @@ Also this app uses
 NOTE: both server and client path include item classes (Important, Deal, Day, Task, Note) but they are different - server path contains cutted versions (without some methods)
 1. First of all you need to install these packages:
 * sqlite3
-* libboost1.71-dev (or newer)
+* libboost1.71-all-dev (or newer)
 * libncurses5-dev (or newer)
-* cmake
+* cmake 3.16.3 (or newer)
 
 You can use apt package manager (example for Ubuntu):
 ```bash
 sudo apt update
 sudo apt install sqlite3
-sudo apt install libboost1.71-dev
+sudo apt install libboost1.71-all-dev
 sudo apt install libncurses5-dev
 sudo apt install cmake
 ```
