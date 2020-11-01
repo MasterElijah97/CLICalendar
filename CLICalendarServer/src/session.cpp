@@ -337,8 +337,8 @@ void session::processNotes() {
 
 void session::process() {
     std::cout << "Processing" << std::endl;
-    this->processDeals();
     this->processDays();
+    this->processDeals();
     this->processTasks();
     this->processNotes();
     std::cout << "End processing" << std::endl;
@@ -355,7 +355,13 @@ void session::sendDeals() {
 
             for (auto &deal : deals_) {
                 this->clearData();
-                std::strncpy(data_, deal.concatenate().c_str(), 1024);
+
+                std::cout << deal.concatenate().c_str() << std::endl;
+
+                std::strncpy(data_, deal.concatenate().c_str(), max_length);
+
+                std::cout << data_ << std::endl;
+                
                 boost::asio::write(socket_, boost::asio::buffer(data_, max_length));
             }
 
@@ -381,7 +387,7 @@ void session::sendDays() {
 
             for (auto &day : days_) {
                 this->clearData();
-                std::strncpy(data_, day.concatenate().c_str(), 1024);
+                std::strncpy(data_, day.concatenate().c_str(), max_length);
                 boost::asio::write(socket_, boost::asio::buffer(data_, max_length));
             }
 
@@ -407,7 +413,7 @@ void session::sendTasks() {
             for (auto &task : tasks_) {
                 this->clearData();
 
-                std::strncpy(data_, task.concatenate().c_str(), 1024);
+                std::strncpy(data_, task.concatenate().c_str(), max_length);
                 boost::asio::write(socket_, boost::asio::buffer(data_, max_length));
             }
 
@@ -456,8 +462,8 @@ void session::send() {
     std::strncpy(data_, "ba", 3);
     boost::asio::write(socket_, boost::asio::buffer(data_));
    
-    this->sendDeals();
     this->sendDays();
+    this->sendDeals();
     this->sendTasks();
     this->sendNotes();
 
@@ -482,6 +488,11 @@ void session::getDataFromLocalBase() {
 
     this->deals_ = this->localDb->get_all<Deal>();
     this->days_  = this->localDb->get_all<Day> ();
+
+    for (auto &day : days_) {
+        day.importants_ = this->localDb->get_all<Important>(where(is_equal(&Important::date_, day.date_)));
+    }
+
     this->tasks_ = this->localDb->get_all<Task>();
     this->notes_ = this->localDb->get_all<Note>();
 }
