@@ -166,7 +166,7 @@ public:
             NOTE_SETTED = 2,
             TASK_SETTED = 3,
             DEAL_SETTED = 4,
-            IMPORTANT_SETTED= 5
+            IMPORTANT_SETTED = 5
         };
 
         std::variant

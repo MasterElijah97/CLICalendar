@@ -36,6 +36,7 @@ Deal::Deal(const Deal& other) {
     this->end_         = other.end_;
     this->version_     = other.version_;
     this->id_          = other.id_;
+    this->date_        = other.date_;
 }
 
 Deal::Deal(Deal&& other) {
@@ -47,6 +48,7 @@ Deal::Deal(Deal&& other) {
     this->end_         = other.end_;
     this->version_     = other.version_;
     this->id_          = other.id_;
+    this->date_        = other.date_;
 }
 //operators
 
@@ -62,6 +64,7 @@ Deal& Deal::operator=(const Deal& other) {
     this->end_         = other.end_;
     this->version_     = other.version_;
     this->id_          = other.id_;
+    this->date_        = other.date_;
 
     return *this;
 }
@@ -78,6 +81,7 @@ Deal& Deal::operator=(Deal&& other) {
     this->end_         = other.end_;
     this->version_     = other.version_;
     this->id_          = other.id_;
+    this->date_        = other.date_;
 
     return *this;
 }
@@ -199,7 +203,8 @@ void Deal::edit() {
 }
 
 std::string Deal::concatenate() {
-    return begin_                    +SEPARATOR+
+    return date_                     +SEPARATOR+
+           begin_                    +SEPARATOR+
            end_                      +SEPARATOR+
            name_                     +SEPARATOR+
            label_                    +SEPARATOR+
@@ -207,18 +212,24 @@ std::string Deal::concatenate() {
            std::to_string(version_)  +SEPARATOR+
            std::to_string(id_)       +SEPARATOR+
            description_;
+           
 }
 
 void Deal::deconcatenate(std::string msg) {
+    std::cout << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
-    begin_       = v[0];
-    end_         = v[1];
-    name_        = v[2];
-    label_       = v[3];
-    priority_    = v[4];
-    version_     = std::stoi(v[5]);
-    id_          = std::stoi(v[6]);
-    description_ = v[7];
+    date_        = v[0];
+    begin_       = v[1];
+    end_         = v[2];
+    name_        = v[3];
+    label_       = v[4];
+    priority_    = v[5];
+    version_     = std::stoi(v[6]);
+    id_          = std::stoi(v[7]);
+    description_ = v[8];
+    for (int i = 0; i != v.size(); ++i) {
+        std::cout << i << " " << v[i] << std::endl;
+    }
 }
 
 bool operator==(const Deal& left, const Deal& right) {

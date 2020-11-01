@@ -12,12 +12,16 @@ Day::Day()
 	this->date_    = "01 January 1970";
     this->id_      = -1;
     this->version_ = 1;
+
+    this->importants_.reserve(100);
 }
 
 Day::Day(std::string date) {
     this->date_    = date;
     this->id_      = -1;
     this->version_ = 1;
+
+    this->importants_.reserve(100);
 }
 
 Day::Day(const Day& other) {
@@ -213,9 +217,11 @@ std::string Day::concatenate() {
         return (date_ +SEPARATOR+ std::to_string(id_));
     }
     //preprocessing important
-    std::string tmp = importants_.begin()->important_;
+    std::string tmp;
+    tmp.clear();
+
     for (auto it = importants_.begin(); it != importants_.end(); ++it) {
-        tmp = SEPARATOR + it->important_;
+        tmp += SEPARATOR + it->important_;
     }
 
     return (date_               +SEPARATOR+
@@ -232,9 +238,9 @@ void Day::deconcatenate(std::string msg) {
     //get importants
     if (v.size() > 2){
         for (std::size_t i = 2; i != v.size(); i++) {
-        Important important(v[i]);
-        important.date_ = this->date_;
-        this->importants_.push_back(important);
-    }
+            Important important(v[i]);
+            important.date_ = this->date_;
+            this->importants_.push_back(important);
+        }
     }
 }

@@ -489,9 +489,11 @@ void Session::creatingDeal() {
                   begins,
                   ends);
 
-    std::string date = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
+    std::string date = (std::get<std::vector<Day>::iterator>(joinedObject_))->date_;
+    std::cout << "This is date: " << date << std::endl;
     deal.setDate(date);
-
+    std::cout << "This is date 2: " << deal.date_ << std::endl;
+    deal.id_ = -1;
     auto insertedId = localDb->insert(deal);
     deal.id_= insertedId;
     std::get<std::vector<Day>::iterator>(joinedObject_)->addDeal(deal);
@@ -520,6 +522,7 @@ void Session::creatingImportant() {
         Important important(tmp);
         important.date_ = std::get<std::vector<Day>::iterator>(joinedObject_)->date_;
 
+        important.id_ = -1;
         auto insertedId = localDb->insert(important);
         important.id_ = insertedId;
         std::get<std::vector<Day>::iterator>(joinedObject_)->addImportant(important);

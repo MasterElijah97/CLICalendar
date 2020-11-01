@@ -74,31 +74,30 @@ void NetWorker::sendDeals() {
     auto deals = thisSession->localDb->get_all<Deal>();
     if(!deals.empty()) {
 
-    std::string tmp;
-    try {
-        this->clearData();
-
-        std::strncpy(data_, "bde", 4);
-        boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-
-
-        for (auto &deal : deals) {
+        std::string tmp;
+        try {
             this->clearData();
 
-            std::strncpy(data_, deal.concatenate().c_str(), max_length);
+            std::strncpy(data_, "bde", 4);
             boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
+
+            for (auto &deal : deals) {
+                this->clearData();
+
+                std::strncpy(data_, deal.concatenate().c_str(), max_length);
+                boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
+            }
+
+            this->clearData();
+
+            std::strncpy(data_, "ede", 4);
+            boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
+
+        } catch(std::exception& ex) {
+            std::cout << "Something went wrong" << std::endl;
+            std::cout << ex.what() << std::endl;
+            this->isConnected = false;
         }
-
-        this->clearData();
-
-        std::strncpy(data_, "ede", 4);
-        boost::asio::write(this->s, boost::asio::buffer(data_, max_length));
-
-    } catch(std::exception& ex) {
-        std::cout << "Something went wrong" << std::endl;
-        std::cout << ex.what() << std::endl;
-        this->isConnected = false;
-    }
     }
 }
 void NetWorker::sendDays() {
@@ -236,7 +235,7 @@ void NetWorker::receiveDeals() {
             deal.id_ = -1;
             auto insertedId = this->thisSession->localDb->insert(deal);
             deal.id_ = insertedId;
-            std::cout << insertedId << std::endl;
+            std::cout << "Deal:" << insertedId << std::endl;
         } catch (std::exception& ex) { 
             std::cout << "Something went wrong with database" << ex.what() << std::endl; 
         }
@@ -291,6 +290,9 @@ void NetWorker::receiveDays() {
     }
 
     this->thisSession->days_ = this->thisSession->localDb->get_all<Day>(); 
+    for (auto &day : this->thisSession->days_) {
+        day.importants_ = this->thisSession->localDb->get_all<Important>(where(is_equal(&Important::date_, day.date_)));
+    }
 }
 void NetWorker::receiveTasks() {
     this->clearData();
