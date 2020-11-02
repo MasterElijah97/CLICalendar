@@ -31,7 +31,7 @@ sudo apt install libncurses5-dev
 sudo apt install cmake
 ```
 2. Then create directory named "build" at CLICalendarClient (or CLICalendarServer). Cient and Server are built separately
-3. Run
+3. Run from "build" directory
 ```bash
 cmake .. && make
 ```
