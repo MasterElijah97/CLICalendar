@@ -46,7 +46,7 @@ class NetWorker : public boost::noncopyable {
         //This is not a net-session
         //It is user's session in app
         std::shared_ptr<Session> thisSession;
-
+        //todo reading ip and port from config
         std::string ip_to_connect = "127.0.0.1";
         std::string port_to_connect = "2001";
 

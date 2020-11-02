@@ -56,7 +56,9 @@ void Session::MoveableSetter::operator()(std::vector<Important>::iterator& it) {
 
 template<typename T>
 void Session::JoinedShower::operator()(T& it) {
+    std::cout << std::endl;
 	it->show();
+    std::cout << std::endl;
 }
 
 Session::JoinedEditor::JoinedEditor(Session& sess) {
@@ -399,6 +401,7 @@ void Session::getDataFromLocalBase() {
 
 void Session::creatingTask() {
     std::string description;
+    std::cout << std::endl;
     std::cout << std::setw(13) << "Description: ";
     std::getline(std::cin, description, '\n');
     std::cout << std::endl;
@@ -416,6 +419,7 @@ void Session::creatingNote() {
     std::string description;
     std::string label;
 
+    std::cout << std::endl;
     std::cout << std::setw(13) << "Name: ";
     std::getline(std::cin, name, '\n');
     std::cout << std::setw(13) << "Description: ";
@@ -435,6 +439,7 @@ void Session::creatingNote() {
 
 void Session::creatingDay() {
     std::string date;
+    std::cout << std::endl;
     std::cout << "Date (YYYYMMDD): ";
     std::getline(std::cin, date, '\n');
     std::cout << std::endl;
@@ -468,6 +473,7 @@ void Session::creatingDeal() {
         std::string begins;
         std::string ends;
 
+        std::cout << std::endl;
         std::cout << std::setw(20) << "Name: ";
         std::getline(std::cin, name, '\n');
         std::cout << std::setw(20) << "Description: ";
@@ -490,9 +496,9 @@ void Session::creatingDeal() {
                   ends);
 
     std::string date = (std::get<std::vector<Day>::iterator>(joinedObject_))->date_;
-    std::cout << "This is date: " << date << std::endl;
+    
     deal.setDate(date);
-    std::cout << "This is date 2: " << deal.date_ << std::endl;
+    
     deal.id_ = -1;
     auto insertedId = localDb->insert(deal);
     deal.id_= insertedId;
@@ -838,23 +844,6 @@ void Session::setJoined(T it) {
 	joinedObject_ = std::move(it);
 }
 
-/*void Session::setJoined(std::vector<Day>::iterator it) {
-   this->joinedObject_ = std::move(it);
-}
-void Session::setJoined(std::vector<Deal>::iterator it) {
-   this->joinedObject_ = std::move(it);
-}
-void Session::setJoined(std::vector<Task>::iterator it) {
-   this->joinedObject_ = std::move(it);
-}
-void Session::setJoined(std::vector<Note>::iterator it) {
-   this->joinedObject_ = std::move(it);
-}
-void Session::setJoined(std::vector<Important>::iterator it) {
-   this->joinedObject_ = std::move(it);
-}*/
-
-
 void Session::incrementJoined() {
 
 		if( (this->joinedSetted != 0) &&
@@ -888,17 +877,6 @@ void Session::decrementJoined() {
 
 }
 
-/*
-template<typename T>
-void Session::setMovable(std::vector<T>::iterator it) {
-	movableObject_ = it;
-}
-
-template<typename T>
-void Session::setCopyable(std::vector<T>::iterator it) {
-	copyableObject_ = it;
-}
-*/
 void Session::setMovable() {
     std::visit(MoveableSetter{*this}, this->joinedObject_);
 }

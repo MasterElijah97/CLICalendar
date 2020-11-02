@@ -1,7 +1,7 @@
 #ifndef COMMANDCHECKER_H
 #define COMMANDCHECKER_H
 
-#define NCURSES_NOMACROS
+#define NCURSES_NOMACROS //need to avoid conflicts in function names
 #include <ncurses.h>
 #include <memory>
 #include <string>

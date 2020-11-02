@@ -186,6 +186,7 @@ void CommandChecker::commandMonitor(const std::string& arg1,
 
             std::cout << "Wrong second argument: " << arg2 << std::endl;
             std::cout << "Did you mean 'password'? " << std::endl;
+            std::cout << std::endl;
 
         }
 

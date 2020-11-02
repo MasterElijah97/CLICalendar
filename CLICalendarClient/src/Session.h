@@ -239,12 +239,6 @@ public:
         template<typename T>
         void setJoined(T it);
 
-        /*void setJoined(std::vector<Day>::iterator);
-        void setJoined(std::vector<Deal>::iterator);
-        void setJoined(std::vector<Task>::iterator);
-        void setJoined(std::vector<Note>::iterator);
-        void setJoined(std::vector<Important>::iterator);*/
-
         void setMovable();
         void setCopyable();
 

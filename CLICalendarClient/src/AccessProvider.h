@@ -1,7 +1,7 @@
 #ifndef ACCESSPROVIDER_H
 #define ACCESSPROVIDER_H
 
-#define NCURSES_NOMACROS
+#define NCURSES_NOMACROS //need to avoid conflicts with function names
 #include <ncurses.h>
 #include <string>
 #include <memory>
@@ -14,8 +14,10 @@
 //Asks login and password, checks them, change password
 struct AccessProvider {
     AccessProvider(std::shared_ptr<User>, std::shared_ptr<AccountsDbManager>);
+
     std::shared_ptr<User> user;
     std::shared_ptr<AccountsDbManager> accountsDbManager;
+
     void addingNewUser();
     void logIn();
     void logOut();

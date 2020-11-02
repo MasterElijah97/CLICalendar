@@ -15,12 +15,16 @@ void NetWorker::setPort(std::string port) {
 void NetWorker::connect() {
     try {
         boost::asio::connect(this->s, this->resolver.resolve(ip_to_connect, port_to_connect));
+        std::cout << std::endl;
         std::cout << "Connection established" << std::endl;
+        std::cout << std::endl;
         this->isConnected = true;
     } catch(std::exception& ex) {
+        std::cout << std::endl;
         std::cout << "Something went wrong" << std::endl;
         std::cout << ex.what() << std::endl;
         std::cout << "Try:\n1.Check internet connection\n2.Check server" << std::endl;
+        std::cout << std::endl;
         this->isConnected = false;
     }
 }
@@ -31,11 +35,15 @@ void NetWorker::disconnect() {
 
         this->s.close(ec);
         if (ec) {
+            std::cout << std::endl;
             std::cout << "Something went wrong with NetWorker" << std::endl;
+            std::cout << std::endl;
             ec.clear();
         }
 
+        std::cout << std::endl;
         std::cout << "Connection closed" << std::endl;
+        std::cout << std::endl;
 
         this->isConnected = false;
 
@@ -235,7 +243,6 @@ void NetWorker::receiveDeals() {
             deal.id_ = -1;
             auto insertedId = this->thisSession->localDb->insert(deal);
             deal.id_ = insertedId;
-            std::cout << "Deal:" << insertedId << std::endl;
         } catch (std::exception& ex) { 
             std::cout << "Something went wrong with database" << ex.what() << std::endl; 
         }
@@ -252,6 +259,8 @@ void NetWorker::receiveDays() {
     this->clearData();
     this->thisSession->localDb->remove_all<Day>();
     this->thisSession->localDb->remove_all<Important>();
+
+    this->thisSession->days_.clear();
 
     while(1) {
 
@@ -274,7 +283,6 @@ void NetWorker::receiveDays() {
             day.id_ = -1;
             auto insertedId = this->thisSession->localDb->insert(day);
             day.id_ = insertedId;
-            std::cout << insertedId << std::endl;
 
             for (auto &important : day.importants_) {
                 important.id_ = -1;
@@ -298,6 +306,8 @@ void NetWorker::receiveTasks() {
     this->clearData();
     this->thisSession->localDb->remove_all<Task>();
 
+    this->thisSession->tasks_.clear();
+
     while(1) {
 
         boost::asio::read(this->s, boost::asio::buffer(data_));
@@ -319,7 +329,7 @@ void NetWorker::receiveTasks() {
             task.id_ = -1;
             auto insertedId = this->thisSession->localDb->insert(task);
             task.id_ = insertedId;
-            std::cout << insertedId << std::endl;
+
         } catch (std::exception& ex) { 
             std::cout << "Something went wrong with database" << ex.what() << std::endl; 
         }
@@ -332,6 +342,8 @@ void NetWorker::receiveTasks() {
 void NetWorker::receiveNotes() {
     this->clearData();
     this->thisSession->localDb->remove_all<Note>();
+
+    this->thisSession->notes_.clear();
 
     while(1) {
 
@@ -354,7 +366,7 @@ void NetWorker::receiveNotes() {
             note.id_ = -1;
             auto insertedId = this->thisSession->localDb->insert(note);
             note.id_ = insertedId;
-            std::cout << insertedId << std::endl;
+
         } catch (std::exception& ex) { 
             std::cout << "Something went wrong with database" << ex.what() << std::endl; 
         }
@@ -405,7 +417,9 @@ void NetWorker::sync() {
     if (strcmp(data_, "ba") == 0) {
         this->receive();
     } else {
+        std::cout << std::endl;
         std::cout << "Wrong protocol" << std::endl;
+        std::cout << std::endl;
     }
 }
 
