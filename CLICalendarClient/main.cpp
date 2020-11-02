@@ -45,6 +45,7 @@ int main()
     //User user;
     auto accessProvider = std::make_shared<AccessProvider>(user, accountsDbManager);
 
+    std::cout << std::endl;
     std::cout << "Welcome to CLICalendar. Please, log in or add new user" << std::endl;
     std::cout << "Write 'help' to get list of commands" << std::endl;
     std::cout << std::endl;

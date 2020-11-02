@@ -216,7 +216,6 @@ std::string Deal::concatenate() {
 }
 
 void Deal::deconcatenate(std::string msg) {
-    std::cout << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_        = v[0];
     begin_       = v[1];
@@ -227,9 +226,6 @@ void Deal::deconcatenate(std::string msg) {
     version_     = std::stoi(v[6]);
     id_          = std::stoi(v[7]);
     description_ = v[8];
-    for (int i = 0; i != v.size(); ++i) {
-        std::cout << i << " " << v[i] << std::endl;
-    }
 }
 
 bool operator==(const Deal& left, const Deal& right) {

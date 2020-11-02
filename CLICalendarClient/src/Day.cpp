@@ -169,8 +169,22 @@ void Day::showImportants() {
 void Day::show() {
     std::cout << std::setw(13) << "Date: ";
     std::cout << date_ << std::endl;
-    this->showDeals();
-    this->showImportants();
+    std::cout << std::endl;
+
+    if (!this->deals_.empty()) {
+        std::cout << "Deals: " << std::endl;;
+        this->showDeals();
+    } else {
+        std::cout << std::setw(13) << "There is no one deal yet" << std::endl;
+    }
+
+    if (!this->importants_.empty()) {
+        std::cout << "Importants: " << std::endl;
+        this->showImportants();    
+    } else {
+        std::cout << std::setw(13) << "There is no one important yet" << std::endl;    
+    }
+    
 }
 
 void Day::edit() {
@@ -189,7 +203,9 @@ void Day::edit() {
         input.clear();
     }
 
-    std::cout << std::setw(13) << "Deals: " << std::endl;
+    //Commented section is deprecated
+
+    /*std::cout << std::setw(13) << "Deals: " << std::endl;
     if (!deals_.empty()) {
         for (auto it = deals_.begin(); it != deals_.end(); ++it) {
             it->edit();
@@ -202,7 +218,7 @@ void Day::edit() {
         for (auto it = importants_.begin(); it != importants_.end(); ++it) {
             it->edit();
         }
-    }
+    }*/
 
     std::cout << std::endl;
 
@@ -213,7 +229,6 @@ void Day::edit() {
 std::string Day::concatenate() {
 
     if (this->importants_.empty()) {
-        std::cout << date_ +SEPARATOR+ std::to_string(id_) << std::endl;
         return (date_ +SEPARATOR+ std::to_string(id_));
     }
     //preprocessing important
@@ -230,7 +245,6 @@ std::string Day::concatenate() {
 }
 
 void Day::deconcatenate(std::string msg) {
-    std::cout << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_ = v[0];
     id_   = std::stoi(v[1]);

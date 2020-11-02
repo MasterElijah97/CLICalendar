@@ -99,7 +99,6 @@ std::string Deal::concatenate() {
 }
 
 void Deal::deconcatenate(std::string msg) {
-    std::cout << "Deconcat: " << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_        = v[0];
     begin_       = v[1];

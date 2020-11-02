@@ -66,7 +66,6 @@ Day& Day::operator=(Day&& other) {
 std::string Day::concatenate() {
 
     if (this->importants_.empty()) {
-        std::cout << date_ +SEPARATOR+ std::to_string(id_) << std::endl;
         return (date_ +SEPARATOR+ std::to_string(id_));
     }
     //preprocessing important
@@ -83,7 +82,6 @@ std::string Day::concatenate() {
 }
 
 void Day::deconcatenate(std::string msg) {
-    std::cout << msg << std::endl;
     std::vector<std::string> v = split(msg, SEPARATOR.c_str()[0]);
     date_ = v[0];
     id_   = std::stoi(v[1]);
