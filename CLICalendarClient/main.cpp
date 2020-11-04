@@ -1,32 +1,15 @@
 #include <string>
-#include <vector>
-#include <utility>
-#include <memory>
 #include <iostream>
 #include <iomanip>
-#include <algorithm>
-#include <iterator>
-#include <variant>
-#include <cstdlib>
+#include <memory>
+#include <vector>
+
 #include <boost/asio.hpp>
-#include <boost/core/noncopyable.hpp>
-#include <ncurses.h>
-#include <exception>
-#include <chrono>
-#include <thread>
-#include <filesystem>
 
 #include "include/sqlite_orm.h"
-#include "include/MD5.h"
-#include "src/SEPARATOR.h"
+
 #include "src/split.h"
 #include "src/spaceFilter.h"
-
-#include "src/Task.h"
-#include "src/Note.h"
-#include "src/Deal.h"
-#include "src/Important.h"
-#include "src/Day.h"
 
 #include "src/User.h"
 
