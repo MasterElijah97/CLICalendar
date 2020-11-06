@@ -3,4 +3,5 @@ todo
 	--fix includes
 	--refactor duplicate code sections
 	--cipher data
+	--validating user's input and feature about parsing date and time input
 
