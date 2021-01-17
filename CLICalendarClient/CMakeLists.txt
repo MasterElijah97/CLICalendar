@@ -25,24 +25,25 @@ find_package(SQLite3)
 if(SQLite3_FOUND)
 	target_include_directories(Client INTERFACE ${SQLite3_INCLUDE_DIRS})
 endif()
-target_link_libraries(Client PUBLIC ncurses
+target_link_libraries(Client PUBLIC 
+					ncurses
 					${SQLite3_LIBRARIES}
-										sqlite_orm
-										MD5
+					sqlite_orm
+					MD5
 
-										SEPARATOR
-										split
-										spaceFilter
-										Task
-										Note
-										Deal
-										Important
-										Day
-										User
-										Session
-										AccountsDbManager
-										AccessProvider
-										NetWorker
-										CommandChecker)
+					SEPARATOR
+					split
+					spaceFilter
+					Task
+					Note
+					Deal
+					Important
+					Day
+					User
+					Session
+					AccountsDbManager
+					AccessProvider
+					NetWorker
+					CommandChecker)
 
 
